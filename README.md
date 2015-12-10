@@ -1,11 +1,7 @@
 # Go
-Go Engine based on Monte-Carlo
+Go Engine based on Monte-Carlo using C++ programming language
 
-# using C++ programming language
-
-#-------------------------------#
-# Calendar						#
-#-------------------------------#
+## Calendar
 2015-Dec.10th:
 
 // Node for Monte-Carlo searching-tree
