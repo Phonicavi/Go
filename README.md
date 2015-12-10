@@ -21,8 +21,9 @@
 ### Brown-basic
 *2015-Dec.10th:*  
 
-+ brown.cpp
++ brown.cpp  
 	包含的函数  
+
 		`init_brown() // 初始化 清空棋盘数组board 黑白随机下20步`  
 		`clear_board() // 清空棋盘数组`  
 		`board_empty() // 判定全局棋盘是否为空 全空返1 否则返0`  
@@ -46,8 +47,9 @@
 		`compute_final_status() // 局终计目 等`
 		`... // 让子 等`  
 
-+ interface.cpp
-	调用到的brown.cpp中的函数
++ interface.cpp  
+	调用到的brown.cpp中的函数  
+
 		`init_brown()`  
 		`clear_board()`  
 		`board_empty()`  
@@ -65,5 +67,7 @@
 
 		`compute_final_status()`  
 		`get_final_status(i, j)`  
-	主要需要修改brown.cpp中的函数
+
+	主要需要修改brown.cpp中的函数  
+	
 		`generate_move(*i, *j, color)`  
