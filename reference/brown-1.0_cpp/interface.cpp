@@ -68,7 +68,7 @@ static struct gtp_command commands[] = {
   {"quit",             	  gtp_quit},
   {"boardsize",        	  gtp_boardsize},
   {"clear_board",      	  gtp_clear_board},
-  {"komi",        	  gtp_komi},
+  {"komi",                gtp_komi},
   {"fixed_handicap",   	  gtp_fixed_handicap},
   {"place_free_handicap", gtp_place_free_handicap},
   {"set_free_handicap",   gtp_set_free_handicap},
