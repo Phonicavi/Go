@@ -22,6 +22,9 @@
 	实现基础的蒙特卡洛搜索  
 	不做终局提前优化等
 + Works 读代码-gnuaplus  
+	
+	代码位置在./reference/gnuaplus-light/aplus_final_code/目录下  
+
 	卞文杰: aplus, board, uct_pure  
 	赖凡: tricks_chess, tricks_chess_manual  
 	邱丰: bit_process, gtp, interface
