@@ -21,3 +21,7 @@
 + UCT-gtp bond  
 	实现基础的蒙特卡洛搜索  
 	不做终局提前优化等
++ Works 读代码-gnuaplus  
+	卞文杰: aplus, board, uct_pure  
+	赖凡: tricks_chess, tricks_chess_manual  
+	邱丰: bit_process, gtp, interface
