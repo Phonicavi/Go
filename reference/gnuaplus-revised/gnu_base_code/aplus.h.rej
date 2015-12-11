@@ -1,0 +1,9 @@
+diff a/gnu_base_code/aplus.h b/gnu_base_code/aplus.h	(rejected hunks)
+@@ -51,6 +51,7 @@
+ //#define PATH_CHESS_MANUAL "C:\\Users\\qiaomai\\Documents\\gnuaplus_new\\chess_manual\\kogo4.SGF"
+ #define PATH_CHESS_MANUAL "C:\\Users\\happyqiaomai\\Documents\\GnuAplus\\chess_manual\\kogo4.SGF"
+ //#define PATH_CHESS_MANUAL "C:\\Users\\happyqiaomai\\Documents\\GnuAplus\\chess_manual\\kogo4.SGF"
++>>>>>>> 78216fec87e335b83a177d3ef81d02bb5ccda7e3
+ //#define PATH_CHESS_MANUAL "W:\\qxt\\computer\\AI\\teamwork\\go\\chess_manual\\kogo4.SGF"
+ //#define PATH_CHESS_MANUAL "E:\\Users\\daniyuu\\Visual Studio 2013\\source\\gnuaplus\\\chess_manual\\kogo4.SGF"
+ #define PATH_CHESS_MANUAL "F:\\人工智能\\final_project\\GnuAplus\\bitbucket\\chess_manual\\kogo4.SGF"
