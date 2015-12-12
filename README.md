@@ -27,4 +27,17 @@
 
 	卞文杰: aplus, board, uct_pure  
 	赖凡: tricks_chess, tricks_chess_manual  
-	邱丰: bit_process, gtp, interface
+	邱丰: bit_process, gtp, interface  
+
+*2015-Dec.12th*  
+
++ Works 读代码-Hara  
+	
+	代码位置在./reference/hara-revised/目录下  
+
+	All公共部分 大家都要看: size, goban, gobanconst, priors, group  
+
+	卞文杰: amaf, engine, tree  
+	赖凡: heuristics, zobrist  
+	邱丰: gtp, gtpcommand  
+	
