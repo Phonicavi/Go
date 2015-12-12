@@ -81,7 +81,7 @@ FILE *gtp_output_file = NULL;
 /* Read filehandle gtp_input linewise and interpret as GTP commands. */
 void
 gtp_main_loop(struct gtp_command commands[],
-	      FILE *gtp_input, FILE *gtp_output, FILE *gtp_dump_commands)
+        FILE *gtp_input, FILE *gtp_output, FILE *gtp_dump_commands)
 {
   char line[GTP_BUFSIZE];
   char command[GTP_BUFSIZE];
@@ -92,7 +92,6 @@ gtp_main_loop(struct gtp_command commands[],
 
   gtp_output_file = gtp_output;
 
-//    fprintf(stderr, "before while\n");
   while (status == GTP_OK) {
     /* Read a line from gtp_input. */
     if (!fgets(line, GTP_BUFSIZE, gtp_input))
@@ -101,29 +100,29 @@ gtp_main_loop(struct gtp_command commands[],
     if (gtp_dump_commands) {
       fputs(line, gtp_dump_commands);
       fflush(gtp_dump_commands);
-    }
+    }    
 
     /* Preprocess the line. */
     for (i = 0, p = line; line[i]; i++) {
       char c = line[i];
       /* Convert HT (9) to SPACE (32). */
       if (c == 9)
-	*p++ = 32;
+  *p++ = 32;
       /* Remove CR (13) and all other control characters except LF (10). */
       else if ((c > 0 && c <= 9)
-	       || (c >= 11 && c <= 31)
-	       || c == 127)
-	continue;
+         || (c >= 11 && c <= 31)
+         || c == 127)
+  continue;
       /* Remove comments. */
       else if (c == '#')
-	break;
+  break;
       /* Keep ordinary text. */
       else
-	*p++ = c;
+  *p++ = c;
     }
     /* Terminate string. */
     *p = 0;
-
+  
     p = line;
 
     /* Look for an identification number. */
@@ -142,8 +141,8 @@ gtp_main_loop(struct gtp_command commands[],
      */
     for (i = 0; commands[i].name != NULL; i++) {
       if (strcmp(command, commands[i].name) == 0) {
-	status = (*commands[i].function)(p);
-	break;
+  status = (*commands[i].function)(p);
+  break;
       }
     }
     if (commands[i].name == NULL)
@@ -179,62 +178,62 @@ gtp_set_vertex_transform_hooks(gtp_transform_ptr in, gtp_transform_ptr out)
  * But it also accepts %m, which takes two integers and writes a vertex,
  * and %C, which takes a color value and writes a color string.
  */
-void
+void 
 gtp_mprintf(const char *fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
-
+  
   for (; *fmt; ++fmt) {
     if (*fmt == '%') {
       switch (*++fmt) {
       case 'c':
       {
-	/* rules of promotion => passed as int, not char */
-	int c = va_arg(ap, int);
-	putc(c, gtp_output_file);
-	break;
+  /* rules of promotion => passed as int, not char */
+  int c = va_arg(ap, int);
+  putc(c, gtp_output_file);
+  break;
       }
       case 'd':
       {
-	int d = va_arg(ap, int);
-	fprintf(gtp_output_file, "%d", d);
-	break;
+  int d = va_arg(ap, int);
+  fprintf(gtp_output_file, "%d", d);
+  break;
       }
       case 'f':
       {
-	double f = va_arg(ap, double); /* passed as double, not float */
-	fprintf(gtp_output_file, "%f", f);
-	break;
+  double f = va_arg(ap, double); /* passed as double, not float */
+  fprintf(gtp_output_file, "%f", f);
+  break;
       }
       case 's':
       {
-	char *s = va_arg(ap, char *);
-	fputs(s, gtp_output_file);
-	break;
+  char *s = va_arg(ap, char *);
+  fputs(s, gtp_output_file);
+  break;
       }
       case 'm':
       {
-	int m = va_arg(ap, int);
-	int n = va_arg(ap, int);
+  int m = va_arg(ap, int);
+  int n = va_arg(ap, int);
         gtp_print_vertex(m, n);
-	break;
+  break;
       }
       case 'C':
       {
-	int color = va_arg(ap, int);
-	if (color == WHITE)
-	  fputs("white", gtp_output_file);
-	else if (color == BLACK)
-	  fputs("black", gtp_output_file);
-	else
-	  fputs("empty", gtp_output_file);
-	break;
+  int color = va_arg(ap, int);
+  if (color == WHITE)
+    fputs("white", gtp_output_file);
+  else if (color == BLACK)
+    fputs("black", gtp_output_file);
+  else
+    fputs("empty", gtp_output_file);
+  break;
       }
       default:
-	/* FIXME: Should go to `stderr' instead? */
-	fprintf(gtp_output_file, "\n\nUnknown format character '%c'\n", *fmt);
-	break;
+  /* FIXME: Should go to `stderr' instead? */
+  fprintf(gtp_output_file, "\n\nUnknown format character '%c'\n", *fmt);
+  break;
       }
     }
     else
@@ -265,7 +264,7 @@ gtp_start_response(int status)
     gtp_printf("=");
   else
     gtp_printf("?");
-
+  
   if (current_id < 0)
     gtp_printf(" ");
   else
@@ -341,11 +340,11 @@ gtp_decode_color(char *s, int *color)
       || strcmp(color_string, "black") == 0)
     *color = BLACK;
   else if (strcmp(color_string, "w") == 0
-	   || strcmp(color_string, "white") == 0)
+     || strcmp(color_string, "white") == 0)
     *color = WHITE;
   else
     return 0;
-
+  
   return n;
 }
 
@@ -365,7 +364,7 @@ gtp_decode_coord(char *s, int *i, int *j)
 
   if (sscanf(s, " %c%d%n", &column, &row, &n) != 2)
     return 0;
-
+  
   if (tolower((int) column) == 'i')
     return 0;
   *j = tolower((int) column) - 'a';
@@ -411,7 +410,7 @@ gtp_decode_move(char *s, int *color, int *i, int *j)
     *i = -1;
     *j = -1;
   }
-
+  
   return n1 + n2;
 }
 
@@ -426,14 +425,14 @@ sort_moves(int n, int movei[], int movej[])
   for (b = n-1; b > 0; b--) {
     for (a = 0; a < b; a++) {
       if (movei[a] > movei[b]
-	  || (movei[a] == movei[b] && movej[a] > movej[b])) {
-	int tmp;
-	tmp = movei[b];
-	movei[b] = movei[a];
-	movei[a] = tmp;
-	tmp = movej[b];
-	movej[b] = movej[a];
-	movej[a] = tmp;
+    || (movei[a] == movei[b] && movej[a] > movej[b])) {
+  int tmp;
+  tmp = movei[b];
+  movei[b] = movei[a];
+  movei[a] = tmp;
+  tmp = movej[b];
+  movej[b] = movej[a];
+  movej[a] = tmp;
       }
     }
   }
@@ -447,9 +446,9 @@ gtp_print_vertices(int n, int movei[], int movej[])
 {
   int k;
   int ri, rj;
-
+  
   assert(gtp_boardsize > 0);
-
+  
   sort_moves(n, movei, movej);
   for (k = 0; k < n; k++) {
     if (k > 0)
@@ -457,14 +456,14 @@ gtp_print_vertices(int n, int movei[], int movej[])
     if (movei[k] == -1 && movej[k] == -1)
       gtp_printf("PASS");
     else if (movei[k] < 0 || movei[k] >= gtp_boardsize
-	     || movej[k] < 0 || movej[k] >= gtp_boardsize)
+       || movej[k] < 0 || movej[k] >= gtp_boardsize)
       gtp_printf("??");
     else {
       if (vertex_transform_output_hook != NULL)
-	(*vertex_transform_output_hook)(movei[k], movej[k], &ri, &rj);
+  (*vertex_transform_output_hook)(movei[k], movej[k], &ri, &rj);
       else {
-	ri = movei[k];
-	rj = movej[k];
+  ri = movei[k];
+  rj = movej[k];
       }
       gtp_printf("%c%d", 'A' + rj + (rj >= 8), gtp_boardsize - ri);
     }

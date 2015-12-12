@@ -68,11 +68,8 @@ int main(int argc, char **argv) {
 	//srand((unsigned int)time(0));
 
 	/* Initialize the board. */
-
-//    printf("before init\n");
 	init_aplus();
 
-//    printf("after init\n");
 	/* Process GTP commands. */
 	gtp_main_loop(commands, stdin, stdout, NULL);
 
@@ -138,7 +135,7 @@ static int gtp_boardsize(char *s) {
 	board_size = boardsize;
 	gtp_internal_set_boardsize(boardsize);
 	board_array_size = boardsize * boardsize;
-
+	
 	init_aplus();
 
 	return gtp_success("");
@@ -249,7 +246,7 @@ static int gtp_play(char *s) {
 
 static int gtp_raninit(char *s) {
 	int color = 1, i, pos;
-	//ÒÔÏÂÎª²âÊÔÊ±¼äÐÞ¸ÄµÄ£¬ÏëÈÃËûËæ»úÏÂ20²½µ«Êµ¼ÊÖ»ÏÂÁË1²½£¬ÓÃshowboard¿ÉÒÔ²é¿´µ±Ç°ÆåÅÌ¡£
+	//以下为测试时间修改的，想让他随机下20步但实际只下了1步，用showboard可以查看当前棋盘。
 	for (i = 0; i < 10; i++)
 	{
 		pos = generate_random_move(&main_board, color);
@@ -263,7 +260,7 @@ static int gtp_raninit(char *s) {
 		gtp_start_response(GTP_SUCCESS);
 		gtp_mprintf("%m", I(pos), J(pos));
 		gtp_finish_response();
-		gtp_showboard("s");
+		gtp_showboard('s');
 		color = 1;
 	}
 	return gtp_finish_response();
@@ -277,8 +274,8 @@ static int gtp_genmove(char *s) {
 	if (!gtp_decode_color(s, &color))
 		return gtp_failure("invalid color");
 
-
-
+	
+		
 
 	pos = generate_move(&main_board, color);
 	i = I(pos);
