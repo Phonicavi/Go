@@ -4,7 +4,7 @@
 #include "board.h"
 #include "bit_process.h"
 
-/* ¶Ôµ±Ç°¸ñ¾ÖÏÂ×Ó */
+/* å¯¹å½“å‰æ ¼å±€ä¸‹å­ */
 void bit_play_move(bitboard *bb, int i, int j, intersection color)
 {
 	if (color == WHITE)
@@ -22,7 +22,7 @@ void bit_play_move(bitboard *bb, int i, int j, intersection color)
 	}
 }
 
-/* ½«13*13µÄcharÊı×é×ª»¯ÎªÏàÓ¦µÄ13µÄintµÄÎ»Êı×é */
+/* å°†13*13çš„charæ•°ç»„è½¬åŒ–ä¸ºç›¸åº”çš„13çš„intçš„ä½æ•°ç»„ */
 void bit_convert(intersection *b, bitboard *bb)
 {
 	int i;
@@ -32,7 +32,7 @@ void bit_convert(intersection *b, bitboard *bb)
 	}
 }
 
-/* ±È½ÏÁ½¸öÎ»Êı×éÊÇ·ñÍêÈ«ÏàÍ¬£¬ÏàÍ¬·µ»Ø1£¬·ñÔò·µ»Ø0 */
+/* æ¯”è¾ƒä¸¤ä¸ªä½æ•°ç»„æ˜¯å¦å®Œå…¨ç›¸åŒï¼Œç›¸åŒè¿”å›1ï¼Œå¦åˆ™è¿”å›0 */
 int bit_compare(bitboard *bb1, bitboard *bb2)
 {
 	int i;
@@ -46,7 +46,7 @@ int bit_compare(bitboard *bb1, bitboard *bb2)
 	return 1;
 }
 
-/* ÆåÆ×ÉÏÓĞµÄÎ»ÖÃµÄÑÕÉ«£¬ÆåÅÌÉÏÒ²»áÓĞ */
+/* æ£‹è°±ä¸Šæœ‰çš„ä½ç½®çš„é¢œè‰²ï¼Œæ£‹ç›˜ä¸Šä¹Ÿä¼šæœ‰ */
 int bit_compare_2(bitboard *bb, int temp_board[][7][7])
 {
 	int i, j, k,result;
@@ -75,7 +75,7 @@ int bit_compare_2(bitboard *bb, int temp_board[][7][7])
 	return 0;
 }
 
-/* ÑÕÉ«¸Õ¸ÕºÃÏà·´ */
+/* é¢œè‰²åˆšåˆšå¥½ç›¸å */
 int bit_compare_2_conver(bitboard *bb, int temp_board[][7][7])
 {
 	int i, j, k, result;
@@ -104,7 +104,7 @@ int bit_compare_2_conver(bitboard *bb, int temp_board[][7][7])
 	return 0;
 }
 
-/* ÅĞ¶ÏÄ³¸öÎ»ÖÃµÄ×´Ì¬ */
+/* åˆ¤æ–­æŸä¸ªä½ç½®çš„çŠ¶æ€ */
 int bit_get_state(bitboard *bb, int i, int j)
 {
 	int t1 = (bb[i] >> (2 * j)) & 1;
@@ -117,7 +117,7 @@ int bit_get_state(bitboard *bb, int i, int j)
 		return EMPTY;
 }
 
-/* ÅĞ¶ÏÄ³¸öÎ»ÖÃµÄ×´Ì¬ */
+/* åˆ¤æ–­æŸä¸ªä½ç½®çš„çŠ¶æ€ */
 int bit_get_state_pos(bitboard *bb, int pos)
 {
 	int i = I(pos);

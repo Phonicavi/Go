@@ -2,7 +2,7 @@
 
 #include "board.h"
 
-/* Î»´¦Àí */
+/* ä½å¤„ç† */
 void bit_play_move(bitboard *bb, int i, int j, intersection color);
 void bit_convert(intersection *b, bitboard *bb);
 int bit_compare(bitboard *bb1, bitboard *bb2);

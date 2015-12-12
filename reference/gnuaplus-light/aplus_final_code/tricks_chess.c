@@ -7,19 +7,19 @@
 #include "bit_process.h"
 
 /***********************************************************************************
-*Ìá¸ßÆåÁ¦ÓÃµ½µÄÒ»Ğ©Ğ¡¼¼ÇÉ
+*æé«˜æ£‹åŠ›ç”¨åˆ°çš„ä¸€äº›å°æŠ€å·§
 *
 ***********************************************************************************/
 
 
 
 /***********************************************************************************
-* Ä£¿é£ºÇ°¼¸²½²¼¾Ö
+* æ¨¡å—ï¼šå‰å‡ æ­¥å¸ƒå±€
 *
-* Ö÷º¯Êı£º
+* ä¸»å‡½æ•°ï¼š
 * int get_fuseki_pos(board_status *bs, intersection color)
 *
-* ¹¤¾ß£º
+* å·¥å…·ï¼š
 *
 *
 ***********************************************************************************/
@@ -89,23 +89,23 @@ int get_fuseki_pos(board_status *bs, intersection color)
 }
 
 /***********************************************************************************
-* Ä£¿é£ºÓÅÏÈÕÒÄÜ×ö»îµÄµØ·½×ö»î£¨ĞèÒªÊÇÕæÑÛ£¬Èı¶şÒ»£©
+* æ¨¡å—ï¼šä¼˜å…ˆæ‰¾èƒ½åšæ´»çš„åœ°æ–¹åšæ´»ï¼ˆéœ€è¦æ˜¯çœŸçœ¼ï¼Œä¸‰äºŒä¸€ï¼‰
 *
-* Ö÷º¯Êı£º
+* ä¸»å‡½æ•°ï¼š
 * *int get_all_alive_pos(board_status *bs, intersection color)
 *
-* ¹¤¾ß£º
+* å·¥å…·ï¼š
 *
 *
 ***********************************************************************************/
 
-//Î´¼ÓËÙ
+//æœªåŠ é€Ÿ
 void get_all_alive_pos(board_status *bs, intersection color, int result[])
 {
 	int i, j, ai, aj, k, flag=0;
 	int fill[2];
 
-	//Èı£ºÆåÅÌÄÚ²¿£¬Ò»¸öÑÛĞèÒªÈı¸ö½Ç
+	//ä¸‰ï¼šæ£‹ç›˜å†…éƒ¨ï¼Œä¸€ä¸ªçœ¼éœ€è¦ä¸‰ä¸ªè§’
 	for (i = 1; i < MAX_BOARD-1; ++i)
 		for (j = 1; j < MAX_BOARD-1; ++j)
 	{
@@ -123,7 +123,7 @@ void get_all_alive_pos(board_status *bs, intersection color, int result[])
 					{
 						fill[flag] = POS(i + ai, j + aj);
 						flag++;
-						if (flag > 2)//ÒÑ¾­ÓĞÁ½¸öÁË£¬ÕâÊÇµÚÈı¸ö
+						if (flag > 2)//å·²ç»æœ‰ä¸¤ä¸ªäº†ï¼Œè¿™æ˜¯ç¬¬ä¸‰ä¸ª
 						{
 							break;
 						}
@@ -143,7 +143,7 @@ void get_all_alive_pos(board_status *bs, intersection color, int result[])
 
 	int di[5], dj[5];
 
-	//¶ş£ºÆåÅÌ±ßÉÏ£¬Ò»¸öÑÛĞèÒªÁ½¸ö½Ç
+	//äºŒï¼šæ£‹ç›˜è¾¹ä¸Šï¼Œä¸€ä¸ªçœ¼éœ€è¦ä¸¤ä¸ªè§’
 	for (i = 1; i < MAX_BOARD-1; ++i)
 	{
 		if (bs->board[POS(0, i)] == EMPTY)
@@ -220,18 +220,18 @@ void get_all_alive_pos(board_status *bs, intersection color, int result[])
 	}
 
 
-	//Ò»£ºÆåÅÌ½ÇÂä£¬Ò»¸öÑÛĞèÒªÒ»¸ö½Ç
-	//ÔİÊ±²»Ì«ÓĞ±ØÒª
+	//ä¸€ï¼šæ£‹ç›˜è§’è½ï¼Œä¸€ä¸ªçœ¼éœ€è¦ä¸€ä¸ªè§’
+	//æš‚æ—¶ä¸å¤ªæœ‰å¿…è¦
 
 }
 
 /***********************************************************************************
-* Ä£¿é£º³Ô×Ó£¨Ìá×Ó£©ºÍ¾È×Ó£¨½Ğ³Ô£º¡°Ìá×Ó¡±Ç°Ò»ÊÖ¡£ÔÚ¶Ô·½ÂäÏÂÒ»ÊÖÖ®Ç°²»¸Ï¿ìÍùÍâÌÓ£¬¾Í»á±»¶Ô·½Ìá³ÔµÄÇé¿ö£©
-*		ºÍ½ôÆø£¨ÔÚ³Ô¶Ô·½×ÓÖ®Ç°£¬¼õÉÙ¶Ô·½ÆøµÄÊıÄ¿£©
-* Ö÷º¯Êı£º
+* æ¨¡å—ï¼šåƒå­ï¼ˆæå­ï¼‰å’Œæ•‘å­ï¼ˆå«åƒï¼šâ€œæå­â€å‰ä¸€æ‰‹ã€‚åœ¨å¯¹æ–¹è½ä¸‹ä¸€æ‰‹ä¹‹å‰ä¸èµ¶å¿«å¾€å¤–é€ƒï¼Œå°±ä¼šè¢«å¯¹æ–¹æåƒçš„æƒ…å†µï¼‰
+*		å’Œç´§æ°”ï¼ˆåœ¨åƒå¯¹æ–¹å­ä¹‹å‰ï¼Œå‡å°‘å¯¹æ–¹æ°”çš„æ•°ç›®ï¼‰
+* ä¸»å‡½æ•°ï¼š
 * *void get_all_eat_save_lib_pos(board_status *bs, intersection color, int result[])
-*	*ÃèÊö£º¿´ÏÂÄ³¸öÎ»ÖÃposÄÜ³Ôµô¶Ô·½¶àÉÙ¿Å×Ó»ò¾È»î×Ô¼º¶àÉÙ¿Å×Ó»òÄÜ½ôÆø¶àÉÙ×Ó
-*	*¼ì²éposµÄÉÏÏÂ×óÓÒ£¬¿´ÄÜ²»ÄÜ³Ô»òÕß¾È
+*	*æè¿°ï¼šçœ‹ä¸‹æŸä¸ªä½ç½®posèƒ½åƒæ‰å¯¹æ–¹å¤šå°‘é¢—å­æˆ–æ•‘æ´»è‡ªå·±å¤šå°‘é¢—å­æˆ–èƒ½ç´§æ°”å¤šå°‘å­
+*	*æ£€æŸ¥posçš„ä¸Šä¸‹å·¦å³ï¼Œçœ‹èƒ½ä¸èƒ½åƒæˆ–è€…æ•‘
 *
 ***********************************************************************************/
 
@@ -257,7 +257,7 @@ void get_all_eat_save_lib_pos(board_status *bs, intersection color, int result[]
 				continue;
 			if (!has_additional_liberty_game(bs, bi, bj, ai, aj))
 			{
-				//¼ì²é»á²»»áºÍÖ®Ç°µÄµãÔÚÍ¬Ò»¸öÆå´®
+				//æ£€æŸ¥ä¼šä¸ä¼šå’Œä¹‹å‰çš„ç‚¹åœ¨åŒä¸€ä¸ªæ£‹ä¸²
 				father[k] = get_father(bs, POS(bi, bj));
 				for (t = 0; t < k; ++t)
 					if (father[t] != -1 && father[k] == father[t])
@@ -268,12 +268,12 @@ void get_all_eat_save_lib_pos(board_status *bs, intersection color, int result[]
 				if (father[k] == -1)
 					continue;
 
-				//³Ô±ğÈË
+				//åƒåˆ«äºº
 				if (bs->board[POS(bi, bj)] == OTHER_COLOR(color))
 				{
 					result[pos] += SCORE_EAT_EACH * (bs->string_stones[bs->string_index[father[k]]]);
 				}
-				//¾È×Ô¼º
+				//æ•‘è‡ªå·±
 				else if (bs->board[POS(bi, bj)] == color)
 				{
 					if (sim_for_string(bs, pos, color))
@@ -282,15 +282,15 @@ void get_all_eat_save_lib_pos(board_status *bs, intersection color, int result[]
 					}
 					else
 					{
-						//Èç¹û¾ÈÁËÖ®ºóÒ²»¹ÊÇÒ»¿ÚÆø
+						//å¦‚æœæ•‘äº†ä¹‹åä¹Ÿè¿˜æ˜¯ä¸€å£æ°”
 					}
 					
 				}
 			}
-			//Èç¹ûÁíÍâ»¹ÓĞÆø£¬ÅĞ¶ÏÊÇ²»ÊÇÏÂÁËÕâ¿Å×ÓÖ®ºóËü¾ÍÖ»Ê£Ò»¿ÚÆøÁË£¬Èç¹ûÊÇ¾Í½ôÆø
+			//å¦‚æœå¦å¤–è¿˜æœ‰æ°”ï¼Œåˆ¤æ–­æ˜¯ä¸æ˜¯ä¸‹äº†è¿™é¢—å­ä¹‹åå®ƒå°±åªå‰©ä¸€å£æ°”äº†ï¼Œå¦‚æœæ˜¯å°±ç´§æ°”
 			else if (bs->board[POS(bi, bj)] == OTHER_COLOR(color) && sim_for_string(bs, pos, color) == 0)
 			{
-				//¼ì²é»á²»»áºÍÖ®Ç°µÄµãÔÚÍ¬Ò»¸öÆå´®
+				//æ£€æŸ¥ä¼šä¸ä¼šå’Œä¹‹å‰çš„ç‚¹åœ¨åŒä¸€ä¸ªæ£‹ä¸²
 				father[k] = get_father(bs, POS(bi, bj));
 				for (t = 0; t < k; ++t)
 					if (father[t] != -1 && father[k] == father[t])
@@ -301,14 +301,14 @@ void get_all_eat_save_lib_pos(board_status *bs, intersection color, int result[]
 				if (father[k] == -1)
 					continue;
 
-				//½ôÆø
+				//ç´§æ°”
 				result[pos] += SCORE_APPROACH_EACH * (bs->string_stones[bs->string_index[father[k]]]);
 			}
 		}
 	}
 }
 
-//Ìá×Ó£¨³Ô×Ó£©
+//æå­ï¼ˆåƒå­ï¼‰
 int get_eat_pos(board_status *bs, intersection color)
 {
 	int i,j;
@@ -325,7 +325,7 @@ int get_eat_pos(board_status *bs, intersection color)
 	return -14;
 }
 
-//½Ğ³Ô£¨¾È×Ó£©
+//å«åƒï¼ˆæ•‘å­ï¼‰
 int get_atari_pos(board_status *bs, intersection color)
 {
 	int i, j;
@@ -361,7 +361,7 @@ int get_atari_pos(board_status *bs, intersection color)
 	return -14;
 }
 
-//½ôÆø
+//ç´§æ°”
 int get_approach_pos(board_status *bs, intersection color)
 {
 	int i, j;
@@ -379,9 +379,9 @@ int get_approach_pos(board_status *bs, intersection color)
 }
 
 /***********************************************************************************
-* Ä£¿é£º±ÜÃâÌîÑÛ
+* æ¨¡å—ï¼šé¿å…å¡«çœ¼
 *
-* Ö÷º¯Êı£º
+* ä¸»å‡½æ•°ï¼š
 * *void get_ban_fill_eye_pos(board_status *bs, intersection color, int result[])
 *
 *
@@ -412,9 +412,9 @@ void get_ban_fill_eye_pos(board_status *bs, intersection color, int result[])
 }
 
 /***********************************************************************************
-* Ä£¿é£ºÁ¬½ÓºÍÇĞ¶Ï
+* æ¨¡å—ï¼šè¿æ¥å’Œåˆ‡æ–­
 *
-* Ö÷º¯Êı£º
+* ä¸»å‡½æ•°ï¼š
 * *void get_all_connect_cut_pos(board_status *bs, intersection color, int result[])
 * *int get_connect_cut_pos(board_status *bs, intersection color)
 *
@@ -433,7 +433,7 @@ void get_all_connect_cut_pos(board_status *bs, intersection color, int result[])
 		ai = I(pos);
 		aj = J(pos);
 
-		//Èç¹û¶Ô·½¿ÉÒÔÏÂÕâÀï£¬ÎÒÃÇ¾Í¿´¿´ÕâÀïÄÜ²»ÄÜÈÃÎÒÃÇÁ¬½Ó£¬Èç¹û¶Ô·½²»ÄÜÏÂÕâÀï¾ÍÃ»±ØÒª½ÓÉÏÁË£¬Ò²ËµÃ÷ÒÑ¾­±»ÇĞ¶ÏÁË
+		//å¦‚æœå¯¹æ–¹å¯ä»¥ä¸‹è¿™é‡Œï¼Œæˆ‘ä»¬å°±çœ‹çœ‹è¿™é‡Œèƒ½ä¸èƒ½è®©æˆ‘ä»¬è¿æ¥ï¼Œå¦‚æœå¯¹æ–¹ä¸èƒ½ä¸‹è¿™é‡Œå°±æ²¡å¿…è¦æ¥ä¸Šäº†ï¼Œä¹Ÿè¯´æ˜å·²ç»è¢«åˆ‡æ–­äº†
 		if (is_legal_move(bs, OTHER_COLOR(color), pos))
 		{
 			for (k = 0; k < 4; ++k)
@@ -446,13 +446,13 @@ void get_all_connect_cut_pos(board_status *bs, intersection color, int result[])
 				father[k] = get_father(bs, POS(bi, bj));
 				for (t = 0; t < k; ++t)
 				{
-					if (father[t] != -1 && father[t] == father[k])//Í¬Ò»¸ö´®
+					if (father[t] != -1 && father[t] == father[k])//åŒä¸€ä¸ªä¸²
 					{
 						father[k] = -1;
 						break;
 					}
 					else if (father[t] != -1 
-						&& bs->board[POS(ai+deltai[t],aj+deltaj[t])]==bs->board[POS(bi,bj)])//Ò²¾ÍÊÇfather[t] != father[k]
+						&& bs->board[POS(ai+deltai[t],aj+deltaj[t])]==bs->board[POS(bi,bj)])//ä¹Ÿå°±æ˜¯father[t] != father[k]
 					{
 						tmp = bs->string_stones[bs->string_index[father[k]]] + bs->string_stones[bs->string_index[father[t]]];
 						if (tmp >= CONNECT_CUT_MIN_NUM)
@@ -481,7 +481,7 @@ int get_connect_cut_pos(board_status *bs, intersection color)
 		ai = I(pos);
 		aj = J(pos);
 
-		//Èç¹û¶Ô·½¿ÉÒÔÏÂÕâÀï£¬ÎÒÃÇ¾Í¿´¿´ÕâÀïÄÜ²»ÄÜÈÃÎÒÃÇÁ¬½Ó£¬Èç¹û¶Ô·½²»ÄÜÏÂÕâÀï¾ÍÃ»±ØÒª½ÓÉÏÁË£¬Ò²ËµÃ÷ÒÑ¾­±»ÇĞ¶ÏÁË
+		//å¦‚æœå¯¹æ–¹å¯ä»¥ä¸‹è¿™é‡Œï¼Œæˆ‘ä»¬å°±çœ‹çœ‹è¿™é‡Œèƒ½ä¸èƒ½è®©æˆ‘ä»¬è¿æ¥ï¼Œå¦‚æœå¯¹æ–¹ä¸èƒ½ä¸‹è¿™é‡Œå°±æ²¡å¿…è¦æ¥ä¸Šäº†ï¼Œä¹Ÿè¯´æ˜å·²ç»è¢«åˆ‡æ–­äº†
 		if (is_legal_move(bs, OTHER_COLOR(color), pos))
 		{
 			for (k = 0; k < 4; ++k)
@@ -494,13 +494,13 @@ int get_connect_cut_pos(board_status *bs, intersection color)
 				father[k] = get_father(bs, POS(bi, bj));
 				for (t = 0; t < k; ++t)
 				{
-					if (father[t] != -1 && father[t] == father[k])//Í¬Ò»¸ö´®
+					if (father[t] != -1 && father[t] == father[k])//åŒä¸€ä¸ªä¸²
 					{
 						father[k] = -1;
 						break;
 					}
 					else if (father[t] != -1
-						&& bs->board[POS(ai + deltai[t], aj + deltaj[t])] == bs->board[POS(bi, bj)])//Ò²¾ÍÊÇfather[t] != father[k]
+						&& bs->board[POS(ai + deltai[t], aj + deltaj[t])] == bs->board[POS(bi, bj)])//ä¹Ÿå°±æ˜¯father[t] != father[k]
 					{
 						tmp = bs->string_stones[bs->string_index[father[k]]] + bs->string_stones[bs->string_index[father[t]]];
 						if (tmp >= CONNECT_CUT_MIN_NUM)
@@ -516,15 +516,15 @@ int get_connect_cut_pos(board_status *bs, intersection color)
 }
 
 /***********************************************************************************
-* Ä£¿é£ºÇ°Ãæ¼¸²½²»ÄÜÏÂÔÚ±ß½çÉÏ
+* æ¨¡å—ï¼šå‰é¢å‡ æ­¥ä¸èƒ½ä¸‹åœ¨è¾¹ç•Œä¸Š
 *
-* Ö÷º¯Êı£º
+* ä¸»å‡½æ•°ï¼š
 * *void get_one_boundary_pos(board_status *bs, int result[])
 * *void get_two_boundary_pos(board_status *bs, int result[])
 *
 ***********************************************************************************/
 
-//Èç¹ûµ¹ÊıµÚ¶ş²ãÊÇ¿ÕµÄ£¬×îºóÒ»²ã²»ÄÜÏÂ
+//å¦‚æœå€’æ•°ç¬¬äºŒå±‚æ˜¯ç©ºçš„ï¼Œæœ€åä¸€å±‚ä¸èƒ½ä¸‹
 void get_one_boundary_pos(board_status *bs, int result[])
 {
 	int i,empty;
@@ -581,7 +581,7 @@ void get_one_boundary_pos(board_status *bs, int result[])
 	}
 }
 
-//Èç¹ûµ¹ÊıµÚÈı²ãÊÇ¿ÕµÄ£¬×îºóÁ½²ã²»ÄÜÏÂ
+//å¦‚æœå€’æ•°ç¬¬ä¸‰å±‚æ˜¯ç©ºçš„ï¼Œæœ€åä¸¤å±‚ä¸èƒ½ä¸‹
 void get_two_boundary_pos(board_status *bs, int result[])
 {
 	int i, empty;
@@ -651,9 +651,9 @@ void get_two_boundary_pos(board_status *bs, int result[])
 }
 
 /***********************************************************************************
-* Ä£¿é£ºÕÒËÄÖÜ¶¼ÊÇ¿ÕµÄµã
+* æ¨¡å—ï¼šæ‰¾å››å‘¨éƒ½æ˜¯ç©ºçš„ç‚¹
 *
-* Ö÷º¯Êı£º
+* ä¸»å‡½æ•°ï¼š
 * *void get_all_fill_board_pos(board_status *bs, int result[])
 * *int get_fill_board_pos(board_status *bs, intersection color)
 *
@@ -720,15 +720,15 @@ int get_fill_board_pos(board_status *bs, intersection color)
 }
 
 /***********************************************************************************
-* Ä£¿é£º×öÑÛ
+* æ¨¡å—ï¼šåšçœ¼
 *
-* Ö÷º¯Êı£º
+* ä¸»å‡½æ•°ï¼š
 * *void get_all_nakade_pos(board_status *bs, intersection color, int result[])
 * *int get_nakade_pos(board_status *bs, intersection color, intersection color_current)
 *
 ***********************************************************************************/
 
-//²»ÈÃ¶Ô·½×öÑÛ£¬»òÕß×Ô¼º×öÑÛ
+//ä¸è®©å¯¹æ–¹åšçœ¼ï¼Œæˆ–è€…è‡ªå·±åšçœ¼
 void get_all_nakade_pos(board_status *bs, intersection color, int result[])
 {
 	int pos,i;
@@ -807,7 +807,7 @@ void get_all_nakade_pos(board_status *bs, intersection color, int result[])
 	}
 }
 
-//×öÑÛ(×öcolorµÄÑÛ£¬µ±Ç°ÊÇcolor_currentÔÚÏÂ×Ó)
+//åšçœ¼(åšcolorçš„çœ¼ï¼Œå½“å‰æ˜¯color_currentåœ¨ä¸‹å­)
 int get_nakade_pos(board_status *bs, intersection color, intersection color_current)
 {
 	int pos, i;

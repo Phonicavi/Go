@@ -1,44 +1,44 @@
 #ifndef TRICKS_CHESS_MANUAL
 
-#define SCORE_MANUAL_HIT 0.5  //ÔÚÆåÅÌÉÏ³öÏÖÒ»´ÎÄÜµÃµ½µÄ·ÖÊı
-#define SCORE_EAT_EACH 2  //³ÔÒ»¿Å×ÓÄÜµÃµ½µÄ·ÖÊı
-#define SCORE_SAVE_EACH 3  //¾ÈÒ»¿Å×ÓÄÜµÃµ½µÄ·ÖÊı
-#define SCORE_APPROACH_EACH 1 //½ôÆøÒ»¿Å×ÓÄÜµÃµ½µÄ·ÖÊı
-#define CONNECT_CUT_MIN_NUM 4  //Á¬½ÓºÍÇĞ¶ÏµÄÏÂÏŞ
-#define SCORE_CONNECT_EACH 1  //Á¬½ÓÒ»¿Å×ÓÄÜµÃµ½µÄ·ÖÊı
-#define SCORE_CUT_EACH 1  //ÇĞ¶ÏÒ»¿Å×ÓÄÜµÃµ½µÄ·ÖÊı
-#define SCORE_REAL_TYE_EACH 4 //×öÒ»¸öÕæÑÛÄÜµÃµÄ·ÖÊı
-#define SCORE_FILL_BOARD -1 //ÌîÆåÅÌÉÏÒ»¸öËÄÖÜ¶¼Ã»ÓĞ×ÓµÄµã
-#define SCORE_NAKADE 1 //²»ÈÃ¶Ô·½×öÑÛµÄÎ»ÖÃ
+#define SCORE_MANUAL_HIT 0.5  //åœ¨æ£‹ç›˜ä¸Šå‡ºç°ä¸€æ¬¡èƒ½å¾—åˆ°çš„åˆ†æ•°
+#define SCORE_EAT_EACH 2  //åƒä¸€é¢—å­èƒ½å¾—åˆ°çš„åˆ†æ•°
+#define SCORE_SAVE_EACH 3  //æ•‘ä¸€é¢—å­èƒ½å¾—åˆ°çš„åˆ†æ•°
+#define SCORE_APPROACH_EACH 1 //ç´§æ°”ä¸€é¢—å­èƒ½å¾—åˆ°çš„åˆ†æ•°
+#define CONNECT_CUT_MIN_NUM 4  //è¿æ¥å’Œåˆ‡æ–­çš„ä¸‹é™
+#define SCORE_CONNECT_EACH 1  //è¿æ¥ä¸€é¢—å­èƒ½å¾—åˆ°çš„åˆ†æ•°
+#define SCORE_CUT_EACH 1  //åˆ‡æ–­ä¸€é¢—å­èƒ½å¾—åˆ°çš„åˆ†æ•°
+#define SCORE_REAL_TYE_EACH 4 //åšä¸€ä¸ªçœŸçœ¼èƒ½å¾—çš„åˆ†æ•°
+#define SCORE_FILL_BOARD -1 //å¡«æ£‹ç›˜ä¸Šä¸€ä¸ªå››å‘¨éƒ½æ²¡æœ‰å­çš„ç‚¹
+#define SCORE_NAKADE 1 //ä¸è®©å¯¹æ–¹åšçœ¼çš„ä½ç½®
 
-/* trick£º²¼¾Ö */
+/* trickï¼šå¸ƒå±€ */
 int get_fuseki_pos(board_status *bs, intersection color);
 
-/* trick£º×ö»î */
+/* trickï¼šåšæ´» */
 void get_all_alive_pos(board_status *bs, intersection color, int result[]);
 
-/* trick£º³Ô×Ó¾È×Ó½ôÆø */
+/* trickï¼šåƒå­æ•‘å­ç´§æ°” */
 int get_eat_pos(board_status *bs, intersection color);
 int get_atari_pos(board_status *bs, intersection color);
 int get_approach_pos(board_status *bs, intersection color);
 void get_all_eat_save_lib_pos(board_status *bs, intersection color, int result[]);
 
-/* trick£º±ÜÃâÌîÑÛ */
+/* trickï¼šé¿å…å¡«çœ¼ */
 void get_ban_fill_eye_pos(board_status *bs, intersection color, int result[]);
 
-/* trick£ºÁ¬½ÓºÍÇĞ¶Ï */
+/* trickï¼šè¿æ¥å’Œåˆ‡æ–­ */
 int get_connect_cut_pos(board_status *bs, intersection color);
 void get_all_connect_cut_pos(board_status *bs, intersection color, int result[]);
 
-/* trick£ºÇ°Ãæ¼¸²½²»ÄÜÏÂÔÚ±ß½çÉÏ */
+/* trickï¼šå‰é¢å‡ æ­¥ä¸èƒ½ä¸‹åœ¨è¾¹ç•Œä¸Š */
 void get_one_boundary_pos(board_status *bs, int result[]);
 void get_two_boundary_pos(board_status *bs, int result[]);
 
-/* trick£ºÕÒËÄÖÜ¶¼ÊÇ¿ÕµÄµã */
+/* trickï¼šæ‰¾å››å‘¨éƒ½æ˜¯ç©ºçš„ç‚¹ */
 int get_fill_board_pos(board_status *bs, intersection color);
 void get_all_fill_board_pos(board_status *bs, int result[]);
 
-/* trick£º×öÑÛ */
+/* trickï¼šåšçœ¼ */
 int get_nakade_pos(board_status *bs, intersection color, intersection color_current);
 void get_all_nakade_pos(board_status *bs, intersection color, int result[]);
 

@@ -8,20 +8,20 @@
 
 #define PATH_CHESS_MANUAL "F:\\Course\\2015-2016_Autumn\\Artificial_Intelligence\\Go\\resource\\gnuaplus-revised\\chess_manual\\kogo4.SGF"
 
-//·Ö¶Î
-#define STEPS_START_END 3			//¿ª¾ÖÒª×ß¶àÉÙ²½¹Ì¶¨Î»ÖÃ
-#define STEPS_MANUAL_END 10			//µ½¶àÉÙ²½ÎªÖ¹°´ÕÕÆåÆ×À´×ß
-#define STEPS_EAT_SAVE_END 140		//³Ô×ÓºÍ¾È×ÓµÄ²½ÊýÏÞÖÆ
-#define STEPS_CONNECT_CUT_END 40	//Á¬½ÓºÍÇÐ¶ÏµÄ²½ÊýÏÞÖÆ
-#define STEPS_MIDDLE_START 50		//ÖÐ³¡¿ªÊ¼²½Êý
-#define STEPS_MIDDLE_END 100		//ÖÐ³¡½áÊø²½Êý
-#define MAX_LEGGAL_RANDOM 20		//¿¿random»ñµÃlegalmoveµÄ×î´óÊý ÓÃÓÚÓÅ»¯
-#define STEPS_BOUNDARY_TWO 10		//¶àÉÙ²½ÒÔÄÚºöÂÔÆåÅÆ×îÍâÈ¦Á½²ãµã
-#define STEPS_BOUNDARY_ONE 20		//¶àÉÙ²½ÒÔÄÚºöÂÔÆåÅÆ×îÍâÈ¦Ò»²ãµã
+//åˆ†æ®µ
+#define STEPS_START_END 3			//å¼€å±€è¦èµ°å¤šå°‘æ­¥å›ºå®šä½ç½®
+#define STEPS_MANUAL_END 10			//åˆ°å¤šå°‘æ­¥ä¸ºæ­¢æŒ‰ç…§æ£‹è°±æ¥èµ°
+#define STEPS_EAT_SAVE_END 140		//åƒå­å’Œæ•‘å­çš„æ­¥æ•°é™åˆ¶
+#define STEPS_CONNECT_CUT_END 40	//è¿žæŽ¥å’Œåˆ‡æ–­çš„æ­¥æ•°é™åˆ¶
+#define STEPS_MIDDLE_START 50		//ä¸­åœºå¼€å§‹æ­¥æ•°
+#define STEPS_MIDDLE_END 100		//ä¸­åœºç»“æŸæ­¥æ•°
+#define MAX_LEGGAL_RANDOM 20		//é randomèŽ·å¾—legalmoveçš„æœ€å¤§æ•° ç”¨äºŽä¼˜åŒ–
+#define STEPS_BOUNDARY_TWO 10		//å¤šå°‘æ­¥ä»¥å†…å¿½ç•¥æ£‹ç‰Œæœ€å¤–åœˆä¸¤å±‚ç‚¹
+#define STEPS_BOUNDARY_ONE 20		//å¤šå°‘æ­¥ä»¥å†…å¿½ç•¥æ£‹ç‰Œæœ€å¤–åœˆä¸€å±‚ç‚¹
 
-//ÔÚÅÅÐòÖ®Ç°µÄ£¬result_to_uct[i]±íÊ¾pos=iµÄÎ»ÖÃµÄÈ¨ÖØ
-//²»ºÏ·¨£º-1
-//×îÆÕÍ¨µÄµã£º0
+//åœ¨æŽ’åºä¹‹å‰çš„ï¼Œresult_to_uct[i]è¡¨ç¤ºpos=içš„ä½ç½®çš„æƒé‡
+//ä¸åˆæ³•ï¼š-1
+//æœ€æ™®é€šçš„ç‚¹ï¼š0
 int result_to_uct[MAX_BOARDSIZE];
 int result_to_uct_pos[MAX_BOARDSIZE];
 

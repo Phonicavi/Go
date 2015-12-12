@@ -2,11 +2,11 @@
 * Copyright(C),2014-2015,SJTU
 * Program Assignment:	board
 * FileName:	board.c
-* Source code in£º	gnu_base_code/board.c
+* Source code inï¼š	gnu_base_code/board.c
 * Author:	Cyy/ljj/Qxt/Zzh
 * Version:	1.0
 * Date:	2014/12/28
-* Description:	Functions of board. ÓÃÓÚÎ¬»¤ÆåÅÌµÄ²Ù×÷
+* Description:	Functions of board. ç”¨äºç»´æŠ¤æ£‹ç›˜çš„æ“ä½œ
 * Others:
 * Function List:
 *	void clear_board(board_status *bs);
@@ -28,7 +28,7 @@
 * History:
 *	1.	Date:	2014/12/28
 *		Author:	cyy
-*		Modification:	»ù´¡´úÂë
+*		Modification:	åŸºç¡€ä»£ç 
 *	2.	Date:	2015/1/16
 *		Author:	cyy
 *		Modification:	final
@@ -88,7 +88,7 @@ void clear_board(board_status *bs) {
 * Purpose:			Is the board empty?
 * Params :
 *	@board_status(*)	bs		board status
-* Return:				int		0£ºnot empty		1£ºempty
+* Return:				int		0ï¼šnot empty		1ï¼šempty
 * Limitation:
 *******************************************************/
 int board_empty(board_status *bs) {
@@ -107,7 +107,7 @@ int board_empty(board_status *bs) {
 * Params :
 *	@board_status(*)	bs		board status
 *	@int				pos		the index of a position
-* Return:				int		0£ºfalse		1£ºtrue
+* Return:				int		0ï¼šfalse		1ï¼štrue
 * Limitation:
 *******************************************************/
 int is_stone(board_status *bs, int pos) {
@@ -124,24 +124,24 @@ int is_stone(board_status *bs, int pos) {
 * Purpose:			Get the stones of a string.
 * Params :
 *	@board_status(*)	bs		board status
-*	@int				i		ÆğÊ¼stone position i
-*	@int				j		ÆğÊ¼stone position j
-*	@int(*)				stonei	stonei[x] Æå´®µÚx¸öÆå×ÓµÄi×ø±ê
-*	@int(*)				stonej	stonej[x] Æå´®µÚx¸öÆå×ÓµÄj×ø±ê
+*	@int				i		èµ·å§‹stone position i
+*	@int				j		èµ·å§‹stone position j
+*	@int(*)				stonei	stonei[x] æ£‹ä¸²ç¬¬xä¸ªæ£‹å­çš„iåæ ‡
+*	@int(*)				stonej	stonej[x] æ£‹ä¸²ç¬¬xä¸ªæ£‹å­çš„jåæ ‡
 * Return:				int		The number of stones in the string
-* Limitation:	¸ù¾İ²éÑ¯ÆğÊ¼stoneµÄ²»Í¬ stonei stonej»áÓĞ²»Í¬£¬
-*				µ«ÊÇÒÀ¾ÉÂú×ãÒ»Ò»¶ÔÓ¦¹ØÏµ¡£
+* Limitation:	æ ¹æ®æŸ¥è¯¢èµ·å§‹stoneçš„ä¸åŒ stonei stonejä¼šæœ‰ä¸åŒï¼Œ
+*				ä½†æ˜¯ä¾æ—§æ»¡è¶³ä¸€ä¸€å¯¹åº”å…³ç³»ã€‚
 *******************************************************/
 int get_string(board_status *bs, int i, int j, int *stonei, int *stonej) {
-	//¸ÃÆå´®µÄÆå×ÓÊıÄ¿
+	//è¯¥æ£‹ä¸²çš„æ£‹å­æ•°ç›®
 	int num_stones = 0;
-	//²éÑ¯ÆğÊ¼Æå×ÓµÄpos
+	//æŸ¥è¯¢èµ·å§‹æ£‹å­çš„pos
 	int pos = POS(i, j);
 	do {
 		stonei[num_stones] = I(pos);
 		stonej[num_stones] = J(pos);
 		num_stones++;
-		//Ñ¡È¡µ±Ç°Æå×ÓµÄÏàÁ¬µÄÏÂÒ»¸öÍ¬É«Æå×Ó
+		//é€‰å–å½“å‰æ£‹å­çš„ç›¸è¿çš„ä¸‹ä¸€ä¸ªåŒè‰²æ£‹å­
 		pos = bs->next_stone[pos];
 	} while (pos != POS(i, j));
 
@@ -160,7 +160,7 @@ int get_string(board_status *bs, int i, int j, int *stonei, int *stonej) {
 * Limitation:
 *******************************************************/
 int legal_move(board_status *bs, int i, int j, intersection color) {
-	//¶Ô·½Æå×ÓÑÕÉ«
+	//å¯¹æ–¹æ£‹å­é¢œè‰²
 	intersection other = OTHER_COLOR(color);
 
 	/* Pass is always legal. */
@@ -191,19 +191,19 @@ int legal_move(board_status *bs, int i, int j, intersection color) {
 *					at (libi, libj)?
 * Params :
 *	@board_status(*)	bs		board status
-*	@int				i		²éÑ¯stone position i
-*	@int				j		²éÑ¯stone position j
-*	@int				libi	Ô´Í·stone position libi
-*	@int				libj	Ô´Í·stone position libj
+*	@int				i		æŸ¥è¯¢stone position i
+*	@int				j		æŸ¥è¯¢stone position j
+*	@int				libi	æºå¤´stone position libi
+*	@int				libj	æºå¤´stone position libj
 * Return:				int		1:ture	0:false
-* Limitation£º	1. Ô´Í·stoneÓÃÀ´²éÖØ£¬Ô´Í·¹±Ï×µÄÆø²»Ëã
-*				2. ĞèÒª²éÑ¯ ²éÑ¯µãËùÔÚµÄÆå´®ÄÚµÄÈ«²¿Æå×Ó
+* Limitationï¼š	1. æºå¤´stoneç”¨æ¥æŸ¥é‡ï¼Œæºå¤´è´¡çŒ®çš„æ°”ä¸ç®—
+*				2. éœ€è¦æŸ¥è¯¢ æŸ¥è¯¢ç‚¹æ‰€åœ¨çš„æ£‹ä¸²å†…çš„å…¨éƒ¨æ£‹å­
 *******************************************************/
 int has_additional_liberty(board_status *bs, int i, int j, int libi, int libj) {
-	//ÏÈ¼ÙÉèÔÚlibi£¬libjÎ»ÖÃÉÏÒÑ¾­·ÅÖÃÁËÆå×Ó
+	//å…ˆå‡è®¾åœ¨libiï¼Œlibjä½ç½®ä¸Šå·²ç»æ”¾ç½®äº†æ£‹å­
 
 
-	//²éÑ¯stoneµÄpos
+	//æŸ¥è¯¢stoneçš„pos
 	int lib;
 	int pos = POS(i, j);
 	int pos2;
@@ -239,10 +239,10 @@ int has_additional_liberty(board_status *bs, int i, int j, int libi, int libj) {
 
 int has_additional_liberty_game(board_status *bs, int i, int j, int libi, int libj) {
 
-	//ÏÈ¼ÙÉèÔÚlibi£¬libjÎ»ÖÃÉÏÒÑ¾­·ÅÖÃÁËÆå×Ó
+	//å…ˆå‡è®¾åœ¨libiï¼Œlibjä½ç½®ä¸Šå·²ç»æ”¾ç½®äº†æ£‹å­
 
 
-	//²éÑ¯stoneµÄpos
+	//æŸ¥è¯¢stoneçš„pos
 	int lib;
 	int pos = POS(i, j);
 	int pos2;
@@ -290,13 +290,13 @@ int has_additional_liberty_game(board_status *bs, int i, int j, int libi, int li
 *	@board_status(*)	bs		board status
 *	@int				ai		around block position ai
 *	@int				aj		around block position aj
-*	@int				i		²éÑ¯block position i
-*	@int				j		²éÑ¯block position j
+*	@int				i		æŸ¥è¯¢block position i
+*	@int				j		æŸ¥è¯¢block position j
 *	@intersection		color	player's color
 * Return:				int		1:ture	0:false
-* Limitation: ÅĞ¶Ï(i, j)ÖÜ±ßµÄÎ»ÖÃ(ai, aj)ÊÇ·ñÓĞÆø£º
-*				1. £¨ai, aj£©ÉÏÎŞÆå×Ó
-*				2. £¨ai, aj£©ÉÏÊÇÍ¬É«Æå×Ó ¼ÌĞøÅĞ¶Ï
+* Limitation: åˆ¤æ–­(i, j)å‘¨è¾¹çš„ä½ç½®(ai, aj)æ˜¯å¦æœ‰æ°”ï¼š
+*				1. ï¼ˆai, ajï¼‰ä¸Šæ— æ£‹å­
+*				2. ï¼ˆai, ajï¼‰ä¸Šæ˜¯åŒè‰²æ£‹å­ ç»§ç»­åˆ¤æ–­
 *******************************************************/
 int provides_liberty(board_status *bs, int ai, int aj, int i, int j, intersection color) {
 	/* A vertex off the board does not provide a liberty. */
@@ -313,7 +313,7 @@ int provides_liberty(board_status *bs, int ai, int aj, int i, int j, intersectio
 	 * has more liberties than the one at (i, j).
 	 */
 	if (bs->board[POS(ai, aj)] == color) {
-		//¼ÌĞøÅĞ¶Ï£¨ai, aj£©ËùÁ¬µÃÆøÊıÄ¿
+		//ç»§ç»­åˆ¤æ–­ï¼ˆai, ajï¼‰æ‰€è¿å¾—æ°”æ•°ç›®
 		return has_additional_liberty(bs, ai, aj, i, j);
 	}
 
@@ -332,14 +332,14 @@ int provides_liberty(board_status *bs, int ai, int aj, int i, int j, intersectio
 *	@board_status(*)	bs		board status
 *	@int				ai		around block position ai
 *	@int				aj		around block position aj
-*	@int				i		²éÑ¯block position i
-*	@int				j		²éÑ¯block position j
+*	@int				i		æŸ¥è¯¢block position i
+*	@int				j		æŸ¥è¯¢block position j
 *	@intersection		color	player's color
-* Return:				int		Ìá¹©ÆøµÄÊıÄ¿
-* Limitation: ÅĞ¶Ï(i, j)ÖÜ±ßµÄÎ»ÖÃ(ai, aj)ÊÇ·ñÓĞÆø£º
-*				1. £¨ai, aj£©ÉÏÎŞÆå×Ó
-*				2. £¨ai, aj£©ÉÏÊÇÍ¬É«Æå×Ó ·µ»ØÕâÒ»²¿·ÖµÄÆøÊı
-*				ÓÃÀ´·ÀÖ¹³öÏÖ×Ô¼ºËÍ×ÓµÄÇé¿ö cyy
+* Return:				int		æä¾›æ°”çš„æ•°ç›®
+* Limitation: åˆ¤æ–­(i, j)å‘¨è¾¹çš„ä½ç½®(ai, aj)æ˜¯å¦æœ‰æ°”ï¼š
+*				1. ï¼ˆai, ajï¼‰ä¸Šæ— æ£‹å­
+*				2. ï¼ˆai, ajï¼‰ä¸Šæ˜¯åŒè‰²æ£‹å­ è¿”å›è¿™ä¸€éƒ¨åˆ†çš„æ°”æ•°
+*				ç”¨æ¥é˜²æ­¢å‡ºç°è‡ªå·±é€å­çš„æƒ…å†µ cyy
 *******************************************************/
 int provides_liberty_sim(board_status *bs, int ai, int aj, int i, int j, intersection color) {
 	/* A vertex off the board does not provide a liberty. */
@@ -356,7 +356,7 @@ int provides_liberty_sim(board_status *bs, int ai, int aj, int i, int j, interse
 	* has more liberties than the one at (i, j).
 	*/
 	if (bs->board[POS(ai, aj)] == color) {
-		//¼ÌĞøÅĞ¶Ï£¨ai, aj£©ËùÁ¬µÃÕæÆøÊıÄ¿
+		//ç»§ç»­åˆ¤æ–­ï¼ˆai, ajï¼‰æ‰€è¿å¾—çœŸæ°”æ•°ç›®
 		return bs->approximate_liberty_real[bs->string_index[get_father(bs, POS(ai, aj))]] - 1;
 	}
 
@@ -372,17 +372,17 @@ int provides_liberty_sim(board_status *bs, int ai, int aj, int i, int j, interse
 * Purpose:			Is a move at (i, j) suicide for color?
 * Params :
 *	@board_status(*)	bs		board status
-*	@int				i		²éÑ¯block position i
-*	@int				j		²éÑ¯block position j
+*	@int				i		æŸ¥è¯¢block position i
+*	@int				j		æŸ¥è¯¢block position j
 *	@intersection		color	player's color
 * Return:				int		0:false 1:true
 * Limitation:
 *******************************************************/
 int suicide(board_status *bs, int i, int j, intersection color) {
 	int k;
-	//²éÑ¯µãµÄËÄÖÜÊÇ·ñÓĞÆø
+	//æŸ¥è¯¢ç‚¹çš„å››å‘¨æ˜¯å¦æœ‰æ°”
 	for (k = 0; k < 4; k++){
-		//Èç¹ûÓĞÆø
+		//å¦‚æœæœ‰æ°”
 		if (provides_liberty(bs, i + deltai[k], j + deltaj[k], i, j, color)){
 			return 0;
 		}
@@ -397,7 +397,7 @@ int suicide(board_status *bs, int i, int j, intersection color) {
 * Params :
 *	@board_status(*)	bs		board status
 *	@intersection		color	player's color
-*	@int				pos		²éÑ¯block position index
+*	@int				pos		æŸ¥è¯¢block position index
 * Return:				int		1:legal	0:not legal
 * Limitation:
 *******************************************************/
@@ -405,7 +405,7 @@ int is_legal_move(board_status *bs, intersection color, int pos) {
 	int ai, aj, bi, bj, k;
 	ai = I(pos);
 	aj = J(pos);
-	// ºÏÀíÒÆ¶¯ÇÒ²»ÊÇ×ÔÉ±ĞĞÎª
+	// åˆç†ç§»åŠ¨ä¸”ä¸æ˜¯è‡ªæ€è¡Œä¸º
 	if (legal_move(bs, ai, aj, color)
 		&& !suicide(bs, ai, aj, color)) {
 		/* Further require the move not to be suicide for the
@@ -501,22 +501,22 @@ int get_father(board_status *bs, int pos) {
 /*******************************************************
 * Function Name:	remove_string_from_strings
 * Purpose:			remove a string from the board array
-*					stringµÄÊıÁ¿Îªnum_of_strings£¬°Ñµ±Ç°ÒªÈ¥µôµÄstring
-*					µÄËùÓĞĞÅÏ¢ÉèÎªµÚnum_of_strings¸östringµÄĞÅÏ¢£¬È»ºó
-*					num_of_strings¼õ1
+*					stringçš„æ•°é‡ä¸ºnum_of_stringsï¼ŒæŠŠå½“å‰è¦å»æ‰çš„string
+*					çš„æ‰€æœ‰ä¿¡æ¯è®¾ä¸ºç¬¬num_of_stringsä¸ªstringçš„ä¿¡æ¯ï¼Œç„¶å
+*					num_of_stringså‡1
 * Params :
 *	@board_status(*)	bs		board status
-*	@int				fa		ÒªÒÆ³ıµÄstringµÄfather
+*	@int				fa		è¦ç§»é™¤çš„stringçš„father
 * Return:				void    Update the status of
 *								strings.
 * Limitation:
 *******************************************************/
 static void remove_string_from_strings(board_status *bs, int fa) {
-	//»ñÈ¡ÒªÒÆ³ıµÄÆå´®µÄindex
+	//è·å–è¦ç§»é™¤çš„æ£‹ä¸²çš„index
 	int str_idx = bs->string_index[fa];
 
 	if (str_idx != bs->num_of_strings) {
-		//°ÑÒªÒÆ³ıµÄstringÏà¹ØµÄĞÅÏ¢ÓÃ×îºóÒ»×éÊı¾İÌæ´ú
+		//æŠŠè¦ç§»é™¤çš„stringç›¸å…³çš„ä¿¡æ¯ç”¨æœ€åä¸€ç»„æ•°æ®æ›¿ä»£
 		bs->strings[str_idx] = bs->strings[bs->num_of_strings];
 		bs->string_color[str_idx] = bs->string_color[bs->num_of_strings];
 		bs->string_stones[str_idx] = bs->string_stones[bs->num_of_strings];
@@ -528,20 +528,20 @@ static void remove_string_from_strings(board_status *bs, int fa) {
 }
 
 static void remove_string_from_strings_game(board_status *bs, int fa) {
-	//»ñÈ¡ÒªÒÆ³ıµÄÆå´®µÄindex
+	//è·å–è¦ç§»é™¤çš„æ£‹ä¸²çš„index
 	int str_idx = bs->string_index[fa], i;
 
 	if (str_idx != bs->num_of_strings) {
-		//°ÑÒªÒÆ³ıµÄstringÏà¹ØµÄĞÅÏ¢ÓÃ×îºóÒ»×éÊı¾İÌæ´ú
+		//æŠŠè¦ç§»é™¤çš„stringç›¸å…³çš„ä¿¡æ¯ç”¨æœ€åä¸€ç»„æ•°æ®æ›¿ä»£
 		bs->strings[str_idx] = bs->strings[bs->num_of_strings];
 		bs->string_color[str_idx] = bs->string_color[bs->num_of_strings];
 		bs->string_stones[str_idx] = bs->string_stones[bs->num_of_strings];
 		bs->approximate_liberty[str_idx] = bs->approximate_liberty[bs->num_of_strings];
 
-		//ÕæÆø
+		//çœŸæ°”
 		bs->approximate_liberty_real[str_idx] = bs->approximate_liberty_real[bs->num_of_strings];
 
-		//¸üĞÂ±»É¾³ıºÍ×îºóÒ»¸öÆå´®µÄprovide_libÊı×é
+		//æ›´æ–°è¢«åˆ é™¤å’Œæœ€åä¸€ä¸ªæ£‹ä¸²çš„provide_libæ•°ç»„
 		for (i = 0; i < MAX_BOARDSIZE; ++i)
 		{
 			if (bs->provide_lib[i][str_idx] == true)
@@ -569,46 +569,46 @@ static void remove_string_from_strings_game(board_status *bs, int fa) {
 *					removed.
 * Params :
 *	@board_status(*)	bs		board status
-*	@int				i		ÒªÉ¾³ıÆå´®ÖĞµÄÄ³¸östoneµÄ i
-*	@int				j		ÒªÉ¾³ıÆå´®ÖĞµÄÄ³¸östoneµÄ j
+*	@int				i		è¦åˆ é™¤æ£‹ä¸²ä¸­çš„æŸä¸ªstoneçš„ i
+*	@int				j		è¦åˆ é™¤æ£‹ä¸²ä¸­çš„æŸä¸ªstoneçš„ j
 * Return:				int		The number of the removed
 *								stones.
-* Limitation: Ö»ÔÚsimulateµÄÊ±ºòÊ¹ÓÃ
+* Limitation: åªåœ¨simulateçš„æ—¶å€™ä½¿ç”¨
 *******************************************************/
 static int remove_string(board_status *bs, int i, int j) {
-	//ÒªÉ¾³ıÆå´®ÖĞµÄÄ³¸östoneµÄ pos
+	//è¦åˆ é™¤æ£‹ä¸²ä¸­çš„æŸä¸ªstoneçš„ pos
 	int pos = POS(i, j);
 
 	int lpos;
 
-	//Æå´®¹²ÓĞfather
+	//æ£‹ä¸²å…±æœ‰father
 	int fa = get_father(bs, pos);
-	//É¾³ıµÄÆå×Ó¸öÊı
+	//åˆ é™¤çš„æ£‹å­ä¸ªæ•°
 	int removed = 0;
 
 	int k, pos2, ai, aj, f2;
 
-	//µ±Ç°±»É¾³ıÆå´®µÄÑÕÉ«
+	//å½“å‰è¢«åˆ é™¤æ£‹ä¸²çš„é¢œè‰²
 	intersection color = bs->board[pos];
 
-	//update_pos¼ÇÂ¼ÁËµÈ»á¶ùĞèÒªÓÃÓÚ¸üĞÂlegal[][]µÄpos
+	//update_posè®°å½•äº†ç­‰ä¼šå„¿éœ€è¦ç”¨äºæ›´æ–°legal[][]çš„pos
 	//bs->update_pos[0] = 0;
 
-	//ÒÔÒ»µãstone±éÀúÈ«²¿Æå´®Æå×Ó
+	//ä»¥ä¸€ç‚¹stoneéå†å…¨éƒ¨æ£‹ä¸²æ£‹å­
 	pos = POS(i, j);
 	do {
-		// ±éÀúËÄÖÜÆå×Ó
+		// éå†å››å‘¨æ£‹å­
 		for (k = 0; k < 4; k++) {
 			ai = I(pos) + deltai[k];
 			aj = J(pos) + deltaj[k];
 			pos2 = POS(ai, aj);
-			//Èç¹ûËÄÖÜÓĞÆå×ÓÊÇ¶Ô·½Æå×Ó
+			//å¦‚æœå››å‘¨æœ‰æ£‹å­æ˜¯å¯¹æ–¹æ£‹å­
 			if (ON_BOARD(ai, aj)
 				&& bs->board[pos2] == OTHER_COLOR(color)) {
-				//»ñÈ¡¶Ô·½Æå×ÓËùÔÚÆå´®µÄfather
+				//è·å–å¯¹æ–¹æ£‹å­æ‰€åœ¨æ£‹ä¸²çš„father
 				f2 = get_father(bs, pos2);
 
-				//Î±Æø
+				//ä¼ªæ°”
 				bs->approximate_liberty[bs->string_index[f2]]++;
 			}
 		}
@@ -616,9 +616,9 @@ static int remove_string(board_status *bs, int i, int j) {
 	} while (pos != POS(i, j));
 
 
-	//É¾³ıÆå´®
-	/* 1. board×´Ì¬Îªempty
-	 * 2. ¸üĞÂfather */
+	//åˆ é™¤æ£‹ä¸²
+	/* 1. boardçŠ¶æ€ä¸ºempty
+	 * 2. æ›´æ–°father */
 	pos = POS(i, j);
 	do {
 		bs->board[pos] = EMPTY;
@@ -630,52 +630,52 @@ static int remove_string(board_status *bs, int i, int j) {
 	} while (pos != POS(i, j));
 
 
-	// É¾³ıstrings¼¯ºÏÀïÃæµÄÆå´®
+	// åˆ é™¤stringsé›†åˆé‡Œé¢çš„æ£‹ä¸²
 	remove_string_from_strings(bs, fa);
 
 	return removed;
 }
 
 static int remove_string_game(board_status *bs, int i, int j) {
-	//ÒªÉ¾³ıÆå´®ÖĞµÄÄ³¸östoneµÄ pos
+	//è¦åˆ é™¤æ£‹ä¸²ä¸­çš„æŸä¸ªstoneçš„ pos
 	int pos = POS(i, j);
 
 	int lpos;
 
-	//Æå´®¹²ÓĞfather
+	//æ£‹ä¸²å…±æœ‰father
 	int fa = get_father(bs, pos);
-	//É¾³ıµÄÆå×Ó¸öÊı
+	//åˆ é™¤çš„æ£‹å­ä¸ªæ•°
 	int removed = 0;
 
 	int k, pos2, ai, aj, f2;
 
-	//µ±Ç°±»É¾³ıÆå´®µÄÑÕÉ«
+	//å½“å‰è¢«åˆ é™¤æ£‹ä¸²çš„é¢œè‰²
 	intersection color = bs->board[pos];
 
-	//update_pos¼ÇÂ¼ÁËµÈ»á¶ùĞèÒªÓÃÓÚ¸üĞÂlegal[][]µÄpos
+	//update_posè®°å½•äº†ç­‰ä¼šå„¿éœ€è¦ç”¨äºæ›´æ–°legal[][]çš„pos
 	//bs->update_pos[0] = 0;
 
-	//ÒÔÒ»µãstone±éÀúÈ«²¿Æå´®Æå×Ó
+	//ä»¥ä¸€ç‚¹stoneéå†å…¨éƒ¨æ£‹ä¸²æ£‹å­
 	pos = POS(i, j);
 	do {
-		// ±éÀúËÄÖÜÆå×Ó
+		// éå†å››å‘¨æ£‹å­
 		for (k = 0; k < 4; k++) {
 			ai = I(pos) + deltai[k];
 			aj = J(pos) + deltaj[k];
 			pos2 = POS(ai, aj);
-			//Èç¹ûËÄÖÜÓĞÆå×ÓÊÇ¶Ô·½Æå×Ó
+			//å¦‚æœå››å‘¨æœ‰æ£‹å­æ˜¯å¯¹æ–¹æ£‹å­
 			if (ON_BOARD(ai, aj)
 				&& bs->board[pos2] == OTHER_COLOR(color)) {
-				//»ñÈ¡¶Ô·½Æå×ÓËùÔÚÆå´®µÄfather
+				//è·å–å¯¹æ–¹æ£‹å­æ‰€åœ¨æ£‹ä¸²çš„father
 				f2 = get_father(bs, pos2);
-				//×¢ÊÍÆø
-				//ÕæÆø
+				//æ³¨é‡Šæ°”
+				//çœŸæ°”
 				if (!bs->provide_lib[pos][bs->string_index[f2]])
 				{
 					bs->provide_lib[pos][bs->string_index[f2]] = true;
 					bs->approximate_liberty_real[bs->string_index[f2]]++;
 				}
-				//Î±Æø
+				//ä¼ªæ°”
 				bs->approximate_liberty[bs->string_index[f2]]++;
 			}
 		}
@@ -683,9 +683,9 @@ static int remove_string_game(board_status *bs, int i, int j) {
 	} while (pos != POS(i, j));
 
 
-	//É¾³ıÆå´®
-	/* 1. board×´Ì¬Îªempty
-	* 2. ¸üĞÂfather */
+	//åˆ é™¤æ£‹ä¸²
+	/* 1. boardçŠ¶æ€ä¸ºempty
+	* 2. æ›´æ–°father */
 	pos = POS(i, j);
 	do {
 		bs->board[pos] = EMPTY;
@@ -696,7 +696,7 @@ static int remove_string_game(board_status *bs, int i, int j) {
 
 	} while (pos != POS(i, j));
 
-	// É¾³ıstrings¼¯ºÏÀïÃæµÄÆå´®
+	// åˆ é™¤stringsé›†åˆé‡Œé¢çš„æ£‹ä¸²
 	remove_string_from_strings_game(bs, fa);
 
 	return removed;
@@ -720,10 +720,10 @@ static int same_string(board_status *bs, int pos1, int pos2) {
 	return (get_father(bs, pos1) == get_father(bs, pos2));
 }
 
-//×¢ÊÍÆø
-//Ö»ÓĞÔÚÓÃÕæÆøµÄÊ±ºò²ÅÓÃ
+//æ³¨é‡Šæ°”
+//åªæœ‰åœ¨ç”¨çœŸæ°”çš„æ—¶å€™æ‰ç”¨
 static int union_lib(board_status *bs, int st1, int st2) {
-	//st1ÊÇĞ¡´®
+	//st1æ˜¯å°ä¸²
 	int lib, f1, f2, bi, bj, k, t, pos, pos2;
 	lib = bs->approximate_liberty_real[st1] + bs->approximate_liberty_real[st2];
 	pos = f1 = bs->strings[st1];
@@ -766,7 +766,7 @@ static void union_string(board_status *bs, int pos1, int pos2) {
 	if (f1 != f2) {
 		int i1 = bs->string_index[f1];
 		int i2 = bs->string_index[f2];
-		//±£Ö¤°ÑĞ¡µÄ´®²¢µ½´óµÄ´®
+		//ä¿è¯æŠŠå°çš„ä¸²å¹¶åˆ°å¤§çš„ä¸²
 		if (bs->string_stones[i1] < bs->string_stones[i2])
 		{
 			k = i1;
@@ -777,7 +777,7 @@ static void union_string(board_status *bs, int pos1, int pos2) {
 			f1 = f2;
 			f2 = k;
 		}
-		//Ç°ÃæÊÇi2Ğ¡´®£¬i1ÊÇ´ó´®
+		//å‰é¢æ˜¯i2å°ä¸²ï¼Œi1æ˜¯å¤§ä¸²
 		bs->approximate_liberty[i1] += bs->approximate_liberty[i2];
 		bs->father[f2] = f1;
 		bs->string_stones[i1] += bs->string_stones[i2];
@@ -795,7 +795,7 @@ static void union_string_game(board_status *bs, int pos1, int pos2) {
 	if (f1 != f2) {
 		int i1 = bs->string_index[f1];
 		int i2 = bs->string_index[f2];
-		//±£Ö¤°ÑĞ¡µÄ´®²¢µ½´óµÄ´®
+		//ä¿è¯æŠŠå°çš„ä¸²å¹¶åˆ°å¤§çš„ä¸²
 		if (bs->string_stones[i1] < bs->string_stones[i2])
 		{
 			k = i1;
@@ -806,11 +806,11 @@ static void union_string_game(board_status *bs, int pos1, int pos2) {
 			f1 = f2;
 			f2 = k;
 		}
-		//Ç°ÃæÊÇi2Ğ¡´®£¬i1ÊÇ´ó´®
-		//×¢ÊÍÆø
+		//å‰é¢æ˜¯i2å°ä¸²ï¼Œi1æ˜¯å¤§ä¸²
+		//æ³¨é‡Šæ°”
 		bs->approximate_liberty_real[i1] = union_lib(bs, i2, i1);
 
-		//¸üĞÂprovide_libÊı×é£¬st2»á±»É¾µô
+		//æ›´æ–°provide_libæ•°ç»„ï¼Œst2ä¼šè¢«åˆ æ‰
 		for (i = 0; i < MAX_BOARDSIZE; ++i)
 		{
 			if (bs->provide_lib[i][i2] == true)
@@ -833,7 +833,7 @@ static void union_string_game(board_status *bs, int pos1, int pos2) {
 
 /*******************************************************
 * Function Name:	play_move
-* Purpose:			Play at (i, j) for color. È·ÈÏÏÂ×Ó
+* Purpose:			Play at (i, j) for color. ç¡®è®¤ä¸‹å­
 * Params :
 *	@board_status(*)	bs		board status
 *	@int				i		position i
@@ -842,17 +842,17 @@ static void union_string_game(board_status *bs, int pos1, int pos2) {
 * Return:				void	Update the board array,
 *								the next_stone array, and
 *								the ko point.
-* Limitation: Ö»ÔÚsimulateµÄÊ±ºòÊ¹ÓÃ ²»ĞèÒª¶ÔÕæÆø½øĞĞÎ¬»¤
+* Limitation: åªåœ¨simulateçš„æ—¶å€™ä½¿ç”¨ ä¸éœ€è¦å¯¹çœŸæ°”è¿›è¡Œç»´æŠ¤
 *******************************************************/
 void play_move(board_status *bs, int i, int j, intersection color) {
-	// ÏÂ×Ópos
+	// ä¸‹å­pos
 	int pos = POS(i, j);
-	// ±»³ÔµôµÄÆå×ÓµÄÊıÄ¿
+	// è¢«åƒæ‰çš„æ£‹å­çš„æ•°ç›®
 	int captured_stones = 0;
 	int k;
 	int ko_pos = POS(bs->ko_i, bs->ko_j);
 
-	//Õâ¸ö²Ù×÷±ØĞëÔÚÇ°Ãæ£¬ÒòÎªÎŞÂÛÊÇ·ñpassÊÇ·ñ×ÔÉ±µÈÌáÇ°·µ»ØµÄÇé¿ö£¬ÕâĞ©ĞÅÏ¢¶¼±ØĞë¸üĞÂ
+	//è¿™ä¸ªæ“ä½œå¿…é¡»åœ¨å‰é¢ï¼Œå› ä¸ºæ— è®ºæ˜¯å¦passæ˜¯å¦è‡ªæ€ç­‰æå‰è¿”å›çš„æƒ…å†µï¼Œè¿™äº›ä¿¡æ¯éƒ½å¿…é¡»æ›´æ–°
 	/* Reset the ko point. */
 	bs->ko_i = -1;
 	bs->ko_j = -1;
@@ -898,7 +898,7 @@ void play_move(board_status *bs, int i, int j, intersection color) {
 	bs->board[pos] = color;
 
 	/* Put down the new stone. Initially build a single stone string by
-	 * setting next_stone[pos] pointing to itself.¸üĞÂÆåÅÌ
+	 * setting next_stone[pos] pointing to itself.æ›´æ–°æ£‹ç›˜
 	 */
 
 	/* Create a new string */
@@ -907,14 +907,14 @@ void play_move(board_status *bs, int i, int j, intersection color) {
 	bs->num_of_strings++;
 	bs->string_index[pos] = bs->num_of_strings;
 
-	// Âä×ÓÎ»ÖÃÁ¬ÆğÀ´µÄstring
+	// è½å­ä½ç½®è¿èµ·æ¥çš„string
 	/* Create a new string */
 	bs->strings[bs->num_of_strings] = pos;
 	bs->string_stones[bs->num_of_strings] = 1;
 	bs->approximate_liberty[bs->num_of_strings] = 0;
 	bs->string_color[bs->num_of_strings] = color;
 
-	// Âä×ÓÒÔºóupdateÖÜÎ§Æå´®µÄÆøºÍ×Ô¼ºµÄÆø
+	// è½å­ä»¥åupdateå‘¨å›´æ£‹ä¸²çš„æ°”å’Œè‡ªå·±çš„æ°”
 	for (k = 0; k < 4; k++) {
 		int ai = i + deltai[k];
 		int aj = j + deltaj[k];
@@ -924,7 +924,7 @@ void play_move(board_status *bs, int i, int j, intersection color) {
 				bs->approximate_liberty[bs->string_index[get_father(bs, pos2)]]--;
 			}
 
-			//×Ô¼º×÷ÎªÒ»¸öÆå´®¿ÉÒÔ»ñµÃµÄÆø¿Ú
+			//è‡ªå·±ä½œä¸ºä¸€ä¸ªæ£‹ä¸²å¯ä»¥è·å¾—çš„æ°”å£
 			if (bs->board[pos2] == EMPTY){
 				bs->approximate_liberty[bs->num_of_strings]++;
 			}
@@ -977,14 +977,14 @@ void play_move(board_status *bs, int i, int j, intersection color) {
 }
 
 void play_move_game(board_status *bs, int i, int j, intersection color) {
-	// ÏÂ×Ópos
+	// ä¸‹å­pos
 	int pos = POS(i, j);
-	// ±»³ÔµôµÄÆå×ÓµÄÊıÄ¿
+	// è¢«åƒæ‰çš„æ£‹å­çš„æ•°ç›®
 	int captured_stones = 0;
 	int k;
 	int ko_pos = POS(bs->ko_i, bs->ko_j);
 
-	//Õâ¸ö²Ù×÷±ØĞëÔÚÇ°Ãæ£¬ÒòÎªÎŞÂÛÊÇ·ñpassÊÇ·ñ×ÔÉ±µÈÌáÇ°·µ»ØµÄÇé¿ö£¬ÕâĞ©ĞÅÏ¢¶¼±ØĞë¸üĞÂ
+	//è¿™ä¸ªæ“ä½œå¿…é¡»åœ¨å‰é¢ï¼Œå› ä¸ºæ— è®ºæ˜¯å¦passæ˜¯å¦è‡ªæ€ç­‰æå‰è¿”å›çš„æƒ…å†µï¼Œè¿™äº›ä¿¡æ¯éƒ½å¿…é¡»æ›´æ–°
 	/* Reset the ko point. */
 	bs->ko_i = -1;
 	bs->ko_j = -1;
@@ -1030,7 +1030,7 @@ void play_move_game(board_status *bs, int i, int j, intersection color) {
 	bs->board[pos] = color;
 
 	/* Put down the new stone. Initially build a single stone string by
-	* setting next_stone[pos] pointing to itself.¸üĞÂÆåÅÌ
+	* setting next_stone[pos] pointing to itself.æ›´æ–°æ£‹ç›˜
 	*/
 
 	/* Create a new string */
@@ -1039,17 +1039,17 @@ void play_move_game(board_status *bs, int i, int j, intersection color) {
 	bs->num_of_strings++;
 	bs->string_index[pos] = bs->num_of_strings;
 
-	// Âä×ÓÎ»ÖÃÁ¬ÆğÀ´µÄstring
+	// è½å­ä½ç½®è¿èµ·æ¥çš„string
 	/* Create a new string */
 	bs->strings[bs->num_of_strings] = pos;
 	bs->string_stones[bs->num_of_strings] = 1;
 	bs->approximate_liberty[bs->num_of_strings] = 0;
 	bs->approximate_liberty_real[bs->num_of_strings] = 0;
 	bs->string_color[bs->num_of_strings] = color;
-	//×¢ÊÍÆø
+	//æ³¨é‡Šæ°”
 	memset(bs->provide_lib[pos], false, MAX_BOARDSIZE);
 
-	// Âä×ÓÒÔºóupdateÖÜÎ§Æå´®µÄÆøºÍ×Ô¼ºµÄÆø
+	// è½å­ä»¥åupdateå‘¨å›´æ£‹ä¸²çš„æ°”å’Œè‡ªå·±çš„æ°”
 	for (k = 0; k < 4; k++) {
 		int ai = i + deltai[k];
 		int aj = j + deltaj[k];
@@ -1060,9 +1060,9 @@ void play_move_game(board_status *bs, int i, int j, intersection color) {
 				bs->approximate_liberty_real[bs->string_index[get_father(bs, pos2)]]--;
 			}
 
-			//×Ô¼º×÷ÎªÒ»¸öÆå´®¿ÉÒÔ»ñµÃµÄÆø¿Ú
+			//è‡ªå·±ä½œä¸ºä¸€ä¸ªæ£‹ä¸²å¯ä»¥è·å¾—çš„æ°”å£
 			if (bs->board[pos2] == EMPTY){
-				//×¢ÊÍÆø
+				//æ³¨é‡Šæ°”
 				bs->provide_lib[pos2][bs->num_of_strings] = true;
 				bs->approximate_liberty[bs->num_of_strings]++;
 				bs->approximate_liberty_real[bs->num_of_strings]++;
@@ -1119,9 +1119,9 @@ void play_move_game(board_status *bs, int i, int j, intersection color) {
 * Purpose:			Set a final status value for an entire string.
 * Params :
 *	@board_status(*)	bs		board status
-*	@int				pos		²»¶®´ı²¹³ä
-*	@int				status	²»¶®´ı²¹³ä
-* Return:				void	²»¶®´ı²¹³ä
+*	@int				pos		ä¸æ‡‚å¾…è¡¥å……
+*	@int				status	ä¸æ‡‚å¾…è¡¥å……
+* Return:				void	ä¸æ‡‚å¾…è¡¥å……
 * Limitation:
 *******************************************************/
 static void set_final_status_string(board_status *bs, int pos, int status) {
@@ -1344,8 +1344,8 @@ double get_score(board_status *bs) {
 	return score;
 }
 
-//ÏëÈÃËü¸ü¿ì£¬Ö»¼ÆËãÊäÓ®£¬²»¼ÆËã·ÖÊı
-//-1ÊÇºÚÊ¤£¬1ÊÇ°×Ê¤
+//æƒ³è®©å®ƒæ›´å¿«ï¼Œåªè®¡ç®—è¾“èµ¢ï¼Œä¸è®¡ç®—åˆ†æ•°
+//-1æ˜¯é»‘èƒœï¼Œ1æ˜¯ç™½èƒœ
 int get_score_uct(board_status *bs) {
 	//print_line("get_score");
 	double score = (board_array_size - komi) / 2;

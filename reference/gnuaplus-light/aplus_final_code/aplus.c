@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h> //½â¾örand£¨£©¾¯¸æ
+#include <stdlib.h> //è§£å†³randï¼ˆï¼‰è­¦å‘Š
 #include <string.h>
 #include <time.h>
 #include "aplus.h"
@@ -11,13 +11,13 @@
 
 int isLine(int i, int j) {
 	if (i == 0 && (j) >= 1 && (j) < (board_size - 1))
-		return 1; //ÉÏ
+		return 1; //ä¸Š
 	else if (j == (board_size - 1) && (i) >= 1 && (i) < (board_size - 1))
-		return 2; //ÓÒ
+		return 2; //å³
 	else if (i == (board_size - 1) && (j) >= 1 && (j) < (board_size - 1))
-		return 3; //ÏÂ
+		return 3; //ä¸‹
 	else if (j == 0 && (i) >= 1 && (i) < (board_size - 1))
-		return 4; //×ó
+		return 4; //å·¦
 	else
 		return 0;
 }
@@ -31,14 +31,14 @@ void init_aplus(void){
 //	printf("after manual\n");
 }
 
-/*¼ì²é×Ô¼ºÕâÃ´ÏÂÁËÖ®ºó»á²»»áÖ»Ê£Ò»¿ÚÆø*/
+/*æ£€æŸ¥è‡ªå·±è¿™ä¹ˆä¸‹äº†ä¹‹åŽä¼šä¸ä¼šåªå‰©ä¸€å£æ°”*/
 int sim_for_string(board_status *bs, int pos, intersection color){
 	int k;
 	int sim_approximate_liberty = 0;
 	int i = I(pos);
 	int j = J(pos);
 
-	// Âä×ÓÒÔºóupdateÖÜÎ§Æå´®µÄÆøºÍ×Ô¼ºµÄÆø
+	// è½å­ä»¥åŽupdateå‘¨å›´æ£‹ä¸²çš„æ°”å’Œè‡ªå·±çš„æ°”
 	for (k = 0; k < 4; k++) {
 		int ai = i + deltai[k];
 		int aj = j + deltaj[k];
@@ -64,7 +64,7 @@ int generate_random_move(board_status *bs, intersection color) {
 	//random
 	int flag = 0;
 	int num_of_random = 0;
-	//ÖÐ³¡½áÊøÖ®Ç°
+	//ä¸­åœºç»“æŸä¹‹å‰
 	//printf("bs->path_top == %d", bs->path_top);
 	if (bs->path_top < STEPS_MIDDLE_END){
 		while (num_of_random < MAX_LEGGAL_RANDOM)
@@ -79,9 +79,9 @@ int generate_random_move(board_status *bs, intersection color) {
 		flag = 1;
 	}
 
-	//ÖÐ³¡½áÊøÖ®ºó or ÖÐ³¡½áÊøÖ®Ç°randomÊ§°Ü
+	//ä¸­åœºç»“æŸä¹‹åŽ or ä¸­åœºç»“æŸä¹‹å‰randomå¤±è´¥
 	if (bs->path_top >= STEPS_MIDDLE_END || flag){
-		//»ñµÃÆåÅÌÉÏµ±Ç°ËùÓÐµÄºÏ·¨Î»ÖÃ ÀûÓÃÆåÅÌ×´Ì¬À´´«µÝ
+		//èŽ·å¾—æ£‹ç›˜ä¸Šå½“å‰æ‰€æœ‰çš„åˆæ³•ä½ç½® åˆ©ç”¨æ£‹ç›˜çŠ¶æ€æ¥ä¼ é€’
 		get_legal_moves(bs, color);
 
 		/* Choose one of the considered moves randomly with uniform
@@ -90,7 +90,7 @@ int generate_random_move(board_status *bs, intersection color) {
 		* chosen, but for all practical purposes we get a uniform
 		* distribution.)
 		*/
-		//Èç¹û´æÔÚºÏ·¨ÒÆ¶¯ legal_movesÀïÃæ×°µÄÊÇºÏ·¨²½ÖèµÄi*13+j
+		//å¦‚æžœå­˜åœ¨åˆæ³•ç§»åŠ¨ legal_movesé‡Œé¢è£…çš„æ˜¯åˆæ³•æ­¥éª¤çš„i*13+j
 		if (bs->legal_moves_num > 0) {
 			move = bs->legal_moves[rand() % bs->legal_moves_num];
 			return move;
@@ -108,11 +108,11 @@ int generate_random_move(board_status *bs, intersection color) {
 int generate_move(board_status *bs, intersection color) {
 	int pos = -14, i;
 
-	//¿ª¾Ö²¼¾Ö
+	//å¼€å±€å¸ƒå±€
 	if (bs->path_top < STEPS_START_END - 1)
 		pos = get_fuseki_pos(bs, color);
 
-	//ÅÐ¶ÏÊÇ·ñºÏ·¨
+	//åˆ¤æ–­æ˜¯å¦åˆæ³•
 	get_legal_moves(bs, color);
 	for (i = 0; i < MAX_BOARDSIZE; ++i)
 	{
@@ -125,56 +125,56 @@ int generate_move(board_status *bs, intersection color) {
 	}
 
 	if (pos == -14 && bs->path_top<STEPS_BOUNDARY_TWO - 1)
-		get_two_boundary_pos(bs, result_to_uct);//10²½ÒÔÄÚºöÂÔ×îÍâÁ½È¦
+		get_two_boundary_pos(bs, result_to_uct);//10æ­¥ä»¥å†…å¿½ç•¥æœ€å¤–ä¸¤åœˆ
 	else if (pos == -14 && bs->path_top<STEPS_BOUNDARY_ONE - 1)
-		get_one_boundary_pos(bs, result_to_uct);//20²½ÒÔÄÚºöÂÔ×îÍâÒ»È¦
+		get_one_boundary_pos(bs, result_to_uct);//20æ­¥ä»¥å†…å¿½ç•¥æœ€å¤–ä¸€åœˆ
 
-	//ºöÂÔËÄÖÜ¶¼ÊÇ¿ÕµÄµã
+	//å¿½ç•¥å››å‘¨éƒ½æ˜¯ç©ºçš„ç‚¹
 	if (pos == -14 && bs->path_top>10 && bs->path_top<40)
 		get_all_fill_board_pos(bs, result_to_uct);
 
-	//³Ô×Ó¾È×Ó½ôÆø
+	//åƒå­æ•‘å­ç´§æ°”
 	if (pos == -14)
 		get_all_eat_save_lib_pos(bs, color, result_to_uct);
 
-	//ÓÐÕæÑÛ¾Í×ö
+	//æœ‰çœŸçœ¼å°±åš
 	if (pos == -14)
 		get_all_alive_pos(bs, color, result_to_uct);
 
-	//Á¬½ÓºÍÇÐ¶Ï
+	//è¿žæŽ¥å’Œåˆ‡æ–­
 	if (pos == -14)
 		get_all_connect_cut_pos(bs, color, result_to_uct);
 
-	//×öÑÛ
+	//åšçœ¼
 	if (pos == -14)
 		get_all_nakade_pos(bs, color, result_to_uct);
 
 
-	//¿ª¾ÖÆåÆ×
-	//chess_manual_result[i]=x ±íÊ¾pos=iµÄÎ»ÖÃÔÚÆåÆ×Àï³öÏÖÁË¶àÉÙ´Î£¬Ã»ÓÐ³öÏÖ¹ý¾ÍÊÇ0
+	//å¼€å±€æ£‹è°±
+	//chess_manual_result[i]=x è¡¨ç¤ºpos=içš„ä½ç½®åœ¨æ£‹è°±é‡Œå‡ºçŽ°äº†å¤šå°‘æ¬¡ï¼Œæ²¡æœ‰å‡ºçŽ°è¿‡å°±æ˜¯0
 	if (pos == -14 && bs->path_top < STEPS_MANUAL_END - 1)
 	{
 		get_manual_start_pos(bs, color, result_to_uct);
 
 	}
 
-	//±ÜÃâÌîÑÛ
+	//é¿å…å¡«çœ¼
 	if (pos == -14)
 		get_ban_fill_eye_pos(bs, color, result_to_uct);
 
 
-	//²»½øÈëuctµÄ²Ù×÷begin
-	//ÄÜ¾È×Ó¾Í¾È×Ó
+	//ä¸è¿›å…¥uctçš„æ“ä½œbegin
+	//èƒ½æ•‘å­å°±æ•‘å­
 	if (pos == -14 && bs->path_top < STEPS_EAT_SAVE_END)
 		pos = get_atari_pos(bs, color);
 	if (pos == -14 && bs->path_top < STEPS_EAT_SAVE_END)
 		pos = get_eat_pos(bs, color);
-	//²»½øÈëuctµÄ²Ù×÷end
+	//ä¸è¿›å…¥uctçš„æ“ä½œend
 
 	//uct
 	if (pos == -14 || !is_legal_move(bs, color, pos))
 	{
-		//ºòÑ¡µãµÄÅÅÐò£¨¼ÇµÃ´ò¿ªÕâÀï£©
+		//å€™é€‰ç‚¹çš„æŽ’åºï¼ˆè®°å¾—æ‰“å¼€è¿™é‡Œï¼‰
 		quick_sort_for_result(0, MAX_BOARDSIZE - 1);
 		pos = uct_search_pure(bs, color, result_to_uct, result_to_uct_pos);
 	}
@@ -197,7 +197,7 @@ void place_free_handicap(board_status *bs, int handicap) {
 }
 
 
-/* ¿ìÅÅ */
+/* å¿«æŽ’ */
 int divide_result(int low, int high) {
 	int tmp = result_to_uct[low];
 	int pos = result_to_uct_pos[low];

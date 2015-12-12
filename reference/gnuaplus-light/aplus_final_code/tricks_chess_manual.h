@@ -3,52 +3,52 @@
 #include "board.h"
 #include "tricks_chess.h"
 
-#define MANUAL_HASH_TABLE_SIZE 362 //ÆåÆ×ÉÏ×î¶àÓĞ¶àÉÙ¸öÆå×Ó
-#define BUFFER_STACK_SIZE 10000 //¶ÁÆåÆ×Ê±ÓÃµ½µÄÕ»µÄ´óĞ¡
+#define MANUAL_HASH_TABLE_SIZE 362 //æ£‹è°±ä¸Šæœ€å¤šæœ‰å¤šå°‘ä¸ªæ£‹å­
+#define BUFFER_STACK_SIZE 10000 //è¯»æ£‹è°±æ—¶ç”¨åˆ°çš„æ ˆçš„å¤§å°
 
 
-/* ±£´æÆåÆ×µÄ¸ñ¾Ö£¬ÓÃ¶ù×ÓĞÖµÜÁ´±íÊ¾·¨ */
+/* ä¿å­˜æ£‹è°±çš„æ ¼å±€ï¼Œç”¨å„¿å­å…„å¼Ÿé“¾è¡¨ç¤ºæ³• */
 typedef struct bit_config{
 
-	/* µ±Ç°¾ÖÃæ */
+	/* å½“å‰å±€é¢ */
 	bitboard board_bit[MAX_BOARD];
 
-	/* ÏÂÒ»²½ÂÖµ½ºÚ»¹ÊÇ°× */
+	/* ä¸‹ä¸€æ­¥è½®åˆ°é»‘è¿˜æ˜¯ç™½ */
 	intersection color;
 
-	/* ÒÑ¾­ÏÂÁË¶àÉÙ¿Å×Ó */
+	/* å·²ç»ä¸‹äº†å¤šå°‘é¢—å­ */
 	short num_current;//1,2,3...
 
-	/* ¶ù×Ó */
+	/* å„¿å­ */
 	struct bit_config_edge *edge_son;
 
-	/* ºÍËü²ãÊıÏàÍ¬µÄÏÂÒ»¸ö */
+	/* å’Œå®ƒå±‚æ•°ç›¸åŒçš„ä¸‹ä¸€ä¸ª */
 	struct bit_config *next;
 
-	/* Õâ¸ö¾ÖÃæÔÚÆåÆ×ÖĞ³öÏÖµÄ´ÎÊı */
+	/* è¿™ä¸ªå±€é¢åœ¨æ£‹è°±ä¸­å‡ºç°çš„æ¬¡æ•° */
 	int times;
 
 }config;
 
-/* ¸¸Ç×¶ù×ÓÖ®¼äÏàÁ¬µÄ±ß£¬ÓÃ¶ù×ÓĞÖµÜÁ´±íÊ¾·¨ */
+/* çˆ¶äº²å„¿å­ä¹‹é—´ç›¸è¿çš„è¾¹ï¼Œç”¨å„¿å­å…„å¼Ÿé“¾è¡¨ç¤ºæ³• */
 typedef struct bit_config_edge{
-	/* ÏÂÁËÄÄ¿Å×Ó£¬¼´ÏÂÒ»¸ö¸ñ¾ÖÏà¶ÔÉÏÒ»¸ö¸ñ¾ÖµÄ±ä»¯ */
+	/* ä¸‹äº†å“ªé¢—å­ï¼Œå³ä¸‹ä¸€ä¸ªæ ¼å±€ç›¸å¯¹ä¸Šä¸€ä¸ªæ ¼å±€çš„å˜åŒ– */
 	int pos;
 
-	/* Á¬µ½ÏÂÒ»¸ñ¾Ö */
+	/* è¿åˆ°ä¸‹ä¸€æ ¼å±€ */
 	struct bit_config *config_son;
 
-	/* ĞÖµÜ */
+	/* å…„å¼Ÿ */
 	struct bit_config_edge *brother;
 
 }config_edge;
 
-/* ¿ªÉ¢ÁĞ±í */
+/* å¼€æ•£åˆ—è¡¨ */
 typedef struct bit_hash_note{
-	/* ÂÖµ½Ê²Ã´ÑÕÉ«ÏÂÁË */
+	/* è½®åˆ°ä»€ä¹ˆé¢œè‰²ä¸‹äº† */
 	intersection color;
 
-	/* ÆåÅÌÉÏÄ¿Ç°ÓĞ¶àÉÙ¿Å×Ó */
+	/* æ£‹ç›˜ä¸Šç›®å‰æœ‰å¤šå°‘é¢—å­ */
 	short num_current;
 
 	/* head */
@@ -56,7 +56,7 @@ typedef struct bit_hash_note{
 }hash_node;
 
 
-/* ¶ÁÆåÆ×µÄÊ±ºòÓÃµ½µÄÕ»,´æµÄÊÇconfigµÄÖ¸Õë */
+/* è¯»æ£‹è°±çš„æ—¶å€™ç”¨åˆ°çš„æ ˆ,å­˜çš„æ˜¯configçš„æŒ‡é’ˆ */
 typedef struct stack_chess_manual_buffer
 {
 	config *stack[BUFFER_STACK_SIZE];
@@ -70,7 +70,7 @@ hash_node hash_array[MANUAL_HASH_TABLE_SIZE];
 
 
 
-/* trick 2: °´ÕÕÆåÆ×À´×ß */
+/* trick 2: æŒ‰ç…§æ£‹è°±æ¥èµ° */
 void get_manual_start_pos(board_status *bs, intersection color, int result[]);
 void get_manual_start_pos_sub(board_status *bs, intersection color, int offset_x, int offset_y, int is_oppsite, int result[]);
 void init_trick_chess_manual();

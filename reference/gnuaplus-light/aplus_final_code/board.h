@@ -2,11 +2,11 @@
 * Copyright(C),2014-2015,SJTU
 * Program Assignment:	board
 * FileName:	board.h
-* Source code in£º	gnu_base_code/board.h
+* Source code inï¼š	gnu_base_code/board.h
 * Author:	Cyy/ljj/Qxt/Zzh
 * Version:	1.0
 * Date:	2014/12/28
-* Description:	ÆåÅÌ¶ÔÏó¶¨Òå¼°Í·ÎÄ¼þ
+* Description:	æ£‹ç›˜å¯¹è±¡å®šä¹‰åŠå¤´æ–‡ä»¶
 * Others:
 * Function List:
 * History:
@@ -28,7 +28,7 @@
 #define MAX_BOARDSIZE 169
 
 /* board block status */
-/* ÓÃÓÚÃèÊö board[i] */
+/* ç”¨äºŽæè¿° board[i] */
 #define EMPTY 0
 #define WHITE 1
 #define BLACK 2
@@ -52,19 +52,19 @@ extern int board_array_size;
 
 typedef struct sbs {
 	/* board status */
-	/* board[i] £ºÆåÅÌÉÏpos == i´¦µÄÆåÅÌ×´Ì¬ */
+	/* board[i] ï¼šæ£‹ç›˜ä¸Špos == iå¤„çš„æ£‹ç›˜çŠ¶æ€ */
 	/* board[i] -> EMPTY or WHITE or BLACK */
 	/* default value:
 	 *	board[i] = EMPTY */
 	intersection board[MAX_BOARDSIZE];
 
 	/* Position of the last move */
-	/* default value£º
+	/* default valueï¼š
 	 *	last_move_pos = -1 */
 	int last_move_pos;
 
 	/* Point which would be an illegal ko recapture. */
-	/* default value£º
+	/* default valueï¼š
 	 *	ko_i	=	-1
 	 *	ko_i	=	-1
 	 *	ko_pos	=	POS(-1, -1) */
@@ -73,50 +73,50 @@ typedef struct sbs {
 	/* Stones are linked together in a circular list for each string. */
 	int next_stone[MAX_BOARDSIZE];
 
-	/* ²¢²é¼¯ ¼ÓËÙÓÃ */
+	/* å¹¶æŸ¥é›† åŠ é€Ÿç”¨ */
 	/* father[i] -> stonei's father is father[i]
 	 * i -> the index of block
 	 * father[i] == i -> single stone
 	 * father[i] == -1 -> EMPTY
 	 *
-	 * default value £º
+	 * default value ï¼š
 	 *	father[i] = -1
 	 */
 	int father[MAX_BOARDSIZE];
 
-	/* ¼ÇÂ¼ÆåÅÌÉÏµÄÆå´® */
+	/* è®°å½•æ£‹ç›˜ä¸Šçš„æ£‹ä¸² */
 	/* strings[i] = x:
-	 *	i-> string_index(ÓÉÆå´®ÊýÄ¿¾ö¶¨)
-	 *	x->	¸ÃÆå´®µÄfather */
+	 *	i-> string_index(ç”±æ£‹ä¸²æ•°ç›®å†³å®š)
+	 *	x->	è¯¥æ£‹ä¸²çš„father */
 	/* all strings in the board */
 	int strings[MAX_BOARDSIZE];
 
-	/* ¼ÇÂ¼ÆåÅÌÉÏµÄÆå´®µÄÑÕÉ« */
+	/* è®°å½•æ£‹ç›˜ä¸Šçš„æ£‹ä¸²çš„é¢œè‰² */
 	/* string_color[i] = x:
-	*	i-> string_index(ÓÉÆå´®ÊýÄ¿¾ö¶¨)
-	*	x->	¸ÃÆå´®µÄcolor */
+	*	i-> string_index(ç”±æ£‹ä¸²æ•°ç›®å†³å®š)
+	*	x->	è¯¥æ£‹ä¸²çš„color */
 	/* all strings in the board */
 	intersection string_color[MAX_BOARDSIZE];
 
-	/* ¼ÇÂ¼ÆåÅÌÉÏµÄÆå´®µÄÆå×Ó¸öÊý */
+	/* è®°å½•æ£‹ç›˜ä¸Šçš„æ£‹ä¸²çš„æ£‹å­ä¸ªæ•° */
 	/* string_stones[i] = x:
-	*	i-> string_index(ÓÉÆå´®ÊýÄ¿¾ö¶¨)
-	*	x->	¸ÃÆå´®µÄÆå×Ó¸öÊý */
+	*	i-> string_index(ç”±æ£‹ä¸²æ•°ç›®å†³å®š)
+	*	x->	è¯¥æ£‹ä¸²çš„æ£‹å­ä¸ªæ•° */
 	/* all strings in the board */
 	int string_stones[MAX_BOARDSIZE];
 
-	/* ¼ÇÂ¼ÆåÅÌÉÏµÄÆå´®µÄÆø¿Ú */
+	/* è®°å½•æ£‹ç›˜ä¸Šçš„æ£‹ä¸²çš„æ°”å£ */
 	/* approximate_liberty[i] = x:
-	*	i-> string_index(ÓÉÆå´®ÊýÄ¿¾ö¶¨)
-	*	x->	¸ÃÆå´®µÄÆø¿Ú */
+	*	i-> string_index(ç”±æ£‹ä¸²æ•°ç›®å†³å®š)
+	*	x->	è¯¥æ£‹ä¸²çš„æ°”å£ */
 	/* all strings in the board */
 	int approximate_liberty[MAX_BOARDSIZE];
 
 
-	/* ¼ÇÂ¼ÆåÅÌÉÏµÄÆå´®µÄÕæÆøÆø¿Ú */
+	/* è®°å½•æ£‹ç›˜ä¸Šçš„æ£‹ä¸²çš„çœŸæ°”æ°”å£ */
 	/* approximate_liberty_real[i] = x:
-	*	i-> string_index(ÓÉÆå´®ÊýÄ¿¾ö¶¨)
-	*	x->	¸ÃÆå´®µÄÕæÆøÆø¿Ú */
+	*	i-> string_index(ç”±æ£‹ä¸²æ•°ç›®å†³å®š)
+	*	x->	è¯¥æ£‹ä¸²çš„çœŸæ°”æ°”å£ */
 	/* all strings in the board */
 	int approximate_liberty_real[MAX_BOARDSIZE];
 
@@ -125,19 +125,19 @@ typedef struct sbs {
 	 *	num_of_strings = 0 */
 	int num_of_strings;
 
-	//Ä¿Ç°Ã»ÓÐ³õÊ¼»¯Öµ cyy
-	/* ¼ÇÂ¼ÆåÅÌÉÏÆå´®µÄindex °´ÕÕÆå´®µÄfather posÀ´¼ÇÂ¼ */
-	/* string_index[i] = x£º Æå´®fatherÎªiµÄindexÎªx */
+	//ç›®å‰æ²¡æœ‰åˆå§‹åŒ–å€¼ cyy
+	/* è®°å½•æ£‹ç›˜ä¸Šæ£‹ä¸²çš„index æŒ‰ç…§æ£‹ä¸²çš„father posæ¥è®°å½• */
+	/* string_index[i] = xï¼š æ£‹ä¸²fatherä¸ºiçš„indexä¸ºx */
 	/* strings[string_index[get_father(pos)]] = get_father(pos) */
 	int string_index[MAX_BOARDSIZE];
 
-	/* ÓÃÀ´¼ÇÂ¼µ±Ç°ÆåÅÌ×´Ì¬ÏÂµÄºÏ·¨ÒÆ¶¯µÄpos */
-	/* legal_moves[i] = x: µÚi¸öºÏ·¨ÒÆ¶¯Î»ÖÃµÄposÊÇx */
+	/* ç”¨æ¥è®°å½•å½“å‰æ£‹ç›˜çŠ¶æ€ä¸‹çš„åˆæ³•ç§»åŠ¨çš„pos */
+	/* legal_moves[i] = x: ç¬¬iä¸ªåˆæ³•ç§»åŠ¨ä½ç½®çš„posæ˜¯x */
 	/* defalut value:
 	 *	legal_moves[i] = -1 */
 	int legal_moves[MAX_BOARDSIZE];
 
-	/* ÓÃÀ´¼ÇÂ¼µ±Ç°ÆåÅÌ×´Ì¬ÏÂºÏ·¨ÒÆ¶¯µÄÎ»ÖÃÊýÄ¿ */
+	/* ç”¨æ¥è®°å½•å½“å‰æ£‹ç›˜çŠ¶æ€ä¸‹åˆæ³•ç§»åŠ¨çš„ä½ç½®æ•°ç›® */
 	/* defalut value:
 	*	legal_moves_num = 0 */
 	int legal_moves_num;
@@ -151,9 +151,9 @@ typedef struct sbs {
 	int path_top;//-1,0,1,2...
 
 
-	/*ÅÐ¶ÏÒ»¸ö¿ÕÎ»ÊÇ·ñ¸øÒ»¸öÆå´®Ìá¹©Æø
-	provide_lib[¿ÕÎ»pos][Æå´®index]*/
-	//×¢ÊÍÆø
+	/*åˆ¤æ–­ä¸€ä¸ªç©ºä½æ˜¯å¦ç»™ä¸€ä¸ªæ£‹ä¸²æä¾›æ°”
+	provide_lib[ç©ºä½pos][æ£‹ä¸²index]*/
+	//æ³¨é‡Šæ°”
 	bool provide_lib[MAX_BOARDSIZE][MAX_BOARDSIZE];
 } board_status;
 
@@ -175,7 +175,7 @@ extern int deltaj[4];
 
 /* pass or not */
 #define PASS_MOVE(i, j) ((i) == -1 && (j) == -1)
-/* ÅÐ¶Ï (i, j) Õâ¸öÎ»ÖÃÊÇ²»ÊÇÔÚÆåÅÌ·¶Î§ÄÚ */
+/* åˆ¤æ–­ (i, j) è¿™ä¸ªä½ç½®æ˜¯ä¸æ˜¯åœ¨æ£‹ç›˜èŒƒå›´å†… */
 #define ON_BOARD(i, j) \
     ((i) >= 0 && (i) < board_size && (j) >= 0 && (j) < board_size)
 

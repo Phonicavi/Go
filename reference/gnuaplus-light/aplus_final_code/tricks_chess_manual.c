@@ -11,21 +11,21 @@
 #include <windows.h>
 
 /***********************************************************************************
-* Ä£¿é£º°´ÕÕÆåÆ×À´×ß
+* æ¨¡å—ï¼šæŒ‰ç…§æ£‹è°±æ¥èµ°
 *
-* Ö÷º¯Êı£º
+* ä¸»å‡½æ•°ï¼š
 * int get_manual_start_pos(board_status *bs, intersection color)
 *
-* ¹¤¾ß£º
+* å·¥å…·ï¼š
 * *int get_manual_start_pos_sub(board_status *bs, intersection color, int offset_x, int offset_y, int is_oppsite)
-*	*ÃèÊö£ºÖ÷º¯ÊıµÄ×Óº¯Êı£¬¶ÔÓÚÒÑ¾­¿ò³öÀ´µÄ¸ø¶¨µÄ7*7ÇøÓò£¬Ğı×ª·­×ª°ËÖÖ×´Ì¬¿´¿´ÓĞÃ»ÓĞÄÜÔÚÆåÆ×ÀïÃæÆ¥ÅäµÄ
+*	*æè¿°ï¼šä¸»å‡½æ•°çš„å­å‡½æ•°ï¼Œå¯¹äºå·²ç»æ¡†å‡ºæ¥çš„ç»™å®šçš„7*7åŒºåŸŸï¼Œæ—‹è½¬ç¿»è½¬å…«ç§çŠ¶æ€çœ‹çœ‹æœ‰æ²¡æœ‰èƒ½åœ¨æ£‹è°±é‡Œé¢åŒ¹é…çš„
 *
 *
 ***********************************************************************************/
 void get_manual_start_pos(board_status *bs, intersection color, int result[])
 {
 	int i, j, k, offset_x, offset_y;
-	//kogoµÄÒª1,5£¬Ê¯Ìï·¼·òµÄÒª0,6
+	//kogoçš„è¦1,5ï¼ŒçŸ³ç”°èŠ³å¤«çš„è¦0,6
 	int min_offset = 1;
 	int max_offset = 5;
 	switch ((bs->path_top + 2) % 2)
@@ -51,7 +51,7 @@ void get_manual_start_pos(board_status *bs, intersection color, int result[])
 
 void get_manual_start_pos_sub(board_status *bs, intersection color, int offset_x, int offset_y, int is_oppsite, int result[])
 {
-	//Êı×Ó
+	//æ•°å­
 	int i, j, k, num_stone = 0;
 	config *temp;
 	for (i = offset_x; i < offset_x + 7; ++i)
@@ -66,8 +66,8 @@ void get_manual_start_pos_sub(board_status *bs, intersection color, int offset_x
 		if (num_stone > bs->path_top)
 			break;
 	}
-	//ÏÈ·­×ª£¬ºó±È½Ï
-	int temp_board[8][7][7] = { 0 };//8ÖÖ×´Ì¬£¬7*7
+	//å…ˆç¿»è½¬ï¼Œåæ¯”è¾ƒ
+	int temp_board[8][7][7] = { 0 };//8ç§çŠ¶æ€ï¼Œ7*7
 	for (i = offset_x; i < offset_x + 7; ++i)
 	{
 		for (j = offset_y; j < offset_y + 7; ++j)
@@ -78,27 +78,27 @@ void get_manual_start_pos_sub(board_status *bs, intersection color, int offset_x
 			{
 				temp_board[0][6 - (i - offset_x)][6 - (j - offset_y)] = temp_board[0][i - offset_x][j - offset_y];
 			}
-			//0 ·­×ª
+			//0 ç¿»è½¬
 			temp_board[1][j - offset_y][i - offset_x] = temp_board[0][i - offset_x][j - offset_y];
 			//90
 			temp_board[2][i - offset_x][6 - (j - offset_y)] = temp_board[0][i - offset_x][j - offset_y];
-			//90·­×ª
+			//90ç¿»è½¬
 			temp_board[3][6 - (j - offset_y)][i - offset_x] = temp_board[2][i - offset_x][6 - (j - offset_y)];
 			//180
 			temp_board[4][6 - (i - offset_x)][6 - (j - offset_y)] = temp_board[0][i - offset_x][j - offset_y];
-			//180·­×ª
+			//180ç¿»è½¬
 			temp_board[5][6 - (j - offset_y)][6 - (i - offset_x)] = temp_board[4][6 - (i - offset_x)][6 - (j - offset_y)];
 			//270
 			temp_board[6][6 - (i - offset_x)][j - offset_y] = temp_board[0][i - offset_x][j - offset_y];
-			//270·­×ª
+			//270ç¿»è½¬
 			temp_board[7][j - offset_y][6 - (i - offset_x)] = temp_board[6][6 - (i - offset_x)][j - offset_y];
 
 		}
 	}
-	//¹şÏ£À´±È½Ï
+	//å“ˆå¸Œæ¥æ¯”è¾ƒ
 	if (num_stone >= MANUAL_HASH_TABLE_SIZE)
 		num_stone = MANUAL_HASH_TABLE_SIZE - 1;
-	for (k = num_stone; k >= num_stone / 2; --k)//num_stone/2Èç¹ûÒÑ¾­Ò»°ë¶¼²»ÊôÓÚÆåÆ×µÄ£¬ÄÇ¿Ï¶¨²»ÊÇÆåÆ×µÄÁË
+	for (k = num_stone; k >= num_stone / 2; --k)//num_stone/2å¦‚æœå·²ç»ä¸€åŠéƒ½ä¸å±äºæ£‹è°±çš„ï¼Œé‚£è‚¯å®šä¸æ˜¯æ£‹è°±çš„äº†
 	{
 		temp = hash_array[k].head;
 		while (1)
@@ -128,7 +128,7 @@ void get_manual_start_pos_sub(board_status *bs, intersection color, int offset_x
 	}
 }
 
-//ÆåÆ×µÃ³öµÄÕâ¸öµãºÃ²»ºÃ
+//æ£‹è°±å¾—å‡ºçš„è¿™ä¸ªç‚¹å¥½ä¸å¥½
 int is_fine_move(int pos)
 {
 	int i = I(pos);
@@ -140,24 +140,24 @@ int is_fine_move(int pos)
 }
 
 /***********************************************************************************
-* Ä£¿é£ºµ¼ÈëÆåÆ×£¬Éú³ÉÆåÆ×Ê÷
+* æ¨¡å—ï¼šå¯¼å…¥æ£‹è°±ï¼Œç”Ÿæˆæ£‹è°±æ ‘
 *
-* ¶¥²ãº¯Êı£º
+* é¡¶å±‚å‡½æ•°ï¼š
 * *void init_trick_chess_manual()
 *
-* ¹¤¾ß£º
+* å·¥å…·ï¼š
 * *void init_hash_array()
-*	*ÃèÊö£º³õÊ¼»¯¹şÏ£±í
+*	*æè¿°ï¼šåˆå§‹åŒ–å“ˆå¸Œè¡¨
 *
 * *void make_chess_manual_tree()
-*	*¶ÁÆåÆ×ÎÄ¼ş£¬Ò»¸ö¸ö×Ö·ûÈ¥·ÖÎö
+*	*è¯»æ£‹è°±æ–‡ä»¶ï¼Œä¸€ä¸ªä¸ªå­—ç¬¦å»åˆ†æ
 *
 * *void refresh_config(config **con, int i, int j, intersection color)
-*	*ÏÂÁËÒ»¿Å×Ó£¬È¥¸üĞÂÌí¼ÓÒ»¸ö¸ñ¾Ö£¬²¢¸üĞÂÕâ¿ÃÊ÷
+*	*ä¸‹äº†ä¸€é¢—å­ï¼Œå»æ›´æ–°æ·»åŠ ä¸€ä¸ªæ ¼å±€ï¼Œå¹¶æ›´æ–°è¿™æ£µæ ‘
 *
 * *void init_config(config *con, U64 k, bitboard *bb, intersection c, short nc)
 * *void init_config_edge(config_edge *edge, int p, config *con, config_edge *brother)
-*	*Îª¸ñ¾Ö¸³ÖµµÄ²Ù×÷
+*	*ä¸ºæ ¼å±€èµ‹å€¼çš„æ“ä½œ
 *
 *
 ***********************************************************************************/
@@ -177,7 +177,7 @@ void init_trick_chess_manual()
 	make_chess_manual_tree();
 
 //	printf("after chess_tree\n");
-	////´òÓ¡Êä³öÕâ¿ÃÊ÷¿´¿´
+	////æ‰“å°è¾“å‡ºè¿™æ£µæ ‘çœ‹çœ‹
 	//int i;
 	//for (i = 0; i < STEPS_MANUAL_MAX_BOARD; ++i)
 	//{
@@ -204,7 +204,7 @@ void init_hash_array()
 		hash_array[i].head = NULL;
 	}
 
-	//³õÊ¼×´Ì¬£ºµ±Ç°ÆåÅÌÉÏÓĞ0¸öµã£¬ÂÖµ½ºÚÉ«ÏÂÁË
+	//åˆå§‹çŠ¶æ€ï¼šå½“å‰æ£‹ç›˜ä¸Šæœ‰0ä¸ªç‚¹ï¼Œè½®åˆ°é»‘è‰²ä¸‹äº†
 	hash_array[0].head = (config*)malloc(sizeof(config));
 	bitboard *temp_bb = (bitboard*)malloc(MAX_BOARD*sizeof(bitboard));
 	memset(temp_bb, 0, MAX_BOARD*sizeof(bitboard));
@@ -280,7 +280,7 @@ void refresh_config(config **con, int i, int j, intersection color)
 		bit_play_move(con_new->board_bit, i, j, color);
 		init_config_edge(con_edge_new, POS(i, j), con_new, NULL);
 
-		//´Ó¾É¸ñ¾Öµ½ĞÂ¸ñ¾ÖµÄ±ß£¬Òª¼ÓÔÚ¾É¸ñ¾ÖÄÜµ½µÄ±ßµÄÁ´±íÀï£¬¼ÓÔÚ×îºó£¬ÒòÎªÆåÆ×´ó¶à°ÑºÃµÄ×ß·¨·ÅÇ°Ãæ
+		//ä»æ—§æ ¼å±€åˆ°æ–°æ ¼å±€çš„è¾¹ï¼Œè¦åŠ åœ¨æ—§æ ¼å±€èƒ½åˆ°çš„è¾¹çš„é“¾è¡¨é‡Œï¼ŒåŠ åœ¨æœ€åï¼Œå› ä¸ºæ£‹è°±å¤§å¤šæŠŠå¥½çš„èµ°æ³•æ”¾å‰é¢
 		if ((*con)->edge_son == NULL)
 		{
 			(*con)->edge_son = con_edge_new;
@@ -295,8 +295,8 @@ void refresh_config(config **con, int i, int j, intersection color)
 			temp = con_edge_new;
 		}
 
-		//½«ĞÂµÄ¸ñ¾ÖÌí¼Óµ½¹şÏ£±í£¨Ë÷Òı£©ÄÜµ½´ïµÄ¸ñ¾ÖµÄÁ´±íÀï£¬¼ÓÔÚ×îºó£¬ÒòÎªÒª±ß¼Ó±ß±È½ÏÓĞÃ»ÓĞÖØ¸´µÄ
-		//ÏÂÃæ·ÏÆúµÄ£¬Ó¦¸Ã²åµ½ºóÃæÈ¥£¬²¢ÇÒ²åÈëµÄÊ±ºòÒª±È½Ï
+		//å°†æ–°çš„æ ¼å±€æ·»åŠ åˆ°å“ˆå¸Œè¡¨ï¼ˆç´¢å¼•ï¼‰èƒ½åˆ°è¾¾çš„æ ¼å±€çš„é“¾è¡¨é‡Œï¼ŒåŠ åœ¨æœ€åï¼Œå› ä¸ºè¦è¾¹åŠ è¾¹æ¯”è¾ƒæœ‰æ²¡æœ‰é‡å¤çš„
+		//ä¸‹é¢åºŸå¼ƒçš„ï¼Œåº”è¯¥æ’åˆ°åé¢å»ï¼Œå¹¶ä¸”æ’å…¥çš„æ—¶å€™è¦æ¯”è¾ƒ
 		//con_new->next = hash_array[other_color - 1][con_new->num_current].head;
 		//hash_array[other_color - 1][con_new->num_current].head = con_new;
 		config *temp_config = hash_array[con_new->num_current].head;
@@ -306,7 +306,7 @@ void refresh_config(config **con, int i, int j, intersection color)
 		}
 		else
 		{
-			if (bit_compare(temp_config->board_bit, con_new->board_bit))//Á½¸ö¸ñ¾ÖÒ»ÑùÔòºÏ²¢
+			if (bit_compare(temp_config->board_bit, con_new->board_bit))//ä¸¤ä¸ªæ ¼å±€ä¸€æ ·åˆ™åˆå¹¶
 			{
 				con_edge_new->config_son = temp_config;
 				con_new = temp_config;
@@ -315,7 +315,7 @@ void refresh_config(config **con, int i, int j, intersection color)
 			else{
 				while (temp_config->next != NULL)
 				{
-					if (bit_compare(temp_config->next->board_bit, con_new->board_bit))//Á½¸ö¸ñ¾ÖÒ»ÑùÔòºÏ²¢
+					if (bit_compare(temp_config->next->board_bit, con_new->board_bit))//ä¸¤ä¸ªæ ¼å±€ä¸€æ ·åˆ™åˆå¹¶
 					{
 						con_edge_new->config_son = temp_config->next;
 						con_new = temp_config->next;
@@ -328,17 +328,17 @@ void refresh_config(config **con, int i, int j, intersection color)
 					}
 				}
 				if (temp_config->next == NULL)
-					temp_config->next = con_new;//µ½¾¡Í·ÁË¾ÍÖ±½Ó¼ÓÔÚÄ©Î²¾ÍºÃÁË
+					temp_config->next = con_new;//åˆ°å°½å¤´äº†å°±ç›´æ¥åŠ åœ¨æœ«å°¾å°±å¥½äº†
 			}
 		}
 
-		//×îºóµ±Ç°Ö¸ÕëÖ¸µ½ĞÂµÄ¸ñ¾ÖÈ¥
+		//æœ€åå½“å‰æŒ‡é’ˆæŒ‡åˆ°æ–°çš„æ ¼å±€å»
 		*con = con_new;
 	}
 }
 
 /**
-* Description:×Ö·û´®Á¬½Óº¯Êı
+* Description:å­—ç¬¦ä¸²è¿æ¥å‡½æ•°
 */
 void contact(char *str, const char *str1, const char *str2)
 {
@@ -356,14 +356,14 @@ void contact(char *str, const char *str1, const char *str2)
 }
 
 
-/* Éú³ÉÆåÆ×Ê÷ */
+/* ç”Ÿæˆæ£‹è°±æ ‘ */
 void make_chess_manual_tree()
 {
 	buffer_stack.top = -1;
 
 	FILE *fp;
-	char ch; //Ò»¸ö¸ö×Ö·ûÈ¥¶Á
-	int i, j; //¶Áµ½µÄµãµÄ×ø±ê
+	char ch; //ä¸€ä¸ªä¸ªå­—ç¬¦å»è¯»
+	int i, j; //è¯»åˆ°çš„ç‚¹çš„åæ ‡
 	config *temp_config = NULL;
 
 
@@ -371,7 +371,7 @@ void make_chess_manual_tree()
 	GetModuleFileNameA(NULL, szFilePath, MAX_PATH);
 	char p[MAX_PATH + 1] = { 0 };
 	char last[MAX_PATH + 1] = "\\chess_manual\\kogo4.SGF";
-	(strrchr(szFilePath, '\\'))[0] = 0; // É¾³ıÎÄ¼şÃû£¬Ö»»ñµÃÂ·¾¶×Ö´®
+	(strrchr(szFilePath, '\\'))[0] = 0; // åˆ é™¤æ–‡ä»¶åï¼Œåªè·å¾—è·¯å¾„å­—ä¸²
 	contact(p, szFilePath, last);
 //	printf("test\n %s  TESTEND", p);
 
@@ -417,7 +417,7 @@ void make_chess_manual_tree()
 					j = ch - 'a';
 					if (j > 9)
 						j = j - 6;
-					//i--;//kogoµÄ¾Í²»Òª--ÁË
+					//i--;//kogoçš„å°±ä¸è¦--äº†
 					//j--;
 					refresh_config(&temp_config, i, j, BLACK);
 					chess_manual_buffer_push(temp_config);
@@ -467,24 +467,24 @@ void make_chess_manual_tree()
 }
 
 /***********************************************************************************
-* Ä£¿é£ºÕ»µÄ²Ù×÷
+* æ¨¡å—ï¼šæ ˆçš„æ“ä½œ
 *
-* ÓÃÍ¾£º
-* *¶ÁÆåÆ×
+* ç”¨é€”ï¼š
+* *è¯»æ£‹è°±
 *
 * *void chess_manual_buffer_push(config *push)
-*	*ÈëÕ»
+*	*å…¥æ ˆ
 *
 * *config *chess_manual_buffer_pop()
-*	*³öÕ»
+*	*å‡ºæ ˆ
 *
 * *config *chess_manual_buffer_top()
-*	*È¡Õ»¶¥ÔªËØ
+*	*å–æ ˆé¡¶å…ƒç´ 
 *
 *
 ***********************************************************************************/
 
-/* ÈëÕ» */
+/* å…¥æ ˆ */
 void chess_manual_buffer_push(config *push)
 {
 	buffer_stack.top++;
@@ -496,7 +496,7 @@ void chess_manual_buffer_push(config *push)
 	printf("\n");*/
 }
 
-/* ³öÕ» */
+/* å‡ºæ ˆ */
 config *chess_manual_buffer_pop()
 {
 	config *pos = buffer_stack.stack[buffer_stack.top];
@@ -508,7 +508,7 @@ config *chess_manual_buffer_pop()
 	return pos;
 }
 
-/* È¡Õ»¶¥ÔªËØ */
+/* å–æ ˆé¡¶å…ƒç´  */
 config *chess_manual_buffer_top()
 {
 	return buffer_stack.stack[buffer_stack.top];

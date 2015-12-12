@@ -249,7 +249,7 @@ static int gtp_play(char *s) {
 
 static int gtp_raninit(char *s) {
 	int color = 1, i, pos;
-	//以下为测试时间修改的，想让他随机下20步但实际只下了1步，用showboard可以查看当前棋盘。
+	//脪脭脧脗脦陋虏芒脢脭脢卤录盲脨脼赂脛碌脛拢卢脧毛脠脙脣没脣忙禄煤脧脗20虏陆碌芦脢碌录脢脰禄脧脗脕脣1虏陆拢卢脫脙showboard驴脡脪脭虏茅驴麓碌卤脟掳脝氓脜脤隆拢
 	for (i = 0; i < 10; i++)
 	{
 		pos = generate_random_move(&main_board, color);
