@@ -294,7 +294,7 @@ int Goban::drop_stone(int point, bool color)
   if (points[point]->get_nliberties() == 0) {    //suicide.
       erase_neighbour(points[point]);
   } else if (points[point]->has_one_liberty()) { //self-atari.
-    last_atari[color] = points[point] ;
+    last_atari[color] = points[point] ; // 下面所说的在drop_stone中会handle的就在这里
   }
   last_point2 = last_point;
   last_point = point;
@@ -303,25 +303,26 @@ int Goban::drop_stone(int point, bool color)
 
 int Goban::handle_neighbours(int point)
 {
-  int captured_lone = 0, ncapt_lone = 0;
+  int captured_lone = 0, ncapt_lone = 0; // 提子位置 和 提子数
   GroupSet<4> neighbours;
   int nneigh = neighbour_groups(point, neighbours);
   
   for (int i = 0; i < nneigh; i++) {
     Group *current_neigh = neighbours[i];
     if (current_neigh->get_color() == points[point]->get_color()) {
-      merge_neighbour(point, current_neigh);
+      merge_neighbour(point, current_neigh);  // 合并棋串
     } else {
-      if (current_neigh->has_one_liberty()) {
+      if (current_neigh->has_one_liberty()) {  // 只剩一口气
         if (current_neigh->get_nstones() == 1) {  
           ncapt_lone++;
           captured_lone = current_neigh->get_stone(0);
         }
-        erase_neighbour(current_neigh);
+        erase_neighbour(current_neigh);  // 拿掉拿掉
       } else {
-        current_neigh->erase_liberties(point);
+        current_neigh->erase_liberties(point);  // 减掉这个点的气
         if (current_neigh->has_one_liberty()) {
           last_atari[current_neigh->get_color()] = current_neigh;
+          /* 如果剪完只剩一口气，标记一下这个棋串马上就要挂了 */
         }
       }
     }
@@ -339,10 +340,11 @@ void Goban::merge_neighbour(int point, Group *neigh)
   neigh->erase_liberties(point);
   group->attach_group(neigh);
   for (Group::StoneIterator st(neigh);  st; ++st) {
-    points[*st] = group;
+    points[*st] = group; // 都到并查集爸爸group的怀里来
   }
   neigh->clear();
-  if (neigh == last_atari[neigh->get_color()]) {
+  /* 下面假定合并完 本来要死得neigh保住了小命 */
+  if (neigh == last_atari[neigh->get_color()]) { 
     last_atari[neigh->get_color()] = 0;
     //merged group may still be in atari, but this case is handled in 'drop_stone()'.
   }    
@@ -375,8 +377,8 @@ void Goban::erase_neighbour(Group *neigh) //移除neigh这一个棋串
 }
 
 int Goban::play_move(int point)  //this move isn't stored in game_history.
-{
-  if (point) {
+{// 模拟.下棋(?)
+  if (point) {      
     drop_stone(point, side);
   }
   side = !side;
@@ -387,7 +389,7 @@ int Goban::play_move(int point)  //this move isn't stored in game_history.
   return point;
 }
 
-int Goban::play_move(int point, bool color)
+int Goban::play_move(int point, bool color)  //真.下棋
 {
   if (side != color) {      //two consecutive moves of the same color are 
     game_history.add(PASS); //represented by a pass inbetween.
@@ -413,7 +415,7 @@ int Goban::play_move(int point, bool color)
   return point;
 }
 
-bool Goban::set_position(const PList &moves)
+bool Goban::set_position(const PList &moves) // 这是在重下？
 {
   for (int i = 0; i < moves.length(); i++) {
     if (moves[i]) {

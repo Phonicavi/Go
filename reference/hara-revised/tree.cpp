@@ -30,7 +30,7 @@
 #include "tree.h"
 #include <cmath>
 
-void Node::reset()
+void Node::reset()  // 重置节点信息，注意prior两个成员么有被重置
 {
   child = 0;
   sibling = 0;
@@ -41,7 +41,7 @@ void Node::reset()
   move = 0;
 }
 
-void Node::copy_values(const Node *orig)
+void Node::copy_values(const Node *orig) // 复制节点信息，但是child和sibliing都为NULL
  {
   child = 0;
   sibling = 0;
@@ -54,7 +54,7 @@ void Node::copy_values(const Node *orig)
   move = orig->move;
  }
 
-void Node::add_child(Node *child)
+void Node::add_child(Node *child) // 添加子节点
 {
   if (!this->child)  this->child = child;
   else {
@@ -65,7 +65,7 @@ void Node::add_child(Node *child)
   }
 }
 
-void Node::set_move(int mv, const Prior &prior)
+void Node::set_move(int mv, const Prior &prior)// 更新此节点move信息
 {
   move = mv;
   rave_results = prior.prior;
@@ -74,18 +74,19 @@ void Node::set_move(int mv, const Prior &prior)
   prior_visits = prior.equiv;
 }
 
-void Node::set_results(int result)
+void Node::set_results(int result) // 更新此节点模拟对局信息
 {
   visits++;
   results += result;
 }
 
-void Node::set_amaf(int result, const AmafBoard &amaf, bool side, int depth)
+void Node::set_amaf(int result, const AmafBoard &amaf, bool side, int depth) // 更新每个子节点的amaf信息
 {
   const double discount = 0.0; //0.0001;
-  for (Node *next = child; next; next = next->sibling) {
+  for (Node *next = child; next; next = next->sibling) { 
     next->rave_results += result * amaf.value(next->move, depth, side, discount);
     next->rave_visits += amaf.value(next->move, depth, side, discount);
+    /* 具体怎么实现的还不知道 */
   }
 }
 
@@ -105,10 +106,10 @@ double Node::get_value(double parent_visits) const
   return 1.0;   //first player urgency.
 }
 
-Node *Node::select_child() const
+Node *Node::select_child() const // 选择该展开哪个娃娃
 {
   double best_value = -1;
-  Node *RAVE_child = 0;
+  Node *RAVE_child = 0;   
   for (Node *next = child; next; next = next->sibling) {
     if (next->get_value(visits) > best_value) {
       best_value = next->get_value(visits);
@@ -118,13 +119,13 @@ Node *Node::select_child() const
   return RAVE_child;
 }
 
-Node *Node::get_best_child() const
+Node *Node::get_best_child() const // 选择那个被选召的孩子
 {
   //return select_child();
   Node *best_child = 0;
   double best_visits = 0;
   for (Node *next = child; next; next = next->sibling) {
-    double curr_visits = next->visits + next->rave_visits;
+    double curr_visits = next->visits + next->rave_visits;   // 居然1：1分配没调参数
     if (curr_visits > best_visits) {
       best_visits = curr_visits;
       best_child= next;
@@ -184,7 +185,7 @@ void Tree::clear_active()
 Node *Tree::insert(Node *parent, int move, const Prior &prior)
 {
   if (size[active] < maxsize) {
-    Node *child = root[active] + size[active]++;
+    Node *child = root[active] + size[active]++; //？
     child->reset();
     parent->add_child(child);
     child->set_move(move, prior);
@@ -195,7 +196,7 @@ Node *Tree::insert(Node *parent, int move, const Prior &prior)
   }
 }
 
-Node *Tree::insert(Node *parent, const Node *orig)
+Node *Tree::insert(Node *parent, const Node *orig) // 把orig这个节点的信息插入成parent的子节点
 {
   if (size[1-active] < maxsize) {
     Node *child = root[1-active] + size[1-active]++;
@@ -208,14 +209,17 @@ Node *Tree::insert(Node *parent, const Node *orig)
   }
 }
 
-void Tree::copy_recursive(Node *parent, const Node *orig)
+void Tree::copy_recursive(Node *parent, const Node *orig) // 就是把orig和他的后代们都拷贝过来
 {
   for (Node *node = orig->get_child(); node; node = node->get_sibling()) {
     Node *child = insert(parent, node);
     if (child) copy_recursive(child, node);
   }
 }
-
+/* 这个吊袜，大概的意思是在root的子节点里面找到new_root状态。然后把它以new_root为根节点的整个
+  * 树更新到root[1-active]上，然后反转active
+  * 如果没有的话就自暴自弃，全部clear重新来过TAT
+ */
 int Tree::promote(int new_root)
 {
   for (Node *n = root[active]->get_child(); n; n = n->get_sibling()) {
@@ -230,7 +234,7 @@ int Tree::promote(int new_root)
   clear();
   return active;
 }
-
+/* 展开parent节点 */
 int Tree::expand(Node *parent, const int *moves, int nmovs, const Prior priors[])
 {
   //if (parent->has_childs()) return 0; //No need to expand, but we check before calling.
