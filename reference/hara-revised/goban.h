@@ -52,6 +52,7 @@ private:
   
   //We won't use groups[0], so board is [1-362); initialized at 0.
   Group *points [MAXSIZE2+1];  //The board.
+  // points 看上去感觉就像爸爸  （并查集的father[]）保存每个点的爸爸哪个棋串
 
 
   // 以棋串的形式来保存数组，感觉hara并不在乎内存问题（其实也没有必要），空位相当于一个棋子数为0
@@ -96,6 +97,7 @@ private:
   void reset();
   
   //4-neighbours iterating methods:
+  // const函数看gobanconst里的注释
   int point_liberties(int point) const;
   int point_liberties(int point, PList &liberties) const;
   int neighbour_groups(int point, GroupSet<4> &neighbours) const;
@@ -107,8 +109,8 @@ private:
   int neighbours_in_atari(int point, bool color, const GroupSet<4> &neighbours) const;
   
   //Playing methods:
-  int drop_stone(int point, bool color);
-  int handle_neighbours(int point); // 获得打劫点
+  int drop_stone(int point, bool color); //  落子
+  int handle_neighbours(int point); // 合并该合并的棋串 拿掉该拿掉的 并且获得打劫点
   void merge_neighbour(int point, Group *neighbour);
   void erase_neighbour(Group *neighbour);//移除neigh这一个棋串
   void remove_empty(int point);// 把点从空点集的当中移掉，估计是此点落子了
@@ -171,7 +173,7 @@ public:
   float chinese_count() const;
   void score_area(int point_list[]) const;
   int mercy() const;
-  void init_priors(Prior priors[]) const;
+  void init_priors(Prior priors[]) const;  // 这个就是用来打分的
   void print_goban() const;
 
 #ifdef ZOBRIST

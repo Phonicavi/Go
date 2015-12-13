@@ -66,8 +66,15 @@ public:
 
 class Tree{
 private:
+
   Node *root[2];
   int size[2], maxsize, active;
+  /*
+  * active 是指目前是哪一边貌似
+  * size[i] 貌似是root[i]的实际用到的大小
+  * 他的奇技淫巧是先开maxsize，后面就不要一个一个去new了
+  * 我想打他... 
+  */
   const Goban *goban;
 public:
   Tree(int maxsize, Goban *goban);
@@ -81,7 +88,7 @@ public:
   int expand(Node *parent, const int *moves, int nmoves, const Prior[]);
   Node *get_best() const{ return root[active]->get_best_child(); }
   Node *get_root() const{ return root[active]; }
-  int get_size() const{ return size[active];}
+  int get_size() const{ return size[active];}// 得到当前active的实际size
   void print() const;
   void print(Node *node, int threshold, int depth) const;
 };
