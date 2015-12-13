@@ -39,7 +39,7 @@ Group::Group()
 }
 
 void Group::set_up(int point, bool new_color, const PList &new_liberties)
-{
+{// 设置point处属性
   color = new_color;
   nsts = 0;
   stones[nsts++] = point;
@@ -51,14 +51,14 @@ void Group::set_up(int point, bool new_color, const PList &new_liberties)
   }
 }
 
-int Group::add_liberties(int i)
+int Group::add_liberties(int i)   
 {
   for (int j = 0; j < nlibs; j++) {
-    if (liberties[j] == i) return 0;
+    if (liberties[j] == i) return 0;    //避免重复添加气
   }
   liberties[nlibs++] = i;
   liberties[nlibs] = 0;
-  return nlibs;
+  return nlibs;         //返回操作后气数
 }
 
 int Group::erase_liberties(int lib)
@@ -80,6 +80,12 @@ void Group::clear()
   nlibs = 0;
   liberties[nlibs] = 0;
 }
+
+/* 
+  * 不禁感叹hara大法好, 是这样的。Aplus在合并串的时候是将两个串的气相加
+  * 然后在判断各种奇怪的组合姿势，减少气数
+  * hara通过保存气的位置，直接合起来，重复的干脆直接不加就好了 
+*/
 
 void Group::attach_group(Group *attached)
 {  

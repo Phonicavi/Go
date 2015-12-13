@@ -37,7 +37,7 @@ const int MAXSIZE = 19;
 const int MAXSIZE2 = MAXSIZE*MAXSIZE;
 
 const char COORDINATES[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'};
-
+/*花式让手*/
 const int handicap19[][9]= {
   {61, 301, 289, 73,  175, 187, 67, 295, 181},
   {61, 301, 289, 73,  175, 187, 67, 295, 0},

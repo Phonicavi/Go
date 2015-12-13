@@ -43,13 +43,13 @@ class PList{
 
 };
 
-class Group{
+class Group{    //棋串
  private:
-  bool color;
-  int stones[MAXSIZE2];
-  int nsts;
-  int liberties[MAXSIZE2*2/3];
-  int nlibs;
+  bool color; //棋串颜色
+  int stones[MAXSIZE2]; // 棋串中每个棋子的位置
+  int nsts; //该棋串棋子个数
+  int liberties[MAXSIZE2*2/3];  // 棋串中每个气的位置
+  int nlibs;   //  该棋串气数
 
  public:
   Group();
@@ -66,7 +66,7 @@ class Group{
   int get_liberty(int i) const { return liberties[i]; }
   const int *get_liberties() const { return liberties; }
   
-  class StoneIterator{
+  class StoneIterator{      //棋串中棋子的迭代器
    protected:
     const int *it;
    public:
@@ -77,7 +77,7 @@ class Group{
     operator bool() const { return *it != 0; }
   };
   
-  class LibertyIterator : public StoneIterator{
+  class LibertyIterator : public StoneIterator{  //棋串中气的迭代器
    public:
     LibertyIterator(const Group *gr) { it = gr->get_liberties(); }
   };
@@ -88,11 +88,21 @@ class Group{
   int erase_liberties(int lib);
   void print_group() const;
 };
+/*
+以一个int常量值作为模板参数.
+template <int base>
+class stringarray
+{
+   char* str[base];
+};
+stringarray<10>.str 就是一个char[10]数组
 
-template<const int S> class GroupSet{
+*/
+
+template<const int S> class GroupSet{     //所有棋串的集合
  protected:
-  Group *groups[S];
-  int multiplicity[S];
+  Group *groups[S];       // 保存棋串
+  int multiplicity[S];    //  每个棋串的重复次数 
   int len;
 
  public:
@@ -107,7 +117,7 @@ template<const int S> class GroupSet{
     if (gr == 0) return false;
     for (int i = 0; i < len; i++) {
       if (groups[i] == gr) {
-        multiplicity[i]++;
+        multiplicity[i]++;    //发生重复
         return  false;
       }
     }
@@ -116,7 +126,7 @@ template<const int S> class GroupSet{
     return true;
   }
 
-  Group *operator[](int i) const { return groups[i]; }
+  Group *operator[](int i) const { return groups[i]; }   // 重载[]
   int get_multiplicity(int i) const
   {
     #ifdef DEBUG_INFO
@@ -150,7 +160,7 @@ public:
   {
     if (len == S) {
     #ifdef DEBUG_INFO
-      std::cerr << "long list\n";
+      std::cerr << "long list\n";   //爆了
     #endif
       return;
     }
