@@ -67,6 +67,7 @@ unsigned long long Goban::set_zobrist(int move) const
   return get_zobrist();
 }
 #endif
+/* 计算某一点的气  返回气数并把气的位置存在liberties里*/
 int Goban::point_liberties(int point, PList &liberties) const
 {  // liberties must be of size > 4.
   for (int i = 0; int adj=adjacent[point][i]; i++) {
@@ -76,16 +77,16 @@ int Goban::point_liberties(int point, PList &liberties) const
   }
   return liberties.length();
 }
-
+/* 单纯计算气数 */
 int Goban::point_liberties(int point) const
 {
   int nlibs = 0;
   for (int i = 0; adjacent[point][i]; i++) {
-    if (points[adjacent[point][i]] == 0) nlibs++;
+    if (points[adjacent[point][i]] == 0) nlibs++; // 为空位
   }
   return nlibs;
 }
-
+/* 获得point的眼眶位置的棋串 ，返回棋串数*/
 int Goban::neighbour_groups(int point, GroupSet<4> &neighbours) const
 {
   for (int i = 0; adjacent[point][i]; i++) {
@@ -93,7 +94,7 @@ int Goban::neighbour_groups(int point, GroupSet<4> &neighbours) const
   }
   return neighbours.length();  
 }
-
+/* 获得point周围颜色为color，气数不大于max_lib的棋串 */
 int Goban::neighbour_groups(int point, bool color, int max_liberties,
                             GroupSet<MAXSIZE2/3> *neighbours) const
 {
@@ -108,7 +109,7 @@ int Goban::neighbour_groups(int point, bool color, int max_liberties,
   }
   return nneigh;  
 }
-
+/* 计算棋串group周围相邻的颜色为color的棋串 */
 int Goban::neighbour_groups(const Group *group, bool color, int max_liberties,
                             GroupSet<MAXSIZE2/3> &neighbours) const
 {
@@ -117,7 +118,7 @@ int Goban::neighbour_groups(const Group *group, bool color, int max_liberties,
   }
   return neighbours.length();
 }
-
+/* 计算point周围（n/w/e/s）所有颜色为color的棋串的总棋子数 */
 int Goban::neighbours_size(int point, bool color) const
 {
   int nstones = 0;
@@ -131,7 +132,7 @@ int Goban::neighbours_size(int point, bool color) const
   }
   return nstones;
 }
-
+/* 计算point周围棋串所有颜色 不 为color且只有一口气的棋串数 */
 int Goban::neighbours_in_atari(int point, bool color, const GroupSet<4> &neighbours) const
 {
   int natari = 0;
@@ -142,7 +143,7 @@ int Goban::neighbours_in_atari(int point, bool color, const GroupSet<4> &neighbo
   }
   return natari;
 }
-
+/* 计算一个空位是否已经 在不考虑consider_occup的情况下四个眼眶是不是都是color */
 bool Goban::is_surrounded(int point, bool color, int consider_occupied) const
 {
   if (points[point] != 0) return false;
@@ -159,6 +160,7 @@ bool Goban::is_true_eye(int point, bool color, int consider_occupied) const
 {
   int i, ncontrolled = 0;
   if (!is_surrounded(point, color, consider_occupied)) return false;
+  // 保证眼眶占领get
   for (i = 0; int diag=diagonals[point][i]; i++) {
     if (points[diag]) {
       if (points[diag]->get_color() == color) {
@@ -171,8 +173,8 @@ bool Goban::is_true_eye(int point, bool color, int consider_occupied) const
     }
   }
   if (i == 4) {
-    if (ncontrolled > 2) return true;
-  } else if (ncontrolled == i) {
+    if (ncontrolled > 2) return true; // 4个眼角要三个
+  } else if (ncontrolled == i) { // 3个眼角都要是
     return true;
   }
   return false;
@@ -212,19 +214,20 @@ bool Goban::is_legal(int point, bool color) const
 #ifdef ZOBRIST
   if (zobrist.check_history(get_zobrist(point))) return false;
 #endif
-  if (point_liberties(point) > 0) return true;
+  if (point_liberties(point) > 0) return true;  // point有气
 
   GroupSet<4> neighbours;
   int nneigh = neighbour_groups(point, neighbours);
   for (int i = 0; i < nneigh; i++) {
     if (neighbours[i]->get_color() == color && !neighbours[i]->has_one_liberty()) {
-      return true;
+      return true;  // 至少要不赌四周同色棋串之一的最后一口气，不要想不开
     }
   }
   return neighbours_in_atari(point, color, neighbours) > 0;
+  //如果实在想不开，起码保证这一步的操作可以带走对方的宝宝
 }
 
-int Goban::legal_moves(int moves[]) const
+int Goban::legal_moves(int moves[]) const  // 整合所有合法moves
 {
   int nlegal = 0;
   for (int i = 0; i < empty_points.length(); i++) {
@@ -244,8 +247,8 @@ int Goban::get_value(int point) const   //Value 1 for Black, -1 for White, 0 for
   }
   return 0;
 }
-
-float Goban::chinese_count() const
+// 算分咯 =========================
+float Goban::chinese_count() const     
 {
   int black_score = 0, white_score = 0, eyes_result = 0;
   for (int i = 1; i <= size2; i++) {
@@ -272,8 +275,8 @@ float Goban::chinese_count() const
     }
   }
 }
-
-int Goban::mercy() const
+//========================================
+int Goban::mercy() const  // 粗略估计？
 {
   for (int s = 0; s < 2; s++) {
     if (stones_on_board[s] - stones_on_board[1-s] > size2/3) {

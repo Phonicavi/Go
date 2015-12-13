@@ -33,6 +33,25 @@
 #include <iostream>
 #include <iomanip>
 
+/*
+Then we have a look at the children of the node and increment amaf_visits for the children if color of that particular (child) node 
+was the first to play on that intersection in the playout. If the playout was also a win for the (child) node then we also increment amaf_wins.
+
+
+Then we also need to change the formula to select then next node. I must admit I just copied the one from Michi (RAVE_EQUIV = 3500. Stolen from Michi):
+
+win_rate = wins / plays (assumes plays will never be 0)
+if amaf_plays == 0 {
+  return win_rate
+} else {
+  rave_winrate = amaf_wins / amaf_plays
+  beta = amaf_plays / ( amaf_plays + plays + plays * amaf_plays / RAVE_EQUIV)
+  return beta * rave_winrate + (1 - beta) * winrate
+}
+*/
+
+/* 然而对于下面的实现我还是没看的很懂 */
+
 class AmafBoard{
  private:
   int board[MAXSIZE2+1];

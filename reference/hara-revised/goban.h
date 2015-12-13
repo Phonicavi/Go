@@ -52,18 +52,34 @@ private:
   
   //We won't use groups[0], so board is [1-362); initialized at 0.
   Group *points [MAXSIZE2+1];  //The board.
+
+
+  // 以棋串的形式来保存数组，感觉hara并不在乎内存问题（其实也没有必要），空位相当于一个棋子数为0
+  // 的棋串，所以可以用0，1 来表示b和w
+
+
   //Pre-allocated groups:
   Group groups[MAXSIZE2+1];
-  int stones_on_board[2];
+  int stones_on_board[2];  // 标记黑白在棋盘上各有多少子
   Group *last_atari[2];  //One for black, one for white.
-  int last_point, last_point2;
+  int last_point, last_point2;    //之前一步和之前两步
 
   //Pre-computed topology:
-  int adjacent[MAXSIZE2+1][5];
-  int diagonals[MAXSIZE2+1][5];
-  int vicinity[MAXSIZE2+1][16];
-  int distance_to_edge[MAXSIZE2+1];
+  int adjacent[MAXSIZE2+1][5];  // 上下左右，四个眼眶
+  int diagonals[MAXSIZE2+1][5]; // 四个眼角
+  int vicinity[MAXSIZE2+1][16];  // 八个相邻位置
+  int distance_to_edge[MAXSIZE2+1];  // 对四个边界最近的距离
+
+  /*
+  曼哈顿距离，就是abs(delta x)+ abs(delta y)
+
+  保存MD距离在4以内的点
+  
+  */
+
   int within_manhattan[MAXSIZE2+1][4][20];
+
+
 
   PointList<MAXSIZE2+1> empty_points;
   PointList<3*MAXSIZE2> game_history;
@@ -92,10 +108,10 @@ private:
   
   //Playing methods:
   int drop_stone(int point, bool color);
-  int handle_neighbours(int point);
+  int handle_neighbours(int point); // 获得打劫点
   void merge_neighbour(int point, Group *neighbour);
-  void erase_neighbour(Group *neighbour);
-  void remove_empty(int point);
+  void erase_neighbour(Group *neighbour);//移除neigh这一个棋串
+  void remove_empty(int point);// 把点从空点集的当中移掉，估计是此点落子了
   
   bool is_surrounded(int point, bool color, int consider_occupied=0) const;
   bool is_true_eye(int point, bool color, int consider_occupied=0) const;

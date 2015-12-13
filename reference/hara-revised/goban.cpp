@@ -56,7 +56,7 @@ void Goban::reset()
     if (Group *point = points[i]) {
       point->clear();
     }
-    points[i] = 0;
+    points[i] = 0; //对指针赋值0  应该就是NULL(?)
   }
   empty_points.clear();
   for (int j = 0; j < size2; j++) {
@@ -135,6 +135,10 @@ void Goban::init_vicinity()
     }
   }
   //Duplicate to calculate rotations,avoiding run-time modulo division:
+  // 复制一份的原因暂时没看懂
+
+
+  // 为了防重复，每次计算两个方向
   for (int i = 0; i < 2; i++) {
     for (int k = 1; k <= size2; k++) {
       if (k <= size*(size-1)) {
@@ -262,7 +266,7 @@ int Goban::set_size(int newsize)
   return size;
 }
 
-void Goban::remove_empty(int point)
+void Goban::remove_empty(int point) // 把点从空点集的当中移掉，估计是此点落子了
 {
   empty_points.remove(point);
 }
@@ -273,9 +277,9 @@ int Goban::drop_stone(int point, bool color)
   if (points[point] != 0) print_goban();
   
   PointSet<5> liberties;
-  point_liberties(point, liberties);
+  point_liberties(point, liberties);  //计算point处的气
   
-  groups[point].set_up(point, color, liberties);
+  groups[point].set_up(point, color, liberties); // 给该点设置好属性
   points[point] = &(groups[point]);
   remove_empty(point);
   stones_on_board[color]++;
@@ -344,9 +348,9 @@ void Goban::merge_neighbour(int point, Group *neigh)
   }    
 }
 
-void Goban::erase_neighbour(Group *neigh)
+void Goban::erase_neighbour(Group *neigh) //移除neigh这一个棋串
 {
-  for (Group::StoneIterator st(neigh);  st; ++st) {
+  for (Group::StoneIterator st(neigh);  st; ++st) { //迭代器
     points[*st] = 0;
     stones_on_board[neigh->get_color()]--;
 #ifdef ZOBRIST
