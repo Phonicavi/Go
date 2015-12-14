@@ -102,7 +102,7 @@ int GTP::parse(const std::string &command_str)
   }
   return 0;
 }
-
+// 响应GTP的执行请求
 int GTP::exec(){
   response = "=";
   response.append(cmd_id);
