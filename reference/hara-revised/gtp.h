@@ -37,6 +37,11 @@
 #include "goban.h"
 #include "engine.h"
 
+// 遵循的GTP协议版本 2.0
+// 程序自己的版本 0.9
+// 程序的名字 Hara 用于响应GTP中的 NAME 指令
+
+
 #define PROTOCOLVERSION "2"
 #define PROGVERSION "0.9"
 #define PROGNAME "Hara"
@@ -58,6 +63,8 @@ private:
 #endif
   Goban main_goban;
   Engine go_engine;
+  // 以下21个void函数
+  // 在gtpcommands.cpp中实现
   void protocol_version();
   void name();
   void version();
@@ -79,7 +86,9 @@ private:
   void time_left();
   void final_score();
   void final_status_list();
-  
+
+  // NCOMMANDS 是枚举类型的最后一个
+  // 默认地 枚举类型的实际值是从0开始的 int 所以这里自然地变成了“指令数量”
   enum {PROTOCOL_VERSION, NAME, VERSION, KNOWN_COMMAND, LIST_COMMANDS,
         QUIT, BOARDSIZE, CLEAR_BOARD, KOMI, PLAY, GENMOVE, SHOWBOARD,
         FIXED_HANDICAP, LEVEL,TIME_SETTINGS, TIME_LEFT, FINAL_SCORE,
