@@ -28,7 +28,7 @@
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                    *
 ***************************************************************************************/
 #include "gtp.h"
-// 实现了class GTP中private函数的21个
+// 实现了class GTP中private且void的函数的全部21个
 // 主要用于响应GTP协议调用
 
 

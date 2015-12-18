@@ -34,8 +34,8 @@
 #include "size.h"
 
 using namespace std;
-  
-GTP::GTP():go_engine(&main_goban)
+
+GTP::GTP():go_engine(&main_goban) // 初始化参数列表 私有成员这里传的是&main_goban
 {
   early_pass = true;
 }
@@ -50,11 +50,15 @@ int GTP::GTP_loop()
   engine_log.open(filename);
 #endif
   loop = true;
+  // command_string是GTP的一个私有成员
+  // 将标准输入读入command_string
   while (loop && getline(cin, command_string)) {
 #ifdef LOG
     engine_log << command_std::string;
     engine_log.flush();
 #endif
+    // 解析读入的指令
+    // 执行
     parse(command_string);  
     exec();
   }
@@ -63,7 +67,7 @@ int GTP::GTP_loop()
 #endif
   return 0;
 }
-
+// 解析标准输入中读入的指令
 int GTP::parse(const std::string &command_str)
 {  
   std::stringstream auxstream(command_str);

@@ -1,0 +1,13 @@
+0. GTP
+1. group/string
+2. goban/board
+	# 1, 2 storage
+
+# group
+#
+# UCT threads
+# chess_book
+# storage<-->method copy Group etc..
+# hash zobrist ?
+
+

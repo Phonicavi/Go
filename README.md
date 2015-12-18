@@ -41,3 +41,12 @@
 	赖凡: heuristics, zobrist  
 	邱丰: gtp, gtpcommand  
 	
+*2015-Dec.18th*  
+
++ 基本的问题  
+
+	UCT并行  
+	棋谱加入到现在的算法中  
+	复制棋盘context 避免重复history  
+	Zobrist哈希去重 必要性验证  
+	

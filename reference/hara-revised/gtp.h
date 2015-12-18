@@ -47,8 +47,8 @@
 #define PROGNAME "Hara"
 //#define LOG
 
-class GTP{
-
+class GTP{ // GTP是一个协议实现类
+// GTP包含了决策的实现 对决策结果的标准化、协议化封装
 private:
   bool loop, early_pass;
   int cmd;
