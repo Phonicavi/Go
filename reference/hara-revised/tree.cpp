@@ -92,6 +92,7 @@ void Node::set_amaf(int result, const AmafBoard &amaf, bool side, int depth) // 
 
 double Node::get_value(double parent_visits) const
 {
+  /* 2000-3000 都可以*/
   const double BIAS = 1.0/3000, UCTK = 0.0;
   if (visits) {
     if (rave_visits) {

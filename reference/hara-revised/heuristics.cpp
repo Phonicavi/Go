@@ -102,7 +102,7 @@ int Goban::play_heavy()
 
 int Goban::last_atari_heuristic() const
 {
-  if (Group *group = last_atari[!side]) {
+  if (Group *group = last_atari[!side]) {    // 打别人的吃 
     int move = group->get_liberty(0);
     if (is_legal(move, side) &&
         !is_self_atari(move, side) &&
@@ -113,7 +113,7 @@ int Goban::last_atari_heuristic() const
   
   PointList<MAXSIZE2> save;
   if (last_atari[side]) {
-    atari_escapes(last_atari[side], save);
+    atari_escapes(last_atari[side], save);   // 救自己
     if (int move = random_choose(save, &Goban::heavy_policy)) {
       return move;
     }
@@ -132,7 +132,7 @@ void Goban::nakade_heuristic(int point, PList &list) const
   }
 }
 
-void Goban::capture_heuristic(int point, PList &list) const
+void Goban::capture_heuristic(int point, PList &list) const  // 把对手吃掉
 {
   for (int i = 0; i < 8; i++) {
     Group *group = points[vicinity[point][i]];
@@ -185,7 +185,7 @@ void Goban::pattern_heuristic(int point, PList &list) const
   }
 }
 
-bool Goban::stones_around(int point, int distance) const
+bool Goban::stones_around(int point, int distance) const // 返回在曼哈顿距离为distance的范围之内有没有棋子
 {
   for (int i = 0; i < distance; i++) {
     for (int j = 0; j < 4*(i+1); j++) {
@@ -196,15 +196,15 @@ bool Goban::stones_around(int point, int distance) const
   return false;
 }
 
-int Goban::total_liberties(int point, bool color, PList *liberties, int enough=0, const Group *exclude=0) const
+int Goban::total_liberties(int point, bool color, PList *liberties, int enough=0, const Group *exclude=0) const // 计算下point这一处产生的整个棋串所能获得得气
 {
   PointSet<MAXSIZE2> libs;
   if (liberties) point_liberties(point, *liberties);
   point_liberties(point, libs);
-  if (enough && libs.length() > enough) return libs.length();
+  if (enough && libs.length() > enough) return libs.length();   // 首先是point自己的所有的气
   
   GroupSet<4> neighbours;
-  int nneigh = neighbour_groups(point, neighbours);
+  int nneigh = neighbour_groups(point, neighbours);             // 接着是point的同色相邻棋串的的气（除了point）其实也就是这一大块的气
   for (int i = 0; i < nneigh; i++) {
     const Group *curr_neigh = neighbours[i];
     if (curr_neigh != exclude) {
@@ -217,13 +217,13 @@ int Goban::total_liberties(int point, bool color, PList *liberties, int enough=0
           }
         }
       } else if (curr_neigh->get_nliberties() == 1) {
-        for (Group::StoneIterator st(curr_neigh); st; ++st) {
-          for (int j = 0; adjacent[*st][j]; j++) {
+        for (Group::StoneIterator st(curr_neigh); st; ++st) {   // 在此之外， 对于周围不同色的只剩一口气的棋串（下在point就可以把它提掉）
+          for (int j = 0; adjacent[*st][j]; j++) {            // 对于这些棋串中棋子，若与point相邻，说明提掉之后就会成为point的气， 
             if (adjacent[*st][j] == point) {
               libs.add(*st);
               if (enough && libs.length() > enough) return libs.length();
             } else if (points[adjacent[*st][j]] &&
-                       points[adjacent[*st][j]]->get_color() == color) {
+                       points[adjacent[*st][j]]->get_color() == color) {   // 若不与point相邻但是周围是point的同色棋串，那么也是这一大块的气
               for (int k = 0; k < nneigh; k++) {
                 if (points[adjacent[*st][j]] == neighbours[k]) {
                   libs.add(*st);
@@ -239,7 +239,7 @@ int Goban::total_liberties(int point, bool color, PList *liberties, int enough=0
   return libs.length();
 }
 
-bool Goban::gains_liberties(int point, const Group *group) const
+bool Goban::gains_liberties(int point, const Group *group) const  // 返回在point这点会不会获得比group当前更多的气
 {
   int curr_liberties = 1;
   if (group) curr_liberties = group->get_nliberties();
@@ -247,30 +247,30 @@ bool Goban::gains_liberties(int point, const Group *group) const
   return nlibs > curr_liberties;
 }
 
-bool Goban::is_self_atari(int point, bool color) const
+bool Goban::is_self_atari(int point, bool color) const     // 下在point反而让自己的这一片棋子只剩一口气
 {
-  return (total_liberties(point, color, 0, 1) == 1);
+  return (total_liberties(point, color, 0, 1) == 1);    
 }
 
 int Goban::atari_last_liberty(int point, bool color) const
 {
   PointSet<MAXSIZE2> liberties;
-  if (total_liberties(point, color, &liberties, 1) == 1) return liberties[0]; //Maybe 0!
+  if (total_liberties(point, color, &liberties, 1) == 1) return liberties[0]; //Maybe 0!   // 看看剩下的唯一那口气在哪里
   return -1;
 }
 
-int Goban::atari_escapes(const Group *group, PList &escapes) const
+int Goban::atari_escapes(const Group *group, PList &escapes) const    // 遇到打吃怎么办
 {
-  for (Group::LibertyIterator lib(group); lib; ++lib) {
-    if (gains_liberties(*lib, group)) {
+  for (Group::LibertyIterator lib(group); lib; ++lib) {  // 加自己的气
+    if (gains_liberties(*lib, group)) {       // 落子在lib会不会让group的气增加
       escapes.add(*lib);
     }
   }
   GroupSet<MAXSIZE2/3> neighbours;
-  int nneigh = neighbour_groups(group, !group->get_color(), group->get_nliberties(), neighbours);
+  int nneigh = neighbour_groups(group, !group->get_color(), group->get_nliberties(), neighbours); // 把周围其他的有可能就给灭了
   for (int i = 0; i < nneigh; i++) {
     for (Group::LibertyIterator lib(neighbours[i]); lib; ++lib) {
-      if (gains_liberties(*lib, group)) {
+      if (gains_liberties(*lib, group)) {    // 不能让对方加自己的气（？）
         escapes.add(*lib);
       }
     }
@@ -278,7 +278,7 @@ int Goban::atari_escapes(const Group *group, PList &escapes) const
   return escapes.length();
 }
 
-bool Goban::fast_ladder(int point, bool color) const
+bool Goban::fast_ladder(int point, bool color) const       // 快速判断是不是征子不利 
 {
   if (total_liberties(point, color, 0) != 2) return false;
   if (neighbour_groups(point, !color, 2, 0)) return false;
@@ -302,12 +302,12 @@ bool Goban::fast_ladder(int point, bool color) const
       p = p + delta[act];
       //look for ladder breakers. TODO: complete.
       if (points[p]) {
-        if (points[p]->get_color() == color) break;
-        else return true;
+        if (points[p]->get_color() == color) break;        // 征子路上遇到自己的子就是征子有利
+        else return true;                                   // 遇到别人的棋子就是征子不利
       }
       if (points[p + delta[act]]) {
-        if (points[p + delta[act]]->get_color() == color) break;
-        else return true;
+        if (points[p + delta[act]]->get_color() == color) break; // 类似的 要是在征子路上的有自己的接应，就是征子有利
+        else return true;                                         // 反之 就是征子不利
       }
       act = 1-act;
     }

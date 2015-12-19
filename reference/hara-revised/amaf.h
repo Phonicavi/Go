@@ -34,6 +34,7 @@
 #include <iomanip>
 
 /*
+Reference:
 Then we have a look at the children of the node and increment amaf_visits for the children if color of that particular (child) node 
 was the first to play on that intersection in the playout. If the playout was also a win for the (child) node then we also increment amaf_wins.
 
