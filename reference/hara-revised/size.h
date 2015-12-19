@@ -33,9 +33,12 @@
 #include <sstream>
 //#define DEBUG_INFO
 
+// 棋盘最大边长19
 const int MAXSIZE = 19;
+// 棋盘最多棋子数 19^2
 const int MAXSIZE2 = MAXSIZE*MAXSIZE;
 
+// 发现了没 并妹有'I'
 const char COORDINATES[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'};
 /*花式让手*/
 const int handicap19[][9]= {

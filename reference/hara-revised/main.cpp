@@ -38,6 +38,7 @@ int main()
   //srand(unsigned(time(NULL)));
   init_genrand64(16669666165875248481ULL);
 
+
   GTP gtp;
   //gtp.perft(100000);
   gtp.GTP_loop();

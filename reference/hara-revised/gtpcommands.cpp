@@ -163,6 +163,8 @@ void GTP::genmove()
     // 这里不懂 颜色如果是自己这边的 跳过上面 直接做这里
     //            如果不是 也要做这里
     int move = go_engine.generate_move(early_pass);
+    // move 是1到169之间的一个数 表示当前决策出走哪一步
+    // 0表示pass -1表示resign
     main_goban.play_move(move, color);
     go_engine.report_move(move);
     print_coordinate(move);
