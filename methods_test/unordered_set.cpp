@@ -34,10 +34,24 @@ public:
 };
 
 
-int main(int argc, char const *argv[])
+int main()
 {
 	// std::unordered_set<int> ust;
 	Te tee;
+	for (int i = 0; i < 10; ++i) {
+		// int x = rand()%17;
+		std::cout<<i<<'\t';
+		tee.add(i);
+	}
 	Te::Re ree(&tee);
+	std::cout<<"\n--------\n";
+	// for (int i = 0; i < 10; ++i) {
+	// 	std::cout<<*(ree)<<'\t';
+	// 	++ree;
+	// }
+	for (; ree; ++ree) {
+		std::cout<<*(ree)<<'\t';
+	}
+	std::cout<<"\n--------\n";
 	return 0;
 }
