@@ -50,3 +50,12 @@
 	复制棋盘context 避免重复history  
 	Zobrist哈希去重 必要性验证  
 	
+*2015-Dec.20th*  
+
++ 发现与改进  
+
+	UCT并行  
+	启发式搜索 加入棋谱  
+	验证证明restore方法即重复history并不比clone棋盘差, 考虑多种方法优化restore  
+	尝试使用-std=c++11中提供的新数据结构加速优化  
+	
