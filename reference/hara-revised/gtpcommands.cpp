@@ -139,7 +139,7 @@ void GTP::play()
     response.append("syntax error");
   }
 }
-// 封装了genmove
+// 封装了early_pass为false的genmove
 void GTP::kgs_genmove_cleanup()
 {
   early_pass = false;
