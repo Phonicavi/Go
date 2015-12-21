@@ -150,7 +150,20 @@ int GTP::char2coordinate(std::string &coordinate)
 
 	if (!coordinate.compare("PASS")) return 0;
 
-	std::string
+	std::string auxstream(coordinate.substr(1,2));
+	if (auxstream >> coord && coord <= main_board.get_size()) {
+	coord = (coord - 1) * main_board.get_size();
+	} else {
+		return -1;
+	}
+
+	for (int i = 0; i < main_board.get_size(); ++i) {
+		if (coordinate[0] == COORDINATES[i]) {
+			coord += i+1;
+			return coord;
+		}
+	}
+	return -1;
 }
 
 void GTP::print_coordinate(int coord)
