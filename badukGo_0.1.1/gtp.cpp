@@ -169,6 +169,12 @@ int GTP::exec(){
     case KGS_GENMOVE_CLEANUP:
       kgs_genmove_cleanup();
       break;
+    case SEE_LIBERTY:
+      see_liberty();
+      break;
+    case SEE_GROUP:
+      see_group();
+      break;
     default:
       unknown_command();
       break;

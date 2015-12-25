@@ -5,7 +5,7 @@ public:
 	int * board;
 	int * next_stone;
 	static int board_size;
-	static double komi;
+	static float komi;
 	static int final_status[MAX_BOARD * MAX_BOARD];
 	int ko_i;
 	int ko_j;
@@ -17,17 +17,19 @@ public:
 	static int deltaj[4];
 	static int diag_i[4];
 	static int diag_j[4];
+	static int around_i[8];
+	static int around_j[8];
 	void show_game();
 	GoBoard();
 	~GoBoard();
 
 	GoBoard * copy_board();
-	int  I(int pos);
-	int  J(int pos);
-	int POS(int i, int  j);
+	static int  I(int pos);
+	static int  J(int pos);
+	static int POS(int i, int  j);
 	int get_string(int i, int j, int *stonei, int *stonej);
 	void play_move( int i, int j, int color);
-	int pass_move(int i, int j);
+	static int pass_move(int i, int j);
 	int on_board(int i, int j);
 	int get_board( int i, int j);
 	int board_empty();
@@ -56,10 +58,30 @@ public:
 	int random_legal_move(int color);
 	double chinese_count();
 	bool is_surrounded(int point, int color);
+
+	//int is_heuristic_available(int color, int rival_move);
 	int is_star_available(int color, int last_moves);
+	int is_xiaomu_available(int color, int rival_move);
+	int is_anti_kakari_available(int color, int rival_move);
+	int is_anti_yijianjia_available(int color, int rival_move);
+	int is_anti_dian33_available(int color, int rival_move);
+	int is_kakari_available(int color, int rival_move);
+
 	bool heavy_policy(int point, int  side);
 	bool is_virtual_eye(int point, int color);
 	int check_one_Liberty(int i, int j);
 	int find_one_Liberty_for_atari(int i, int j);
 	int last_atari_heuristic( int color);
+	void try_to_save_by_eat(int neighbor_i,int neighbor_j,int* saves, int &saves_number);
+	int find_one_Liberty_for_atari2(int bi, int bj, bool*checked);
+	int capture_heuristic(int color);
+	int gains_liberty(int move, int color);
+	int mogo_pattern_heuristic( int color);
+	bool match_mogo_pattern(int bi, int bj, int color);
+	bool match_hane(int bi, int bj, int color);
+	bool match_cut1(int bi, int bj, int color);
+	bool match_cut2(int bi, int bj, int color);
+	bool match_board_side(int bi, int bj, int color);
+
+	bool GoBoard::is_self_atari(int point, int color);
 };

@@ -234,7 +234,7 @@ static int
 gtp_komi(char *s)
 {
 	if (sscanf(s, "%f", &GoBoard::komi) < 1)
-		return gtp_failure("komi not a double");
+		return gtp_failure("komi not a float");
 
 	return gtp_success("");
 }
@@ -333,12 +333,6 @@ gtp_play(char *s)
 	if (!gtp_decode_move(s, &color, &i, &j))
 		return gtp_failure("invalid color or coordinate");
 
-	//ofstream outfile1("log3.txt", ios_base::app);
-	//outfile1 << "rival  \t";
-	//outfile1 << i << " " << j;
-	//outfile1 << "\r\n";
-	//outfile1.close();
-
 	if (!main_engine->go_board->legal_move(i, j, color))
 		return gtp_failure("GGGO v2.0 finds a rival's illegal move");
 
@@ -356,15 +350,6 @@ gtp_genmove(char *s)
 		return gtp_failure("invalid color");
 	main_engine->fin_clock = clock();
 	main_engine->generate_move(&i, &j, color);
-
-	//ofstream outfile1("log3.txt", ios_base::app);
-	//outfile1 << "self   \t";
-	//outfile1 << i << " " << j;
-	//outfile1 << "\r\n";
-	//outfile1.close();
-
-
-	++main_engine->go_board->step;
 	main_engine->go_board->play_move(i, j, color);
 	gtp_start_response(GTP_SUCCESS);
 	gtp_mprintf("%m", i, j);

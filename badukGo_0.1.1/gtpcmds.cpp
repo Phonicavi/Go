@@ -258,3 +258,43 @@ void GTP::final_status_list()
   }
 
 }
+
+
+void GTP::see_liberty()
+{
+  if(cmd_args.size() > 0){
+  	int point = char_to_coordinate(cmd_args[0]);
+  	int tmp[169];
+  	int numlibs = main_board.print_libs_of(point, tmp);
+    for (int i = 0; i < numlibs; ++i)
+    {
+      coord_to_char(tmp[i], response, main_board.get_size());
+      response.append("\t");
+    }
+  } else {
+    response[0] = '?';
+    response.append("syntax error");
+  }
+}
+
+void GTP::see_group()
+{
+  if(cmd_args.size() > 0){
+  	int point = char_to_coordinate(cmd_args[0]);
+  	int tmp[169];
+  	int numlibs = main_board.print_group_of(point, tmp);
+    for (int i = 0; i < numlibs; ++i)
+    {
+      coord_to_char(tmp[i], response, main_board.get_size());
+      response.append("\t");
+    }
+  } else {
+    response[0] = '?';
+    response.append("syntax error");
+  }
+}
+
+
+
+
+

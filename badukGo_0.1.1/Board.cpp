@@ -636,19 +636,30 @@ bool Board::is_true_eye(int point, bool color, int consider_occupied) const
 #ifdef FALSE_EYES
 bool Board::is_virtual_eye(int point, bool color) const
 {
-  if (!is_surrounded(point, color)) return false;
-  int nopponent = 0;
-  for (int i = 0; i < 4; i++) {
-    if (int diag = diagonals[point][i]) {
-      if (points[diag] && points[diag]->get_color() != color) {
-        nopponent++;                                          
-      } 
-    } else {
-      nopponent++;
-      break;
+  // if (!is_surrounded(point, color)) return false;
+  // int nopponent = 0;
+  // for (int i = 0; i < 4; i++) {
+  //   if (int diag = diagonals[point][i]) {
+  //     if (points[diag] && points[diag]->get_color() != color) {
+  //       nopponent++;                                          
+  //     } 
+  //   } else {
+  //     nopponent++;
+  //     break;
+  //   }
+  // }
+  // return nopponent < 2;
+  
+    if (!is_surrounded(point,color)) return false;
+  int n = 0,c;
+  int i;
+  for (i=0; (c = diagonals[point][i]); ++i){
+    if (points[c]!=0){
+      if (points[c]->get_color() != color)++n;
     }
   }
-  return nopponent < 2;
+  return n<=2;
+
 }
 #else
 bool Board::is_virtual_eye(int point, bool color) const
@@ -684,7 +695,7 @@ int Board::legal_moves(int moves[]) const
   int nlegal = 0;
   for (int i = 0; i < empty_points.length(); i++) {
     int point = empty_points[i];
-    if (is_legal(point, side)) {
+    if (is_legal(point, side) && !is_true_eye(point,side)) {
       moves[nlegal++] = point;
     }
   }
@@ -774,3 +785,25 @@ void Board::print_goban() const
   int lat2 = (last_atari[WHITE] ? last_atari[WHITE]->get_stone(0) : 0);
   std::cerr << " last atari: black " << lat1<< " white " << lat2 << "\n";
 }
+
+
+  int  Board::print_libs_of(int point, int libs[]){
+    int fa = points[point]->get_father();
+    int num_lib = points[fa]->get_nliberties();
+    int cnt = 0;
+    for (Group::LibertyIterator lit(points[fa]); lit; ++lit){
+      libs[cnt++] = *lit;
+    }
+    return num_lib;
+
+  }
+    int  Board::print_group_of(int point, int st[]){
+    int fa = points[point]->get_father();
+    int num_st = points[fa]->get_nstones();
+    int cnt = 0;
+    for (Group::StoneIterator lit(points[fa]); lit; ++lit){
+      st[cnt++] = *lit;
+    }
+    return num_st;
+
+  }

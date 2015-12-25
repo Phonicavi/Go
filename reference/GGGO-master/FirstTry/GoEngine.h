@@ -36,4 +36,5 @@ public:
 	void aiMovePreCheck(int *pos, int color, int *moves, int num_moves);
 	void place_free_handicap(int handicap);
 	void aiMove(int *pos, int color, int *moves, int num_moves);
+	void aiMoveStart(int *pos, int color);
 };
