@@ -159,6 +159,9 @@ public:
   void init_priors(Prior priors[]) const;
   void print_goban() const;
 
+  int  print_libs_of(int point, int libs[]);
+  int  print_group_of(int point, int st[]);
+
 
   void backup();
   void resume();

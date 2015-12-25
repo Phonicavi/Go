@@ -5,7 +5,6 @@
 #include <windows.h>
 #include "algorithm"
 #include <vector>
-#include "publicFunc.h"
 #include <fstream>
 #include "GoBoard.h"
 using namespace std;
@@ -231,12 +230,9 @@ DWORD WINAPI  GoEngine::ThreadFunc(LPVOID p)
 		}
 		reward = temp_engine->defaultPolicy(temp_engine->go_board, OTHER_COLOR(chosenNode->color), blackExist, whiteExist);
 		temp_engine->backup(chosenNode, reward, blackExist, whiteExist);
-		//for (int ii = 0; ii < GoBoard::board_size*GoBoard::board_size; ++ii)
-		//{
-		//	printf("%d",blackExist[ii]);
-		//}
-		delete blackExist;
-		delete whiteExist;
+
+		delete []blackExist;
+		delete []whiteExist;
 		++temp_engine->games;          //here is the source of the problem.
 		for (int ii = 0; ii < GoBoard::board_size*GoBoard::board_size; ++ii)
 		{
@@ -301,31 +297,6 @@ void GoEngine::uctSearch(int *pos, int color, int *moves, int num_moves)
 		//If only one best move according to the votes, then chose it
 		//If there are more than one best moves according to the votes,for example, two nextmove both get two votes, then chose the most visited one.
 
-		/*ofstream outfile1("log3.txt", ios_base::app);
-		for (int i = 0; i < GoBoard::board_size*GoBoard::board_size; ++i)
-		{
-			outfile1 << i<<" ";
-			if (i / 10 == 0)
-				outfile1 << " ";2
-		}
-		outfile1 << "\n\r";
-		for (int i = 0; i < GoBoard::board_size*GoBoard::board_size; ++i)
-		{
-			outfile1 << visits[i] << " ";
-			if (visits[i] / 10 == 0)
-				outfile1 << " ";
-		}
-		outfile1 << "\n\r";
-		for (int i = 0; i < GoBoard::board_size*GoBoard::board_size; ++i)
-		{
-			outfile1 << votes[i] << " ";
-			if (votes[i] / 10 == 0)
-				outfile1 << " ";
-		}
-		outfile1 << "\n\r";
-		outfile1 << "------------------\n\r";
-		outfile1.close();*/
-
 		int have_same_votes = 0;//0 represents false
 		int final_most_votes_move = -1;
 		int final_most_votes = -1;
@@ -384,9 +355,34 @@ void GoEngine::aiMove(int *pos, int color, int *moves, int num_moves)
 {
 	//aiMovePreCheck(pos, color, moves, num_moves);
 	//if (*pos == -1)
+		//aiMoveStart(pos, color);
+	//if (*pos == -1)
 		uctSearch(pos, color, moves, num_moves);
 }
 
+void GoEngine::aiMoveStart(int *pos, int color)
+{
+	if (go_board->step < MAX_BEGINING)
+	{
+		int move;
+		int rival_move = POS(go_board->rival_move_i, go_board->rival_move_j);
+
+		move = go_board->is_xiaomu_available(color, rival_move);
+		if (move != -1) { *pos = move; return; }
+		move = go_board->is_anti_kakari_available(color, rival_move);
+		if (move != -1) { *pos = move; return; }
+		move = go_board->is_anti_yijianjia_available(color, rival_move);
+		if (move != -1) { *pos = move; return; }
+		move = go_board->is_anti_dian33_available(color, rival_move);
+		if (move != -1) { *pos = move; return; }
+		move = go_board->is_star_available(color, rival_move);
+		if (move != -1) { *pos = move; return; }
+		move = go_board->is_kakari_available(color, rival_move);
+		if (move != -1) { *pos = move; return; }
+	}
+	*pos = -1;
+	return;
+}
 
 /* Generate a move. */
 void GoEngine::generate_move(int *i, int *j, int color)
@@ -396,27 +392,7 @@ void GoEngine::generate_move(int *i, int *j, int color)
 	int num_moves = 0;
 	int ai, aj;
 	int k;
-	if (go_board->step < MAX_BEGINING)
-	{
-		int move;
-		int rival_move = POS(go_board->rival_move_i,go_board->rival_move_j );
-		
-		/*move = go_board->is_heuristic_available(color, P);
-		if (move != -1) { *i = I(move); *j = J(move); return; }
-		move = go_board->is_xiaomu_available(color, rival_move);
-		if (move != -1) { *i = I(move); *j = J(move); return; }
-		move = go_board->is_anti_kakari_available(color, rival_move);
-		if (move != -1) { *i = I(move); *j = J(move); return; }
-		move = go_board->is_anti_yijianjia_available(color, rival_move);
-		if (move != -1) { *i = I(move); *j = J(move); return; }
-		move = go_board->is_anti_dian33_available(color, rival_move);
-		if (move != -1) { *i = I(move); *j = J(move); return; }*/
-		move = go_board->is_star_available(color, rival_move);
-		if (move != -1) { *i = I(move); *j = J(move); return; }
-		/*move = go_board->is_kakari_available(color, rival_move);
-		if (move != -1) { *i = I(move); *j = J(move); return; }*/
-
-	}
+	
 
 	memset(moves, 0, sizeof(moves));
 	for (ai = 0; ai < GoBoard::board_size; ai++)
@@ -443,11 +419,11 @@ void GoEngine::generate_move(int *i, int *j, int color)
 							moves[num_moves++] = POS(ai, aj);
 							break;
 						}
-						if (go_board->get_board(bi, bj) && go_board->get_board(bi, bj) == color && go_board->checkLiberty(bi, bj) == 1)
-						{
-							moves[num_moves++] = POS(ai, aj);
-							break;
-						}
+						//if (go_board->get_board(bi, bj) && go_board->get_board(bi, bj) == color && go_board->checkLiberty(bi, bj) == 1)
+						//{
+						//	moves[num_moves++] = POS(ai, aj);
+						//	break;
+						//}
 					}
 				}
 			}

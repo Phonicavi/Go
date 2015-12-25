@@ -50,17 +50,19 @@ private:
   void time_left();
   void final_score();
   void final_status_list();
+  void see_liberty();
+  void see_group();
   
   enum {PROTOCOL_VERSION, NAME, VERSION, KNOWN_COMMAND, LIST_COMMANDS,
         QUIT, BOARDSIZE, CLEAR_BOARD, KOMI, PLAY, GENMOVE, SHOWBOARD,
         FIXED_HANDICAP, LEVEL,TIME_SETTINGS, TIME_LEFT, FINAL_SCORE,
-        FINAL_STATUS_LIST, KGS_TIME_SETTINGS, KGS_GENMOVE_CLEANUP, NCOMMANDS};
+        FINAL_STATUS_LIST, KGS_TIME_SETTINGS, KGS_GENMOVE_CLEANUP, SEE_LIBERTY, SEE_GROUP, NCOMMANDS};
 
   const std::string COMMANDS[NCOMMANDS]=
         {"protocol_version","name","version","known_command","list_commands",
          "quit","boardsize","clear_board","komi","play","genmove","showboard",
          "fixed_handicap","level","time_settings","time_left","final_score",
-         "final_status_list","kgs-time_settings", "kgs-genmove_cleanup"};
+         "final_status_list","kgs-time_settings", "kgs-genmove_cleanup", "see_liberty", "see_group"};
       
   int parse(const std::string&);
   int string_to_cmd(const std::string&);
