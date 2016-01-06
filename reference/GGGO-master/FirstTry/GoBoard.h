@@ -12,6 +12,8 @@ public:
 	int step;
 	int rival_move_i;
 	int rival_move_j;
+	int my_last_move_i;
+	int my_last_move_j;
 	int handicap;
 	static int deltai[4];
 	static int deltaj[4];
@@ -66,7 +68,7 @@ public:
 	int is_anti_yijianjia_available(int color, int rival_move);
 	int is_anti_dian33_available(int color, int rival_move);
 	int is_kakari_available(int color, int rival_move);
-
+	int save_atari(int point, int *list);
 	bool heavy_policy(int point, int  side);
 	bool is_virtual_eye(int point, int color);
 	int check_one_Liberty(int i, int j);
@@ -75,6 +77,7 @@ public:
 	void try_to_save_by_eat(int neighbor_i,int neighbor_j,int* saves, int &saves_number);
 	int find_one_Liberty_for_atari2(int bi, int bj, bool*checked);
 	int capture_heuristic(int color);
+	int capture_move(int bi, int bj, int color);
 	int gains_liberty(int move, int color);
 	int mogo_pattern_heuristic( int color);
 	bool match_mogo_pattern(int bi, int bj, int color);

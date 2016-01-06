@@ -244,6 +244,8 @@ DWORD WINAPI  GoEngine::ThreadFunc(LPVOID p)
 		temp_engine->go_board->ko_j = engine->go_board->ko_j;
 		temp_engine->go_board->rival_move_i = engine->go_board->rival_move_i;
 		temp_engine->go_board->rival_move_j = engine->go_board->rival_move_j;
+		temp_engine->go_board->my_last_move_i = engine->go_board->my_last_move_i;
+		temp_engine->go_board->my_last_move_j = engine->go_board->my_last_move_j;
 
 		//go_board = store->copy_board();
 	}
@@ -435,6 +437,18 @@ void GoEngine::generate_move(int *i, int *j, int color)
 	* chosen, but for all practical purposes we get a uniform
 	* distribution.)
 	*/
+	//int move = go_board->select_and_play(color);
+	//if (move != -1)
+	//{
+	//	*i = I(move);
+	//	*j = J(move);
+	//}
+	//else
+	//{
+	//	*i = -1;
+	//	*j = -1;
+	//}
+	//return;
 	if (num_moves > 0)
 	{
 		int temp_pos = -1;

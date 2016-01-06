@@ -3,15 +3,15 @@
 #define EMPTY 0
 #define WHITE 1
 #define BLACK 2
+
 #define THREAD_NUM 1
 
 #define MIN_BOARD 2
-#define MAX_BOARD 23
+#define MAX_BOARD 19
+#define MAX_BOARD2 MAX_BOARD * MAX_BOARD
 
-
-
-#define IMPACT 32
-#define IMPACTDIS 5
+//#define IMPACT 32
+//#define IMPACTDIS 5
 #define AIMOVEMAX 10
 #define SAMECOLOR 4
 #define DIFFERENTCOLOR 2
@@ -24,10 +24,10 @@
 #define TRYTIME 10
 #define MAXSTEP 60
 #define TIMELIMIT 2
-#define MAXGAMES 2250
+#define MAXGAMES 22500
 #define MONTECARLORANGE 13
 #define CLEARTIME 10
-#define VERSION_STRING "3.1"
+#define VERSION_STRING "3.4"
 #define UNKNOWN 5
 #define DEAD 0
 #define ALIVE 1

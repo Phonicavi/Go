@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include "GoEngine.h"
 #include <fstream>
-
+#include <iostream>
 using namespace std;
 
 int GoBoard::board_size = 13;
-float GoBoard::komi = 3.14;
+float GoBoard::komi = 6.5;
 int GoBoard::final_status[MAX_BOARD * MAX_BOARD];
 int GoBoard::deltai[4] = {-1, 1, 0, 0};
 int GoBoard::deltaj[4] = {0, 0, -1, 1};
@@ -72,6 +72,8 @@ GoBoard::GoBoard()
 {
 	rival_move_i = -1;
 	rival_move_j = -1;
+	my_last_move_i = -1;
+	my_last_move_j = -1;
 	int ko_i = -1;
 	int ko_j = -1;
 	int step = 0;
@@ -95,6 +97,8 @@ GoBoard * GoBoard::copy_board()
 	}
 	temp->rival_move_i = rival_move_i;
 	temp->rival_move_j = rival_move_j;
+	temp->my_last_move_i = my_last_move_i;
+	temp->my_last_move_j = my_last_move_j;
 	temp->ko_i = ko_i;
 	temp->ko_j = ko_j;
 	temp->step = step;
@@ -257,12 +261,18 @@ void GoBoard::play_move( int i, int j, int color)
 	/* Nothing more happens if the move was a pass. */
 	if (pass_move(i, j))
 	{
+		my_last_move_i = rival_move_i;
+		my_last_move_j = rival_move_j;
 		rival_move_i = -1;
 		rival_move_j = -1;
+
 		return;
 	}
+	my_last_move_i = rival_move_i;
+	my_last_move_j = rival_move_j;
 	rival_move_i = i;
 	rival_move_j = j;
+
 	/* If the move is a suicide we only need to remove the adjacent
 	* friendly stones.
 	*/
@@ -873,13 +883,21 @@ int GoBoard::random_legal_move(int color)
 int GoBoard::select_and_play(int color)
 {
 
-
-	//int move = last_atari_heuristic(color);   //If the rival's last move is an atari, then try to find away to move out.(any point provide more liberty)
-	//if (move != -1 && heavy_policy(move, color))
+	int save_atari_plays[MAX_BOARD*MAX_BOARD];
+	int save_atari_number = save_atari(POS(rival_move_i, rival_move_j), save_atari_plays);
+	if (save_atari_number>=0)
+	{
+		int move = save_atari_plays[rand()*save_atari_number / (RAND_MAX + 1)];
+		play_move(I(move), J(move), color);
+		return move;
+	}
+	//move = last_atari_heuristic(color);   //If the rival's last move is an atari, then try to find away to move out.(any point provide more liberty)
+	//if (move != -1 )
 	//{
 	//	play_move(I(move), J(move), color);
 	//	return move;
 	//}
+	int move;
 	/*move = nakade_heuristic();		//not consider it at present
 	if (move != -1)
 	{
@@ -892,21 +910,18 @@ int GoBoard::select_and_play(int color)
 	play_move(I(move), J(move), color);
 	return move;
 	}*/
-
 	//move = mogo_pattern_heuristic(color);  // check whether the opponent's last move's around_eight_moves match a pattern, if match ,chose it.
-	//if (move != -1 && heavy_policy(move, color))
+	//if (move != -1 )
 	//{
 	//	play_move(I(move), J(move), color);
 	//	return move;
 	//}
-
-	//move = capture_heuristic( color);					//try to find a move that will capture the opponent
-	//if (move != -1 && heavy_policy(move, color))
-	//{
-	//	play_move(I(move), J(move), color);
-	//	return move;
-	//}
-	int move;
+	move = capture_heuristic( color);					//try to find a move that will capture the opponent
+	if (move != -1 )
+	{
+		play_move(I(move), J(move), color);
+		return move;
+	}
 	move = random_legal_move(color);			//select a random  legal move
 	if (move != -1)
 	{
