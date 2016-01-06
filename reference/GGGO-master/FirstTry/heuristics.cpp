@@ -1,5 +1,11 @@
 #include "GoBoard.h"
 #include <random>
+#include <queue>
+#include <iostream>
+#include <windows.h>
+#include <stdio.h>
+#include <windef.h>
+
 void GoBoard::try_to_save_by_eat(int i, int j, int *saves, int &saves_number)// find the group's adjacent groups and check whether we can eat it
 {
 	int color = get_board(i, j);
@@ -39,30 +45,116 @@ void GoBoard::try_to_save_by_eat(int i, int j, int *saves, int &saves_number)// 
 
 }
 
-int GoBoard::gains_liberty(int move,int color)
+
+
+
+int GoBoard::gains_liberty(int point, int color)
 {
-	int libs = 0;
-	for (int j = 0; j < 4 && libs<2; ++j)
+	std::queue<int>q;
+	q.push(point);
+	int lib = 0;
+	int cur ;
+	int visited[MAX_BOARD*MAX_BOARD];
+	memset(visited, 0, sizeof(int)*board_size*board_size);
+	while (!q.empty())
 	{
-		int ne_lib_i = I(move) + deltai[j];				//check the liberty's near by provides more liberty 
-		int ne_lib_j = J(move) + deltaj[j];
-		if (!on_board(ne_lib_i, ne_lib_j))
-			continue;
-		if (get_board(ne_lib_i, ne_lib_j) == OTHER_COLOR(color))
-			continue;
-		if (get_board(ne_lib_i, ne_lib_j) == EMPTY)
+		cur = q.front();
+		visited[cur] = 1;
+		q.pop();
+		for (int k = 0; k < 4; ++k)
 		{
-			libs++;
-			continue;
-		}
-		if (get_board(ne_lib_i, ne_lib_j) == color)
-		{
-			libs += checkLiberty(ne_lib_i, ne_lib_j) - 1;
+			int ai = I(cur) + deltai[k];
+			int aj = J(cur) + deltaj[k];
+			if (on_board(ai, aj) && !visited[POS(ai, aj)])
+			{
+				if (get_board(ai, aj) == color)
+					q.push(POS(ai, aj));
+				else if ( get_board(ai,aj) == EMPTY)
+				{
+					++lib;
+					visited[POS(ai, aj)] = 1;
+					if (lib > 1)
+						return 1;
+				}
+			}
 		}
 	}
-	if (libs > 1)
-		return true;
-	return false;
+	return lib > 1;
+
+}
+
+
+
+int GoBoard::save_atari(int point, int *list)
+{
+	int ans = 0, ai, aj, k;
+	int color = board[point];
+	if (color == EMPTY)
+		return 0;
+	int other = OTHER_COLOR(color);
+
+	if (point >= 0 && point < board_size*board_size)
+	{
+		int liberty = checkLiberty(I(point), J(point));
+		int ppos = point;
+		int ppos1 = ppos;
+		do {
+			for (k = 0; k < 4; ++k)
+			{
+				ai = I(ppos1) + deltai[k];
+				aj = J(ppos1) + deltaj[k];
+				if (liberty == 2 && on_board(ai, aj) && get_board(ai, aj) == EMPTY && gains_liberty(POS(ai, aj), color) && available(ai, aj, other))
+				{
+					list[ans++] = POS(ai, aj);
+				}
+				else if (on_board(ai, aj) && get_board(ai, aj) == other && checkLiberty(ai, aj) == 2)
+				{
+					int bpos = ppos1;
+					do {
+						int kk, bi, bj;
+						for (kk = 0; kk < 4; ++kk)
+						{
+							bi = I(bpos) + deltai[kk];
+							bj = J(bpos) + deltaj[kk];
+							if (on_board(bi, bj) && get_board(bi, bj) == EMPTY && gains_liberty(POS(bi, bj), other) && available(bi, bj, other))
+							{
+								list[ans++] = POS(bi, bj);
+							}
+						}
+						bpos = next_stone[bpos];
+					} while (bpos != ppos1);
+				}
+			}
+			ppos1 = next_stone[ppos1];
+		} while (ppos1 != ppos);
+	}
+	for (ai = max(I(point) - 1, 0); ai < min(I(point) + 1, board_size - 1); ++ai)
+	{
+		for (aj = max(J(point) - 1, 0); aj < min(J(point)+1, board_size-1); ++aj)
+		{
+			if (POS(ai, aj) == point)
+				continue;
+			if (on_board(ai, aj) && get_board(ai, aj) == other && checkLiberty(ai, aj) == 2)
+			{
+				int ppos1 = POS(ai, aj);
+				int bpos = ppos1;
+				do {
+					int kk, bi, bj;
+					for (kk = 0; kk < 4; ++kk)
+					{
+						bi = I(bpos) + deltai[kk];
+						bj = J(bpos) + deltaj[kk];
+						if (on_board(bi, bj) && get_board(bi, bj) == EMPTY && gains_liberty(POS(bi, bj), other) && available(bi, bj, other))
+						{
+							list[ans++] = POS(bi, bj);
+						}
+					}
+					bpos = next_stone[bpos];
+				} while (bpos != ppos1);
+			}
+		}
+	}
+	return ans;
 }
 
 int GoBoard::last_atari_heuristic( int color)
@@ -117,27 +209,46 @@ int GoBoard::last_atari_heuristic( int color)
 		return captures[rand()*captures_number / (RAND_MAX + 1)];
 	return -1;
 }*/
-int GoBoard::capture_heuristic(int color)
+int GoBoard::capture_move(int bi,int bj,int color)
 {
-	int capture_moves[8];
+	if (!on_board(bi, bj))
+		return -1;
+	if (get_board(bi, bj) != OTHER_COLOR(color))
+		return -1;
+	int move = find_one_Liberty_for_atari(bi, bj);
+	if (move == -1)
+		return -1;
+	if (!available(I(move), J(move), color))
+		return -1;
+	//if (!gains_liberty(move, OTHER_COLOR(color)))
+	//	return -1;
+	return move;
+}
+int GoBoard::capture_heuristic(int color)// sometimes check  the same string
+{
+	int capture_moves[18];
 	int captures_moves_number = 0;
 	for (int i = 0; i < 8; ++i)
 	{
 		int bi = rival_move_i + around_i[i];
 		int bj = rival_move_j + around_j[i];
-		if (!on_board(bi, bj))
-			continue;
-		if (get_board(bi, bj) != OTHER_COLOR(color))
-			continue;
-		int move = find_one_Liberty_for_atari(bi, bj);
-		if (move == -1)
-			continue;
-		if (!available(I(move),J(move),color))
-			continue;
-		if (!gains_liberty(move, OTHER_COLOR(color)))
-			continue;
-		capture_moves[captures_moves_number++] = move;
+		int move = capture_move(bi,bj,color);
+		if (move != -1)
+			capture_moves[captures_moves_number++] = move;
 	}
+	for (int i = 0; i < 8; ++i)
+	{
+		int bi = my_last_move_i+ around_i[i];
+		int bj = my_last_move_j + around_j [i];
+		int move = capture_move(bi, bj, color);
+		if (move != -1)
+			capture_moves[captures_moves_number++] = move;
+	}
+	int bi = rival_move_i;
+	int bj = rival_move_j;
+	int move = capture_move(bi, bj, color);
+	if (move != -1)
+		capture_moves[captures_moves_number++] = move;
 	if (captures_moves_number)
 	{
 		return capture_moves[rand()*captures_moves_number / (RAND_MAX + 1)];

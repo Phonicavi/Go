@@ -91,7 +91,7 @@ GoBoard * main_go_board = NULL;
 GoEngine * main_engine = NULL;
 int _tmain(int argc, char** argv)
 {
-	unsigned int random_seed = time(NULL);
+	unsigned int random_seed = time(0);
 	//ofstream outfile1("log3.txt");
 	//time_t m_time = time(NULL);
 	//tm* t = localtime(&m_time);
@@ -337,7 +337,19 @@ gtp_play(char *s)
 		return gtp_failure("GGGO v2.0 finds a rival's illegal move");
 
 	main_engine->go_board->play_move(i, j, color);
+	//main_engine->go_board->show_board();
 	return gtp_success("");
+}
+
+/* Write a row of letters, skipping 'I'. */
+static void
+letters(void)
+{
+	int i;
+
+	printf("  ");
+	for (i = 0; i < GoBoard::board_size; i++)
+		printf(" %c", 'A' + i + (i >= 8));
 }
 
 static int
@@ -432,17 +444,6 @@ gtp_final_status_list(char *s)
 	}
 
 	return gtp_finish_response();
-}
-
-/* Write a row of letters, skipping 'I'. */
-static void
-letters(void)
-{
-	int i;
-
-	printf("  ");
-	for (i = 0; i < GoBoard::board_size; i++)
-		printf(" %c", 'A' + i + (i >= 8));
 }
 
 static int
