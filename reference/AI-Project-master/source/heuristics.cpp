@@ -167,72 +167,183 @@ int GoBoard::capture_heuristic(int color)// sometimes check  the same string
 		return -1;
 	else return move;
 }
+int GoBoard::find_escape_point(String *string, int escape_points[],int index)
+{
+	if (!string)
+		return 0;
+	for (int i = 0; i < string->get_liberties_number(); ++i)
+	{
+		if (gains_liberty(string->liberties[i], string))
+			index += add_point(escape_points, index, string->liberties[i]);
+	}
+	String * neighbours[MAX_BOARD2];
+	int nneigh = neighbour_strings(string, OTHER_COLOR(string->get_color()), string->get_liberties_number(), neighbours);
+	for (int i = 0; i < nneigh; ++i)
+	{
+		for (int j = 0; j < neighbours[i]->get_liberties_number(); ++j)
+		{
+			if (gains_liberty(neighbours[i]->liberties[j], string))
+				index += add_point(escape_points, index, neighbours[i]->liberties[j]);
+		}
+	}
+	return index;
+}
+
+
+int GoBoard::neighbour_strings( String *string, int color, int max_liberties,String * neighbours[]) 
+{
+	int nlibs = 0;
+	if (!string)
+		return 0;
+	for (int i = 0; i < string->get_stones_number(); ++i)
+	{
+		nlibs = neighbour_strings(string->stones[i], color, max_liberties, neighbours, nlibs);
+	}
+	return nlibs;
+}
+
+int GoBoard::neighbour_strings(int point, int color, int max_liberties, String *  neighbours[],int index)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		int ai = I(point) + deltai[i];
+		int aj = J(point) + deltaj[i];
+		if (!on_board(ai, aj))
+			continue;
+		String * current_string = board[POS(ai, aj)];
+		if (current_string &&current_string->get_color() == color&&current_string->get_liberties_number() <= max_liberties)
+			index += add_string(neighbours, index, current_string);
+	}
+	return index;
+}
+
+
 
 int GoBoard::save_heuristic(int color)
 {
 	if (last_point < 0)
 		return -1;
-	int save_moves[18];
+	int save_moves[MAX_BOARD2];
 	int save_moves_number = 0;
 	if (board[last_point] && board[last_point]->get_liberties_number() == 2)
 	{
 		for (int i = 0; i < 2; ++i)
 		{
 			int lib = board[last_point]->get_liberty(i);
-			if (available(I(lib), J(lib), color) && gains_liberty(lib, board[last_point]))
+			save_moves[save_moves_number++] = lib;
+			if ( gains_liberty(lib, board[last_point]))
 			{
 				save_moves[save_moves_number++] = lib;
 			}
 		}
 	}
-	int ai, aj, pos;
+	String * neighbours[4];
+	int neighbour_number = 0;
+	int ai, aj;
 	for (int k = 0; k < 4; ++k)
 	{
 		ai = I(last_point) + deltai[k];
 		aj = J(last_point) + deltaj[k];
-		pos = POS(ai, aj);
-		if (on_board(ai, aj) && get_board(ai, aj) == color && board[pos]->get_liberties_number() < 2)
+		if (!on_board(ai, aj))
+			continue;
+		if (!board[POS(ai, aj)])
+			continue;
+		neighbour_number += add_string(neighbours, neighbour_number, board[POS(ai, aj)]);
+	}
+	for (int k = 0; k < neighbour_number; ++k)
+	{
+		if (neighbours[k]->get_color() == color &&neighbours[k]->get_liberties_number() == 2)
 		{
-			for (int i = 0; i < board[pos]->get_liberties_number(); ++i)
-			{
-				int lib = board[pos]->get_liberty(i);
-				if (available(I(lib), J(lib), color) && gains_liberty(lib, board[pos]))
-				{
-					save_moves[save_moves_number++] = lib;
-				}
-			}
+			save_moves_number = find_escape_point(neighbours[k], save_moves, save_moves_number);
 		}
 	}
 
-	if (save_moves_number)
-	{
-		return save_moves[rand()*save_moves_number / (RAND_MAX + 1)];
-	}
-	return -1;
+	int move = random_choose_move(save_moves, save_moves_number, color);
+	if (move >= 0)
+		return move;
+	else return -1;
+	//for (int k = 0; k < 4; ++k)
+	//{
+	//	ai = I(last_point) + deltai[k];
+	//	aj = J(last_point) + deltaj[k];
+	//	pos = POS(ai, aj);
+	//	if (on_board(ai, aj) && get_board(ai, aj) == color && board[pos]->get_liberties_number() <= 2)
+	//	{
+	//		for (int i = 0; i < board[pos]->get_liberties_number(); ++i)
+	//		{
+	//			int lib = board[pos]->get_liberty(i);
+	//			if (available(I(lib), J(lib), color) && gains_liberty(lib, board[pos]))
+	//			{
+	//				save_moves[save_moves_number++] = lib;
+	//			}
+	//		}
+	//	}
+	//}
+	//if (save_moves_number)
+	//{
+	//	return save_moves[rand()*save_moves_number / (RAND_MAX + 1)];
+	//}
+	//return -1;
 }
+
+
+
 
 int GoBoard::last_atari_heuristic(int color)
 {
-	int last_atari_moves[4];
-	int last_atari_moves_number = 0;
+	int last_atari_point;
+	last_atari_point = last_atari[OTHER_COLOR(color)];
+	if (last_atari_point>=0&& board[last_atari_point] && board[last_atari_point]->get_color() == OTHER_COLOR(color) && board[last_atari_point]->get_liberties_number() == 1)
+	{
+		int move = board[last_atari_point]->liberties[0];
+		if (available(I(move), J(move), color) && !is_self_atari(move, color) && gains_liberty(move, board[last_atari_point]))
+		{
+			return move;
+		}
 
-	if (on_board(I(last_point), J(last_point)) && board[last_point] && board[last_point]->get_liberties_number() == 1)
-	{
-		int lib = board[last_point]->get_liberty(0);
-		if (available(I(lib), J(lib), color) && gains_liberty(lib, board[last_point]))
-			last_atari_moves[last_atari_moves_number++] = lib;
 	}
-	if (on_board(I(last_point2), J(last_point2)) && board[last_point2] && board[last_point2]->get_liberties_number() == 1)
+	else
 	{
-		int lib = board[last_point2]->get_liberty(0);
-		if (available(I(lib), J(lib), color) && gains_liberty(lib, board[last_point2]))
-			last_atari_moves[last_atari_moves_number++] = lib;
+		last_atari[OTHER_COLOR(color)] = -1;
 	}
-	if (last_atari_moves_number)
+	last_atari_point = last_atari[color];
+
+	if (last_atari_point>=0 &&  board[last_atari_point] &&board[last_atari_point]->get_color() == color && board[last_atari_point]->get_liberties_number() == 1  )
 	{
-		return last_atari_moves[rand()*last_atari_moves_number / (RAND_MAX + 1)];
+		int points[MAXSIZE2];
+
+		int number_points = find_escape_point(board[last_atari_point], points,0);
+		int move = random_choose_move(points, number_points, color);
+		if (move >= 0)
+		{
+			return move;
+		}
+	}
+	else
+	{
+		last_atari[color] = -1;
 	}
 	return -1;
+	//int last_atari_moves[4];
+	//int last_atari_moves_number = 0;
+
+	//if (on_board(I(last_point), J(last_point)) && board[last_point] && board[last_point]->get_liberties_number() == 1)
+	//{
+	//	int lib = board[last_point]->get_liberty(0);
+	//	if (available(I(lib), J(lib), color) && gains_liberty(lib, board[last_point]))
+	//		last_atari_moves[last_atari_moves_number++] = lib;
+	//}
+	//if (on_board(I(last_point2), J(last_point2)) && board[last_point2] && board[last_point2]->get_liberties_number() == 1)
+	//{
+	//	int lib = board[last_point2]->get_liberty(0);
+	//	if (available(I(lib), J(lib), color) && gains_liberty(lib, board[last_point2]))
+	//		last_atari_moves[last_atari_moves_number++] = lib;
+	//}
+	//if (last_atari_moves_number)
+	//{
+	//	return last_atari_moves[rand()*last_atari_moves_number / (RAND_MAX + 1)];
+	//}
+	//return -1;
 }
 
 bool GoBoard::match_hane(int i, int j, int my_color)

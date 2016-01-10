@@ -27,7 +27,7 @@
 #define MAXGAMES 22500
 #define MONTECARLORANGE 13
 #define CLEARTIME 10
-#define VERSION_STRING "3.4"
+#define VERSION_STRING "3.5"
 #define UNKNOWN 5
 #define DEAD 0
 #define ALIVE 1

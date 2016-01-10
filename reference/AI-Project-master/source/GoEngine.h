@@ -32,7 +32,7 @@ public:
 	uctNode* expand(uctNode* curNode, int* moves, int num_moves);
 	uctNode* bestchild(uctNode* curNode);
 	void calScore(uctNode* tmp);
-	int defaultPolicy(GoBoard * temp, int color, bool* blackExist, bool* whiteExist, int*simulate_len, AmafBoard* tamaf);
+	int defaultPolicy(GoBoard * temp, int color, int*simulate_len, AmafBoard* tamaf);
 	//void backup(uctNode* v, int reward, bool* blackExist, bool* whiteExist, int simulate_len, AmafBoard* tamaf);
 	void generate_move(int *i, int *j, int color);
 	//void aiMovePreCheck(int *pos, int color, int *moves, int num_moves);

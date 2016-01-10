@@ -235,9 +235,9 @@ uctNode* GoEngine::treePolicy(uctNode* v, int games, int* sim, AmafBoard *tamaf,
 	}
 	return curNode;
 }
-int GoEngine::defaultPolicy(GoBoard * temp, int color, bool* blackExist, bool* whiteExist, int*simulate_len, AmafBoard* tamaf)
+int GoEngine::defaultPolicy(GoBoard * temp, int color, int*simulate_len, AmafBoard* tamaf)
 {
-	return temp->autoRun_fill_the_board (color, blackExist, whiteExist, simulate_len, tamaf);
+	return temp->autoRun_fill_the_board (color, simulate_len, tamaf);
 }
 
 void GoEngine::back_up_results(int result, std::vector<uctNode*> node_history, int nnodes, bool side, AmafBoard* tamaf)
@@ -326,18 +326,12 @@ DWORD WINAPI  GoEngine::ThreadFunc(LPVOID p)
 		//	tamaf.play(chosenNode->pos, ++simulate_len);
 		//}
 		
-		bool* blackExist = new bool[GoBoard::board_size*GoBoard::board_size];
-		bool* whiteExist = new bool[GoBoard::board_size*GoBoard::board_size];
-		for (int ii = 0; ii < GoBoard::board_size*GoBoard::board_size; ++ii)
-		{
-			blackExist[ii] = 0;
-			whiteExist[ii] = 0;
-		}
+
 		//if (chosenNode->color == BLACK && tamaf.side == 1)
 		//	cerr << "???";
 		//if (chosenNode->color == WHITE && tamaf.side == 0)
 		//	cerr << "???";
-		reward = temp_engine->defaultPolicy(temp_engine->go_board, OTHER_COLOR(chosenNode->color), blackExist, whiteExist, &simulate_len, &tamaf);
+		reward = temp_engine->defaultPolicy(temp_engine->go_board, OTHER_COLOR(chosenNode->color), &simulate_len, &tamaf);
 		//cout << simulate_len << "here" << endl;
 
 		++temp_engine->games;
@@ -382,8 +376,6 @@ DWORD WINAPI  GoEngine::ThreadFunc(LPVOID p)
 		if (reward == -1)
 		{
 			cerr << "not finished";
-			delete[]blackExist;
-			delete[]whiteExist;
 			continue;
 		}
 
@@ -402,8 +394,7 @@ DWORD WINAPI  GoEngine::ThreadFunc(LPVOID p)
 		//}
 		temp_engine->back_up_results(reward, node_history, node_history.size(), side, &tamaf);
 
-		delete[]blackExist;
-		delete[]whiteExist;
+
 	}
 
 	printf("%d\n", temp_engine->games);
