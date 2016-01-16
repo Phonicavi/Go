@@ -1,7 +1,7 @@
 # Go
 *Go Engine based on Monte-Carlo using C++ programming language*
 
-This is a course final project for ***Artificial Intelligence (EI339)*** in **Shanghai Jiao Tong University**, original project referenced and promoted from https://github.com/antoniogarro/Hara, which was written by Antonio Garro and released under a permissive BSD license.  
+This is a course final project for ***Artificial Intelligence (EI339)*** in **Shanghai Jiao Tong University**, original project referenced and promoted from https://github.com/antoniogarro/Hara, which was written by [Antonio Garro](https://github.com/antoniogarro) and released under a permissive BSD license.  
 
 ---
 
@@ -19,5 +19,5 @@ This is a course final project for ***Artificial Intelligence (EI339)*** in **Sh
 		Please contact us at Github :)
 
     [@Phonicavi](https://github.com/Phonicavi)  
-    [@lawinse](https://github.com/lawinse "Title")  
+    [@lawinse](https://github.com/lawinse)  
     [@Slimpid](https://github.com/lawinse)  
