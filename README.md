@@ -8,7 +8,8 @@ This is a course final project for ***Artificial Intelligence (EI339)*** in **Sh
 + How to play?  
     	BadukGo-0.1.5-release supports Windows7, Windows8.1 and later.  
 		You can use any GoGui applications which support the Go Text Protocol (GTP).  
-		Currently we set the board size 13*13 and the time limit 3 sec.  
+		Currently we set the board size 13*13 and the time limit 3 secand the komi 6.5.  
+		Also we do not support any handicaps yet.  
 
 + Version  
 		This is the 0.1.5-version released, using WIN32 API to support multithreads programming.  
