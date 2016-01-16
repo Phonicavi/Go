@@ -1,2 +1,0 @@
-group.o: group.cpp group.h base.h
-zobrist.o: zobrist.cpp zobrist.h mersenne.h base.h

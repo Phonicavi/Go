@@ -1,61 +1,19 @@
 # Go
-**Go Engine based on Monte-Carlo using C++ programming language**
+*Go Engine based on Monte-Carlo using C++ programming language*
+
+This is a course final project for ***Artificial Intelligence (EI339)*** in *Shanghai Jiao Tong University*, original project referenced and promoted from https://github.com/antoniogarro/Hara, which was written by Antonio Garro and released under a permissive BSD license.  
 
 ---
 
-### Calendar
-*2015-Dec.10th:*  
++ How to play?  
+		BadukGo-0.1.5-release supports Windows7, Windows8.1 and later.
+		You can use any GoGui applications which support the Go Text Protocol (GTP).  
+		Currently we set the board size 13*13 and the time limit 3s.  
 
-+ Node for Monte-Carlo searching-tree  
-	/* 搜索树结点 */  
-	`Node.h`  
-	`Node.cpp`  
++ Version  
+		This is the 0.1.5-version released, using WIN32 API to support multithreads programming.  
+		The basic searching strategy is Monte-Carlo based UCT. Some simple pattern are added and some heuristic tricks are used.  
 
-+ Go-board  
-	/* 棋盘 */  
-	`Board.h`  
-	`Board.cpp`  
-
-*2015-Dec.11th*
-
-+ UCT-gtp bond  
-	实现基础的蒙特卡洛搜索  
-	不做终局提前优化等
-+ Works 读代码-gnuaplus  
-	
-	代码位置在./reference/gnuaplus-light/aplus_final_code/目录下  
-
-	卞文杰: aplus, board, uct_pure  
-	赖凡: tricks_chess, tricks_chess_manual  
-	邱丰: bit_process, gtp, interface  
-
-*2015-Dec.12th*  
-
-+ Works 读代码-Hara  
-	
-	代码位置在./reference/hara-revised/目录下  
-
-	All公共部分 大家都要看: size, goban, gobanconst, priors, group  
-
-	卞文杰: amaf, engine, tree  
-	赖凡: heuristics, zobrist  
-	邱丰: gtp, gtpcommand  
-	
-*2015-Dec.18th*  
-
-+ 基本的问题  
-
-	UCT并行  
-	棋谱加入到现在的算法中  
-	复制棋盘context 避免重复history  
-	Zobrist哈希去重 必要性验证  
-	
-*2015-Dec.20th*  
-
-+ 发现与改进  
-
-	UCT并行  
-	启发式搜索 加入棋谱  
-	验证证明restore方法即重复history并不比clone棋盘差, 考虑多种方法优化restore  
-	尝试使用-std=c++11中提供的新数据结构加速优化  
-	
++ Copyright  
+		Released under the MIT License (MIT), Copyright (C) 2016 <BadukGo Project> .
+		Contact us at Github: @lawinse @Slimpid @Phonicavi :)
