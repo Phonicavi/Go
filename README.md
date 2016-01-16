@@ -18,6 +18,7 @@ This is a course final project for ***Artificial Intelligence (EI339)*** in **Sh
 		Released under the MIT License (MIT), Copyright (C) 2016 <BadukGo Project>.  
 		Please contact us at Github :)
 
-    [@Phonicavi](https://github.com/Phonicavi)  
-    [@lawinse](https://github.com/lawinse)  
-    [@Slimpid](https://github.com/lawinse)  
+    [@Phonicavi](https://github.com/Phonicavi) [@lawinse](https://github.com/lawinse) [@Slimpid](https://github.com/lawinse)  
+
++ Acknowledgement  
+		Technical supports of Go (weiqi, igo, baduk) from YUAN Yuancheng, *University of Science and Technology of China*.
