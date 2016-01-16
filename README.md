@@ -3,6 +3,8 @@
 
 This is a course final project for ***Artificial Intelligence (EI339)*** in **Shanghai Jiao Tong University**, original project referenced and promoted from https://github.com/antoniogarro/Hara, which was written by [Antonio Garro](https://github.com/antoniogarro) and released under a permissive BSD License.  
 
+Thanks for the technical instructions of Go (weiqi, igo, baduk) from YUAN Yuancheng, **University of Science and Technology of China**.
+
 ---
 
 + How to play?  
