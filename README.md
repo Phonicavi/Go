@@ -1,14 +1,14 @@
 # Go
 *Go Engine based on Monte-Carlo using C++ programming language*
 
-This is a course final project for ***Artificial Intelligence (EI339)*** in **Shanghai Jiao Tong University**, original project referenced and promoted from https://github.com/antoniogarro/Hara, which was written by [Antonio Garro](https://github.com/antoniogarro) and released under a permissive BSD license.  
+This is a course final project for ***Artificial Intelligence (EI339)*** in **Shanghai Jiao Tong University**, original project referenced and promoted from https://github.com/antoniogarro/Hara, which was written by [Antonio Garro](https://github.com/antoniogarro) and released under a permissive BSD License.  
 
 ---
 
 + How to play?  
     	BadukGo-0.1.5-release supports Windows7, Windows8.1 and later.  
 		You can use any GoGui applications which support the Go Text Protocol (GTP).  
-		Currently we set the board size 13*13 and the time limit 3s.  
+		Currently we set the board size 13*13 and the time limit 3 sec.  
 
 + Version  
 		This is the 0.1.5-version released, using WIN32 API to support multithreads programming.  
