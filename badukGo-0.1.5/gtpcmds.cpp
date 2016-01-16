@@ -133,11 +133,11 @@ void GTP::genmove()
   #ifdef STD_ERR_PRINT
     std::cerr << "enter generate_move" <<std::endl;
   #endif
-    int move = BadukGo.generate_move(early_pass,Current_Step);
+    int move = BadukGo.generate_move(early_pass,Current_Step[main_board.get_side()]);
   #ifdef STD_ERR_PRINT
     std::cerr << "leave generate_move" <<std::endl;
   #endif
-    Current_Step += 1;
+    Current_Step[main_board.get_side()] += 1;
     main_board.play_move(move, color);
   #ifdef STD_ERR_PRINT
     std::cerr << "done play move" <<std::endl;

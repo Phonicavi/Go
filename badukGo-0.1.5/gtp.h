@@ -38,7 +38,7 @@ class GTP {
   private:
   bool loop, early_pass;
   int cmd;
-  int Current_Step;
+  int Current_Step[2];
   std::string cmd_id;
   std::string cmd_name;
   std::vector<std::string> cmd_args;

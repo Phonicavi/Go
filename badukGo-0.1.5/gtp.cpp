@@ -30,7 +30,7 @@ using namespace std;
 GTP::GTP():BadukGo(&main_board)
 {
   early_pass = true;
-  Current_Step = -1;
+  Current_Step[0] = Current_Step[1] = -1;
 }
 
 int GTP::GTP_loop()
