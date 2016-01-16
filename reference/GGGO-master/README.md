@@ -1,2 +1,0 @@
-# GGGO
-FirstTRy
