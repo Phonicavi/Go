@@ -4,7 +4,7 @@ CXXFLAGS=--std=gnu++11 -Wall -Wno-unused -Ofast -flto
 CSTATLIB=-static-libgcc 
 CSTATSTD=-static-libstdc++
 
-CXXSRCS=$(*.cpp)
+CXXSRCS=*.cpp
 CXXPARAM=$(CSTATLIB) $(CSTATSTD) $(CXXFLAGS)
 
 
