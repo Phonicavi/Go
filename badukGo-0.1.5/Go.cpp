@@ -35,11 +35,7 @@ Go::Go(Board *board):tree(DEF_TREESIZE, board), amaf(board->get_size())
 
   lastWinRate[0] = lastWinRate[1] = last2WinRate[0] = last2WinRate[1] = 0.0;
   r_prun_alpha = AGRESSIVE_R_PRUN_ALPHA;
-#ifdef _RWLOCK_
-  InitializeSRWLock(&TREE_SRW);
-#else
   InitializeCriticalSection(&TREE_CRITICAL);
-#endif
   SYSTEM_INFO sinfo;
   GetSystemInfo(&sinfo);
   SYS_THREAD_LIMIT = max(min((int)sinfo.dwNumberOfProcessors,MAX_THREAD_LIMIT),4);
