@@ -159,7 +159,7 @@ public:
   bool get_side() const { return side; }
   int get_size() const { return size; }
   int get_size2() const { return size2; }
-  int get_last_point() const { return last_point; }
+  // int get_last_point() const { return last_point; }
   bool is_occupied(int point) const { return belongedGroup[point] != 0; }
   int get_value(int point) const;  
   int legal_moves(int moves[]) const;
@@ -179,7 +179,7 @@ public:
   void resume();
   void copy_from(Board *board);
   int first_legal_moves(int moves[],int last[],int flag,int cur_step) const;
-  int get_last2() {if(!last_point2) last_point2 = 127; return last_point2;}
+  // int get_last2() {if(!last_point2) last_point2 = 127; return last_point2;}
 
 };
 

@@ -80,7 +80,7 @@ void Board::resume(){
   }
   stones_on_board[1] = stones_on_board_bu[1];
   stones_on_board[0] = stones_on_board_bu[0];
-  last_point_bu = last_point, last_point2_bu = last_point2;
+  last_point = last_point_bu, last_point2 = last_point2_bu;
   empty_points = empty_points_bu;
 }
 
