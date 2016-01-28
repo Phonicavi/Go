@@ -35,7 +35,11 @@ Go::Go(Board *board):tree(DEF_TREESIZE, board), amaf(board->get_size())
 
   lastWinRate[0] = lastWinRate[1] = last2WinRate[0] = last2WinRate[1] = 0.0;
   r_prun_alpha = AGRESSIVE_R_PRUN_ALPHA;
+#ifdef _RWLOCK_
+  InitializeSRWLock(&TREE_SRW);
+#else
   InitializeCriticalSection(&TREE_CRITICAL);
+#endif
   SYSTEM_INFO sinfo;
   GetSystemInfo(&sinfo);
   SYS_THREAD_LIMIT = max(min((int)sinfo.dwNumberOfProcessors,MAX_THREAD_LIMIT),4);
@@ -276,7 +280,7 @@ void Go::perft(int max)
 DWORD WINAPI slave_runner(void *args){
 
   struct id * cid = (id*)args;
-  srand(time(NULL) * cid->thread_id+1);
+  srand(time(NULL) * cid->thread_id*time(NULL)+1);
   cid->cur_bd->copy_from(cid->orig_bd);
   cid->goo->run_thread(cid->max_time_thread,cid->cur_bd,cid->tamaf,cid->thread_id,cid->step);
   return 0;

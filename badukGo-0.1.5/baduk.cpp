@@ -76,7 +76,7 @@ int Board::play_wiser()
   }
 
 
-  if ((rand()&7)&&last_point) {
+  if (last_point) {
     PointSet<MAXSIZE2> list;
     nakade_trick(last_point, list);
     if (int move = random_choose(list, &Board::wiser_method)) {

@@ -76,6 +76,7 @@ void GTP::clear_board()
 {
   main_board.clear();
   BadukGo.reset();
+  Current_Step[0] = Current_Step[1] = -1;
 }
 
 void GTP::komi()

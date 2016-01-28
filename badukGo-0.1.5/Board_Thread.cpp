@@ -158,14 +158,14 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
 	      nlegal = cur_board->legal_moves_origin(legal_moves);
 	    }
 
-       #ifdef NEED_PRIORS
+     #ifdef NEED_PRIORS
 	    if ((aver_winrate<STOP_PRIORS_WINRATE_THERESHOLD)&&(rand()&3)&&cur_board->get_history_length()>=8 && cur_board->get_empty_length()>20)
 	    cur_board->init_priors(priors);
 	   #endif
 	   
 		EnterCriticalSection(&TREE_CRITICAL);
 		tree.expand(node, legal_moves, nlegal, priors); 
-        LeaveCriticalSection(&TREE_CRITICAL);
+    LeaveCriticalSection(&TREE_CRITICAL);
 
 	  }
 	}

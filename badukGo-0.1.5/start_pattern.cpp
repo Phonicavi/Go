@@ -145,10 +145,14 @@ int Board::legal_moves(int moves[]) const
   		int last_self = last_point2_bu;
   		if (is_star_point(last_self)){
   			int which = star_xm_which(last_self);
-  			recommend[rcmd_len++] = star_xm_gua[which][2];
-  			recommend[rcmd_len++] = star_xm_gua[which][1];
+  			recommend[rcmd_len++] = star_xm_gua[which][3];
+  			recommend[rcmd_len++] = star_xm_gua[which][4];
   			recommend[rcmd_len++] = star_xm_gua[(which+1)%4][0];
+        recommend[rcmd_len++] = star_xm_gua[(which+1)%4][1];
+        recommend[rcmd_len++] = star_xm_gua[(which+1)%4][2];
   			recommend[rcmd_len++] = star_xm_gua[(which-1)%4][0];
+        recommend[rcmd_len++] = star_xm_gua[(which-1)%4][1];
+        recommend[rcmd_len++] = star_xm_gua[(which-1)%4][2];
   		}else{
   			assert(is_point_3_4(last_self));
   			int which = star_xm_which(last_self);
@@ -254,19 +258,25 @@ int Board::legal_moves(int moves[]) const
   			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][3];
   			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][4];
   		}else if(is_point_3_4(last_self2) && is_star_point(last_self)){
-  			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][3];
-  			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][4];
-  			int which = star_xm_which(last_self2);
-  			if (star_xm_gua[which][1] == last_self2){
-  				recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self2)][3];
-  			}else recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self2)][4];
+        if (star_xm_which(last_self2) != star_xm_which(last_self)){
+    			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][3];
+    			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][4];
+
+    			int which = star_xm_which(last_self2);
+    			if (star_xm_gua[which][1] == last_self2){
+    				recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self2)][3];
+    			}else recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self2)][4];
+        }
   		}else if(is_point_3_4(last_self) && is_star_point(last_self2)){
-  			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self2)][3];
-  			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self2)][4];
-  			int which = star_xm_which(last_self);
-  			if (star_xm_gua[which][1] == last_self){
-  				recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][3];
-  			}else recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][4];
+        if (star_xm_which(last_self2) != star_xm_which(last_self)){
+    			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self2)][3];
+    			recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self2)][4];
+        
+    			int which = star_xm_which(last_self);
+    			if (star_xm_gua[which][1] == last_self){
+    				recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][3];
+    			}else recommend[rcmd_len++] = star_xm_gua[star_xm_which(last_self)][4];
+        }
   		}else if(is_point_3_4(last_self2) && is_point_3_4(last_self)){
   			int which = star_xm_which(last_self);
   			if (star_xm_gua[which][1] == last_self){
@@ -289,7 +299,7 @@ int Board::legal_moves(int moves[]) const
   				recommend[rcmd_len++] = star_xm_gua[(which-1)%4][j];
   		}
 
-		if (rcmd_len == 0){
+		if (rcmd_len <= 2){
 			for (int i=0; i<4; ++i)
 				for (int j=0; j<3; ++j){
 					recommend[rcmd_len++] = star_xm_gua[i][j];
