@@ -31,9 +31,9 @@
   #define AGRESSIVE_R_PRUN_ALPHA 0.8
   #define SOFT_R_PRUN_ALPHA 0.75
   #define LAZY_R_PRUN_ALPHA 0.7
-  #define SOFT_THERESHOLD 0.8
-  #define LAZY_THERESHOLD 0.9
-  #define STOP_THERESHOLD 0.99
+  #define SOFT_THERESHOLD 0.75
+  #define LAZY_THERESHOLD 0.8
+  #define STOP_THERESHOLD 0.85
   #define R_PRUN_RAVE_DISCOUNT 0.99
 #endif
 

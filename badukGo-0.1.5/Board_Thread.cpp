@@ -66,13 +66,16 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
   int simul_len_thread;
   int ct;
   int pruntime = 0;
-  int prePunc = 1;
+  int prePunc = 0;
   int debugTime = fin_clock;
   int pass;
   double aver_winrate;
   Node *root;
   Node *node;
   float score;
+  aver_winrate = (lastWinRate[main_board->get_side()] + last2WinRate[main_board->get_side()])/2 ; 
+  // std::cerr << "aver_winrate:" << aver_winrate<<std::endl;
+  // std::cerr << "STOP_PRIORS_WINRATE_THERESHOLD: " << STOP_PRIORS_WINRATE_THERESHOLD<<std::endl;
 
   while (clock() - fin_clock < max_time_thread) {
  #ifdef STD_ERR_PRINT
@@ -88,7 +91,7 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
   root = tree.get_root();
 	  	
   Node *node;
-  aver_winrate = (lastWinRate[side] + last2WinRate[side])/2 ; 
+
 
  #ifdef RELATE_PRUNE
   if (aver_winrate>STOP_THERESHOLD)
@@ -100,7 +103,7 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
 		
   ct = (clock()-fin_clock)/CLOCKS_PER_SEC;
   if (cur_board->get_history_length() > BEGIN_PRUN && cur_board->get_history_length() < END_PRUN
-      &&(tid == 1) && (prePunc) && ((ct == 1 && pruntime == 0) || (ct ==2 && pruntime == 1)))
+      &&(tid == 1) && (!prePunc) && ((ct == 1 && pruntime == 0) || (ct ==2 && pruntime == 1)))
   {
 	EnterCriticalSection(&TREE_CRITICAL);
 	tree.do_r_prun(root->get_visits(),r_prun_alpha);
@@ -114,7 +117,7 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
 	tree.relative_prun_num = 0;
   }
 	JUMP_R_PRUN:;
-   #endif
+#endif
 
 	cur_amaf->set_up(cur_board->get_side(), cur_board->get_size());
 	node = root;
@@ -160,7 +163,7 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
 
      #ifdef NEED_PRIORS
 	    if ((aver_winrate<STOP_PRIORS_WINRATE_THERESHOLD)&&(rand()&3)&&cur_board->get_history_length()>=8 && cur_board->get_empty_length()>20)
-	    cur_board->init_priors(priors);
+	           cur_board->init_priors(priors);
 	   #endif
 	   
 		EnterCriticalSection(&TREE_CRITICAL);

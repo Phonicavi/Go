@@ -32,7 +32,7 @@
 #define EXPAND 8
 #define NEED_PRIORS
 #ifdef NEED_PRIORS
-  #define STOP_PRIORS_WINRATE_THERESHOLD 1
+  #define STOP_PRIORS_WINRATE_THERESHOLD 0.87
 #endif
 const int FIRST_R_PRUN_TIME = 1;
 const int SECOND_R_PRUN_TIME = 2;

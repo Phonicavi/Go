@@ -43,6 +43,7 @@ int GTP::GTP_loop()
 #endif
   loop = true;
  init_board_map();
+ // freopen("stderr.log","w+",stderr);
   while (loop && getline(cin, command_string)) {
 #ifdef LOG
     engine_log << command_std::string;
