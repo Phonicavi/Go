@@ -1,6 +1,6 @@
 NAME=BadukGO
 CXX=g++
-CXXFLAGS=--std=gnu++11 -Wall -Wno-unused -Ofast -flto 
+CXXFLAGS=--std=gnu++11 -Wall -Wno-unused -Ofast -flto -ffast-math
 CSTATLIB=-static-libgcc 
 CSTATSTD=-static-libstdc++
 

@@ -213,8 +213,8 @@ int Board::legal_moves(int moves[]) const
   			int last_self = last_point2_bu;
 	  		if (is_star_point(last_self)){
 	  			int which = star_xm_which(last_self);
-	  			recommend[rcmd_len++] = star_xm_gua[which][2];
-	  			recommend[rcmd_len++] = star_xm_gua[which][1];
+	  			recommend[rcmd_len++] = star_xm_gua[which][3];
+	  			recommend[rcmd_len++] = star_xm_gua[which][4];
 	  			recommend[rcmd_len++] = star_xm_gua[(which+1)%4][0];
 	  			recommend[rcmd_len++] = star_xm_gua[(which-1)%4][0];
 	  		}else{

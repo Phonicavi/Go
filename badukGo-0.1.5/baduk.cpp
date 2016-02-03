@@ -166,7 +166,7 @@ void Board::save_trick(int point, LList &list) const
   GroupSet<4> neigh;
   int nneigh = neighbour_groups(point, neigh);
   for (int j = 0; j < nneigh; j++) {
-    if (neigh[j]->get_color() == side && neigh[j]->get_libs_num() == 2) { // <2?
+    if (neigh[j]->get_color() == side && neigh[j]->get_libs_num() <= 2) { // <2?
       atari_escapes(neigh[j], list);
     }
   }
