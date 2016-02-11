@@ -24,7 +24,7 @@
 
 #define FIRST_LEVEL_EMPTY 70
 #define SECOND_LEVEL_EMPTY 35
-const double TIME_TOLERANCE = 0.01;
+const double TIME_TOLERANCE = 0.005;
 const double TIME_UP_LIMIT_SYSTEM = 3;
 const double TIME_LIMIT = TIME_UP_LIMIT_SYSTEM-TIME_TOLERANCE;
 // #define CHANGE_THEARD_NUM
@@ -280,7 +280,7 @@ void Go::perft(int max)
 DWORD WINAPI slave_runner(void *args){
 
   struct id * cid = (id*)args;
-  srand(time(NULL) * cid->thread_id*time(NULL)+1);
+  srand(cid->thread_id*time(NULL)+1);
   cid->cur_bd->copy_from(cid->orig_bd);
   cid->goo->run_thread(cid->max_time_thread,cid->cur_bd,cid->tamaf,cid->thread_id,cid->step);
   return 0;

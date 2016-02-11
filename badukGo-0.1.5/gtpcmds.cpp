@@ -97,8 +97,9 @@ void GTP::play()
     coord = char_to_coordinate(cmd_args[1]);
 
     if (color > -1 && coord > -1) {
+      ++Current_Step[color];
       main_board.play_move(coord, color);
-        BadukGo.report_move(coord);
+        BadukGo.report_move(coord,Current_Step[color]);
         if(board_map[coord] == 1)
             ONE_EXIST = 1;
         else if(board_map[coord] == 2)
@@ -129,21 +130,21 @@ void GTP::genmove()
     bool color = char_to_color(cmd_args[0]);
     if(color != main_board.get_side()){
       main_board.play_move(0, !color);
-      BadukGo.report_move(0);
+      BadukGo.report_move(0,Current_Step[!color]);
     }
   #ifdef STD_ERR_PRINT
     std::cerr << "enter generate_move" <<std::endl;
   #endif
-    int move = BadukGo.generate_move(early_pass,Current_Step[main_board.get_side()]);
+    int move = BadukGo.generate_move(early_pass,Current_Step[color]);
   #ifdef STD_ERR_PRINT
     std::cerr << "leave generate_move" <<std::endl;
   #endif
-    Current_Step[main_board.get_side()] += 1;
+    ++Current_Step[color];
     main_board.play_move(move, color);
   #ifdef STD_ERR_PRINT
     std::cerr << "done play move" <<std::endl;
   #endif 
-    BadukGo.report_move(move);
+    BadukGo.report_move(move,Current_Step[color]);
   #ifdef STD_ERR_PRINT
     std::cerr << "done report move" <<std::endl;
   #endif

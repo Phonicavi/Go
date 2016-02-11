@@ -25,7 +25,7 @@ const double discount = 0.0;
 #ifdef CHANGE_BEST_POLICY
   const double CHANGE_POLICY_WINRATE_THERESHOLD = 0.85;
   const double CHANGE_POLICY_WINRATE_THERESHOLD2 = 0.40;
-  const double CHANGE_POLICY_WINRATE_DIFF_THERESHOLD = 0.99;
+  const double CHANGE_POLICY_WINRATE_DIFF_THERESHOLD = 0.98;
   const double CHANGE_POLICY_VISIT_DIFF_THERESHOLD = 0.3;
   const double CHANGE_POLICY_R_VISIT_DIFF_THERESHOLD = 0.35;
 #endif 
@@ -366,9 +366,20 @@ void Tree::copy_all(Node *parent, const Node *orig)
   }
 }
 
-int Tree::promote(int new_root)
+int Tree::promote(int new_root,int step)
 {
-
+  if (step >= STEPS_BOUNDARY_ONE){
+    for (Node *node = root[cur_root]->get_child(); node; node = node->get_sibling()) {
+      if (node->get_move() == new_root) {
+        root[1-cur_root]->copy_values(node);
+        copy_all(root[1-cur_root], node);
+        clear_cur_root();
+        cur_root = 1-cur_root;
+        // std::cerr << "reuse subtree" <<std::endl;
+        return cur_root;
+      }
+    }
+  }
   clear();
   return cur_root;
 }

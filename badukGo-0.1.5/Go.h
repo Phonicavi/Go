@@ -83,7 +83,7 @@ class Go{
   float score(std::vector<int> *dead);
   int generate_move(bool early_pass,int);
   void perft(int max);
-  void report_move(int move) { tree.promote(move); }
+  void report_move(int move,int step) { tree.promote(move,step); }
 
 
 
