@@ -240,13 +240,15 @@ int Go::play_random_game_thread(bool wiser, int simul_len_thread,
 
 void Go::back_up_results_thread(int result, Node *node_history[], int nnodes, bool side,AmafBoard *cur_amaf,float sc)
 {
+  int t = -1;
   for (int i = 0; i < nnodes; i++) {
   	if (node_history[i]->is_pruned) return;
-    node_history[i]->update_score(sc);
+    node_history[i]->update_score(t*sc);
     node_history[i]->set_results(1-result);
     node_history[i]->set_amaf(result, cur_amaf, side, i+1);
     side = !side;
     result = 1-result;
+    t = -t;
   }
 }
 

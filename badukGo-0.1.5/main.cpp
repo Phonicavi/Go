@@ -44,14 +44,15 @@ void print_info(){
   std::cerr<< "Memory Limit: "<<DEF_TREESIZE<< " nodes\n"<<std::endl; 
 }
 
-
-int main()
+int main(int argc, char const *argv[])
 {
   ALIE_STRIKE(unsigned(time(NULL)));
   ALIE_STRIKE(ASTRAY_RED_FRAME());
   ALIE_STRIKE(seed=ASTRAY_RED_FRAME()*ASTRAY_RED_FRAME()+ASTRAY_RED_FRAME());
   print_info();
   GTP gtp;
+  if(argc == 2 && !strcmp("-logfile",argv[1])) 
+    freopen("stderr.log","w+",stderr);
   gtp.GTP_loop();
   return 0;
 }
