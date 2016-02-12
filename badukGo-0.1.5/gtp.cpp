@@ -45,6 +45,7 @@ int GTP::GTP_loop()
  init_board_map();
  // freopen("stderr.log","w+",stderr);
   while (loop && getline(cin, command_string)) {
+
 #ifdef LOG
     engine_log << command_std::string;
     engine_log.flush();
@@ -99,6 +100,9 @@ int GTP::parse(const std::string &command_str)
 int GTP::exec(){
   response = "=";
   response.append(cmd_id);
+  #ifdef NEED_PONDER
+    BadukGo.stop_ponder();
+  #endif
 
   switch (cmd) {
     case PROTOCOL_VERSION:
@@ -133,6 +137,9 @@ int GTP::exec(){
       break;
     case GENMOVE:
       genmove();
+      #ifdef NEED_PONDER
+        BadukGo.start_ponder(Current_Step[main_board.get_side()]);
+      #endif
       break;
     case SHOWBOARD:
       showboard();

@@ -28,6 +28,9 @@
 #include <process.h>
 #include <windows.h>
 #include <winbase.h>
+
+#define FIRST_LEVEL_EMPTY 70
+#define SECOND_LEVEL_EMPTY 35
 #define MAX_THREAD_LIMIT 6
 #define EXPAND 8
 #define NEED_PRIORS
@@ -54,6 +57,9 @@ class Go{
   Tree tree;
   AmafBoard amaf;
   mutable clock_t fin_clock, max_time;
+#ifdef NEED_PONDER
+  bool is_ponder;
+#endif
 
   int get_best_move() const;
   int play_random_game(bool wiser, float &score);
@@ -62,7 +68,7 @@ class Go{
 
   void back_up_results(int result, Node *node_history[], int nnodes, bool side);
   void back_up_results_thread(int result, Node *node_history[], 
-                        int nnodes, bool side,AmafBoard *cur_amaf);
+                        int nnodes, bool side,AmafBoard *cur_amaf,float sc);
   void print_PV() const;
 
 
@@ -76,6 +82,20 @@ class Go{
       delete  amaf_thread[i];
     }
   };
+#ifdef NEED_PONDER
+  void start_ponder(int step);
+  void stop_ponder(){
+    if (!is_ponder) return;
+    std::cerr << "end pondering" << std::endl;
+    is_ponder = false;
+    WaitForMultipleObjects(real_thread_num,slave_thread,true,INFINITE);
+    for (int i=0; i<real_thread_num; ++i){
+      CloseHandle(slave_thread[i]);
+    }
+  }
+  void run_thread_ponder(int max_time_thread, Board *cur_board, 
+              AmafBoard *cur_amaf, int tid,int);
+#endif
   void reset();
   void set_playouts(int playouts);
   void run_thread(int max_time_thread, Board *cur_board, 
@@ -105,6 +125,9 @@ struct id{
 #ifndef SLAVE_RUNNER
 #define SLAVE_RUNNER 
 DWORD WINAPI slave_runner(void *args);
+  #ifdef NEED_PONDER
+    DWORD WINAPI slave_runner_ponder(void *args);
+  #endif
 #endif
 
 

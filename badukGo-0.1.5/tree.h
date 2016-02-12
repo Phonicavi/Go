@@ -53,7 +53,7 @@ public:
   int is_pruned;
 
   void update_score(const float score){node_score += score;}
-  int get_score() const {return node_score;}
+  float get_score() const {return node_score/visits;}
   void reset();
   void copy_values(const Node *orig);
   void add_child(Node *child);
