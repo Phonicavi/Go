@@ -22,7 +22,7 @@
 #include <ctime>
 #include "Go.h"
 
-const double TIME_TOLERANCE = 0.005;
+const double TIME_TOLERANCE = 0.01;
 const double TIME_UP_LIMIT_SYSTEM = 3;
 const double TIME_LIMIT = TIME_UP_LIMIT_SYSTEM-TIME_TOLERANCE;
 // #define CHANGE_THEARD_NUM
