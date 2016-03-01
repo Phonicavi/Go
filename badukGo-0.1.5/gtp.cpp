@@ -30,7 +30,7 @@ using namespace std;
 GTP::GTP():BadukGo(&main_board)
 {
   early_pass = true;
-  Current_Step = -1;
+  Current_Step[0] = Current_Step[1] = -1;
 }
 
 int GTP::GTP_loop()
@@ -43,7 +43,9 @@ int GTP::GTP_loop()
 #endif
   loop = true;
  init_board_map();
+
   while (loop && getline(cin, command_string)) {
+
 #ifdef LOG
     engine_log << command_std::string;
     engine_log.flush();
@@ -98,6 +100,9 @@ int GTP::parse(const std::string &command_str)
 int GTP::exec(){
   response = "=";
   response.append(cmd_id);
+  #ifdef NEED_PONDER
+    BadukGo.stop_ponder();
+  #endif
 
   switch (cmd) {
     case PROTOCOL_VERSION:
@@ -132,6 +137,9 @@ int GTP::exec(){
       break;
     case GENMOVE:
       genmove();
+      #ifdef NEED_PONDER
+        BadukGo.start_ponder(Current_Step[main_board.get_side()]);
+      #endif
       break;
     case SHOWBOARD:
       showboard();

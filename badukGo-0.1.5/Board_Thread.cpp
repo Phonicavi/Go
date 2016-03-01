@@ -66,13 +66,16 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
   int simul_len_thread;
   int ct;
   int pruntime = 0;
-  int prePunc = 1;
+  int prePunc = 0;
   int debugTime = fin_clock;
   int pass;
   double aver_winrate;
   Node *root;
   Node *node;
   float score;
+  aver_winrate = (lastWinRate[main_board->get_side()] + last2WinRate[main_board->get_side()])/2 ; 
+  // std::cerr << "aver_winrate:" << aver_winrate<<std::endl;
+  // std::cerr << "STOP_PRIORS_WINRATE_THERESHOLD: " << STOP_PRIORS_WINRATE_THERESHOLD<<std::endl;
 
   while (clock() - fin_clock < max_time_thread) {
  #ifdef STD_ERR_PRINT
@@ -88,7 +91,7 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
   root = tree.get_root();
 	  	
   Node *node;
-  aver_winrate = (lastWinRate[side] + last2WinRate[side])/2 ; 
+
 
  #ifdef RELATE_PRUNE
   if (aver_winrate>STOP_THERESHOLD)
@@ -100,7 +103,7 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
 		
   ct = (clock()-fin_clock)/CLOCKS_PER_SEC;
   if (cur_board->get_history_length() > BEGIN_PRUN && cur_board->get_history_length() < END_PRUN
-      &&(tid == 1) && (prePunc) && ((ct == 1 && pruntime == 0) || (ct ==2 && pruntime == 1)))
+      &&(tid == 1) && (!prePunc) && ((ct == 1 && pruntime == 0) || (ct ==2 && pruntime == 1)))
   {
 	EnterCriticalSection(&TREE_CRITICAL);
 	tree.do_r_prun(root->get_visits(),r_prun_alpha);
@@ -114,7 +117,7 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
 	tree.relative_prun_num = 0;
   }
 	JUMP_R_PRUN:;
-   #endif
+#endif
 
 	cur_amaf->set_up(cur_board->get_side(), cur_board->get_size());
 	node = root;
@@ -158,14 +161,14 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
 	      nlegal = cur_board->legal_moves_origin(legal_moves);
 	    }
 
-       #ifdef NEED_PRIORS
+     #ifdef NEED_PRIORS
 	    if ((aver_winrate<STOP_PRIORS_WINRATE_THERESHOLD)&&(rand()&3)&&cur_board->get_history_length()>=8 && cur_board->get_empty_length()>20)
-	    cur_board->init_priors(priors);
+	           cur_board->init_priors(priors);
 	   #endif
 	   
 		EnterCriticalSection(&TREE_CRITICAL);
 		tree.expand(node, legal_moves, nlegal, priors); 
-        LeaveCriticalSection(&TREE_CRITICAL);
+    LeaveCriticalSection(&TREE_CRITICAL);
 
 	  }
 	}
@@ -190,9 +193,9 @@ void Go::run_thread(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,in
 	  assert(0);
     }
    #endif
-	if (nnode_hist > 1 && node_history[1] != NULL)
-	  {node_history[1]->update_score(score);}
-	back_up_results_thread(result, node_history, nnode_hist, side,cur_amaf);
+	// if (nnode_hist > 1 && node_history[1] != NULL)
+	//   {node_history[1]->update_score(score);}
+	back_up_results_thread(result, node_history, nnode_hist, side,cur_amaf,score);
 	  
     LeaveCriticalSection(&TREE_CRITICAL);
 	}
@@ -235,13 +238,187 @@ int Go::play_random_game_thread(bool wiser, int simul_len_thread,
   return ((score = cur_board->score_count()) > 0);
 }
 
-void Go::back_up_results_thread(int result, Node *node_history[], int nnodes, bool side,AmafBoard *cur_amaf)
+void Go::back_up_results_thread(int result, Node *node_history[], int nnodes, bool side,AmafBoard *cur_amaf,float sc)
 {
+  int t = -1;
   for (int i = 0; i < nnodes; i++) {
   	if (node_history[i]->is_pruned) return;
+    node_history[i]->update_score(t*sc);
     node_history[i]->set_results(1-result);
     node_history[i]->set_amaf(result, cur_amaf, side, i+1);
     side = !side;
     result = 1-result;
+    t = -t;
   }
 }
+
+#ifdef NEED_PONDER
+void Go::start_ponder(int step)
+{
+  if (step <= START_PONDER_STEP) return;
+  is_ponder = true;
+  std::cerr << "start pondering..." << std::endl;
+
+
+  bool side = main_board->get_side();
+  int last[2];
+  Node *root = tree.get_root();
+  rand_movs[0] = 0, discarded = 0;
+  double aver_winrate = (lastWinRate[side] + last2WinRate[side])/2 ; 
+  main_board->shuffle_empty();
+
+
+#ifdef CHANGE_THEARD_NUM
+  int empty_len = main_board->get_empty_length();
+  if (empty_len > FIRST_LEVEL_EMPTY){
+    real_thread_num = SYS_THREAD_LIMIT;
+  }else if (empty_len > SECOND_LEVEL_EMPTY){
+    real_thread_num = min(4,SYS_THREAD_LIMIT);
+  }else real_thread_num = 1;
+#else
+
+#endif
+    for (int i=0; i<real_thread_num; ++i){
+      struct id *cid = (struct id*) malloc(sizeof(struct id));
+      cid->thread_id = i+1;
+      cid->orig_bd = main_board;
+      cid->cur_bd = thread_board[i];
+      cid->step = step;
+      cid->goo = this;
+      cid->max_time_thread = 0;
+      cid->tamaf = amaf_thread[i];
+      slave_thread[i] = CreateThread(NULL,0,slave_runner_ponder,cid,0,NULL);
+    }
+    return;
+}
+
+void Go::run_thread_ponder(int max_time_thread,Board *cur_board, AmafBoard *cur_amaf,int tid,int cur_step)
+{
+  Node * n = NULL;
+ #ifdef STD_ERR_PRINT
+  std::cerr << "here!!" << std::endl;
+ #endif
+  rand_movs[tid-1] = 0;
+  int nnode_hist = 0;
+  Node *node_history[3*MAXSIZE2];
+  int result =2;
+  int last[2];
+  bool side = -1;
+  int simul_len_thread;
+  int ct;
+  int pruntime = 0;
+  int prePunc = 0;
+  int debugTime = fin_clock;
+  int pass;
+  double aver_winrate;
+  Node *root;
+  Node *node;
+  float score;
+  aver_winrate = (lastWinRate[main_board->get_side()] + last2WinRate[main_board->get_side()])/2 ; 
+  // std::cerr << "aver_winrate:" << aver_winrate<<std::endl;
+  // std::cerr << "STOP_PRIORS_WINRATE_THERESHOLD: " << STOP_PRIORS_WINRATE_THERESHOLD<<std::endl;
+
+  while (is_ponder) {
+ #ifdef STD_ERR_PRINT
+  if (clock()-debugTime>0.5*CLOCKS_PER_SEC){
+  debugTime = clock();
+  std::cerr << "id:" << tid << " time:" << debugTime <<std::endl;
+  }
+ #endif
+
+  pass = 0;
+  simul_len_thread = 0;
+  side = cur_board->get_side();
+  root = tree.get_root();
+  if (root->get_visits()>PONDER_PLAYOUTS) break;
+      
+  Node *node;
+
+
+  cur_amaf->set_up(cur_board->get_side(), cur_board->get_size());
+  node = root;
+  nnode_hist = 0;
+
+  while (node->has_childs() && pass < 2) {
+    node_history[nnode_hist++] = node;
+   #ifdef LOCK_UCT_SELECT
+    EnterCriticalSection(&TREE_CRITICAL);
+   #endif
+    node = node->select_child();
+   #ifdef LOCK_UCT_SELECT
+    LeaveCriticalSection(&TREE_CRITICAL);
+   #endif
+    int move = node->get_move();
+    
+    if(move == Board::PASS) pass++;
+    else pass = 0;
+    
+    cur_board->play_move(move);
+        cur_amaf->play(move, ++simul_len_thread);
+  }
+
+  if (node->is_expand==0 &&(node->get_visits() >= EXPAND || node == root) ) {
+    node->is_expand = tid;
+    if (node->is_expand == tid){
+    Prior priors[MAXSIZE2+1] = {{0,0}};
+        int legal_moves[MAXSIZE2+1],nlegal;
+        if(node == root){
+          //====分4-10步，10-20步情况，20步后===///
+        if (cur_step >= STEPS_BOUNDARY_TWO)
+          nlegal = cur_board->legal_moves(legal_moves);
+        else if (cur_step > STEPS_BOUNDARY_ONE && cur_step < STEPS_BOUNDARY_TWO)
+          nlegal = cur_board->first_legal_moves(legal_moves,last,2,cur_step);
+        else if (cur_step >= STEPS_START_END && cur_step <= STEPS_BOUNDARY_ONE)
+          nlegal = cur_board->first_legal_moves(legal_moves,last,1,cur_step);
+        else
+          nlegal = cur_board->legal_moves(legal_moves);
+      }
+    else{
+        nlegal = cur_board->legal_moves_origin(legal_moves);
+      }
+
+     #ifdef NEED_PRIORS
+      if ((aver_winrate<STOP_PRIORS_WINRATE_THERESHOLD)&&(rand()&3)&&cur_board->get_history_length()>=8 && cur_board->get_empty_length()>20)
+             cur_board->init_priors(priors);
+     #endif
+     
+    EnterCriticalSection(&TREE_CRITICAL);
+    tree.expand(node, legal_moves, nlegal, priors); 
+    LeaveCriticalSection(&TREE_CRITICAL);
+
+    }
+  }
+
+  node_history[nnode_hist++] = node;
+  score = 0;
+
+  result = play_random_game_thread(cur_board->get_history_length()>8,simul_len_thread,cur_board,cur_amaf,tid,score);
+   #ifdef DEBUG_INFO
+  cur_board->print_board();
+  std::cerr << result << "\n";
+   #endif
+
+  cur_board->resume();
+  if (result == -1) continue;
+  if (side) result = 1-result,score = -score;
+
+  EnterCriticalSection(&TREE_CRITICAL);
+   #ifdef STD_ERR_PRINT
+  if (nnode_hist > 1 && node_history[1] == NULL){
+    std::cerr<<"CAONIDAYE" <<std::endl;
+    assert(0);
+    }
+   #endif
+  // if (nnode_hist > 1 && node_history[1] != NULL)
+  //   {node_history[1]->update_score(score);}
+  back_up_results_thread(result, node_history, nnode_hist, side,cur_amaf,score);
+    
+    LeaveCriticalSection(&TREE_CRITICAL);
+  }
+
+   #ifdef STD_ERR_PRINT
+  std::cerr << rand_movs[tid-1] << " " << tid << std::endl;
+   #endif
+}
+
+#endif

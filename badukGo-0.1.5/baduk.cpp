@@ -76,19 +76,22 @@ int Board::play_wiser()
   }
 
 
-  if ((rand()&7)&&last_point) {
+  if (last_point) {
     PointSet<MAXSIZE2> list;
-    nakade_trick(last_point, list);
-    if (int move = random_choose(list, &Board::wiser_method)) {
-      return play_move(move);
+    if (rand()%10<9){
+      nakade_trick(last_point, list);
+      if (int move = random_choose(list, &Board::wiser_method)) {
+        return play_move(move);
+      }
+      list.clear();
     }
-    list.clear();
-    save_trick(last_point, list);
-    if (int move = random_choose(list, &Board::wiser_method)) {
-      return play_move(move);
+    if (rand()%10<9){
+        save_trick(last_point, list);
+        if (int move = random_choose(list, &Board::wiser_method)) {
+          return play_move(move);
+        }
+      list.clear();
     }
-   
-    list.clear();
     pattern_trick(last_point, list);
     if (int move = random_choose(list, &Board::wiser_method)) {
       return play_move(move);
@@ -96,11 +99,13 @@ int Board::play_wiser()
     list.clear(); 
     #define CAPTURE_HEURISTICS 
   #ifdef CAPTURE_HEURISTICS  
-    list.clear();
-    capture_trick(last_point, list);
-    if (int move = random_choose(list, &Board::wiser_method)) {
-      return play_move(move);
-    }
+    // list.clear();
+    if (rand()%10<9){
+      capture_trick(last_point, list);
+        if (int move = random_choose(list, &Board::wiser_method)) {
+          return play_move(move);
+        }
+      }
   #endif
   }
 
@@ -166,7 +171,7 @@ void Board::save_trick(int point, LList &list) const
   GroupSet<4> neigh;
   int nneigh = neighbour_groups(point, neigh);
   for (int j = 0; j < nneigh; j++) {
-    if (neigh[j]->get_color() == side && neigh[j]->get_libs_num() == 2) { // <2?
+    if (neigh[j]->get_color() == side && neigh[j]->get_libs_num() <= 2) { // <2?
       atari_escapes(neigh[j], list);
     }
   }

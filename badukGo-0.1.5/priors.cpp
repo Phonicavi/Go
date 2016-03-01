@@ -70,6 +70,10 @@ void Board::init_priors(Prior priors[]) const
     }
   endloop:;
   }
+  int last_point3 = game_history[game_history.length()-3];
+  // std::cerr << "last_point3: " << last_point3 <<std::endl;
+  bool is_l3_l1_near = false;
+  
   
   if(last_point == 0) return;
   
@@ -101,8 +105,47 @@ void Board::init_priors(Prior priors[]) const
   for(int i = 0; last_point && i < 4; i++){
     for(int j = 0; j < 4*(i+1); j++){
       int v =  within_manhattan[last_point][i][j];
+      if (v == last_point3) is_l3_l1_near = true;
       if(v) {
         priors[v].prior += (1.0-0.1*i)*EQUIV, priors[v].equiv += EQUIV;
+      }
+    }
+  }
+
+
+
+  if (last_point3 && !is_l3_l1_near){
+    PointList<MAXSIZE2> list;
+    // nakade_trick(last_point, list);
+    // for(int i = 0; i < list.length(); i++){
+    //   priors[list[i]].prior += 2*EQUIV, priors[list[i]].equiv += 2*EQUIV;
+    // }
+    // list.clear();
+    capture_trick(last_point3, list);
+    for(int i = 0; i < list.length(); i++){
+      priors[list[i]].prior += 2*EQUIV, priors[list[i]].equiv += 2*EQUIV;
+    }
+    list.clear();
+
+    save_trick(last_point3, list);
+    for(int i = 0; i < list.length(); i++){
+      priors[list[i]].prior += EQUIV, priors[list[i]].equiv += EQUIV;
+    }
+    list.clear();
+
+    pattern_trick(last_point3, list);
+    for(int i = 0; i < list.length(); i++){
+      priors[list[i]].prior += EQUIV, priors[list[i]].equiv += EQUIV;
+    }
+    list.clear();
+
+    
+    for(int i = 0; last_point3 && i < 4; i++){
+      for(int j = 0; j < 4*(i+1); j++){
+        int v =  within_manhattan[last_point3][i][j];
+        if(v) {
+          priors[v].prior += (1.0-0.1*i)*EQUIV, priors[v].equiv += EQUIV;
+        }
       }
     }
   }

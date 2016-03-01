@@ -22,8 +22,6 @@
 #include <ctime>
 #include "Go.h"
 
-#define FIRST_LEVEL_EMPTY 70
-#define SECOND_LEVEL_EMPTY 35
 const double TIME_TOLERANCE = 0.01;
 const double TIME_UP_LIMIT_SYSTEM = 3;
 const double TIME_LIMIT = TIME_UP_LIMIT_SYSTEM-TIME_TOLERANCE;
@@ -104,6 +102,7 @@ int Go::generate_move(bool early_pass,int cur_step)
   bool side = main_board->get_side();
     int last[2];
   Node *root = tree.get_root();
+  std::cerr <<"root_visit_by_pondering: "<< root->get_visits() << std::endl;
   rand_movs[0] = 0, discarded = 0;
   double aver_winrate = (lastWinRate[side] + last2WinRate[side])/2 ; 
   main_board->shuffle_empty();
@@ -121,84 +120,23 @@ int Go::generate_move(bool early_pass,int cur_step)
 
 #endif
 
-  if (real_thread_num > 1){
-    for (int i=0; i<real_thread_num; ++i){
-      struct id *cid = (struct id*) malloc(sizeof(struct id));
-      cid->thread_id = i+1;
-      cid->orig_bd = main_board;
-      cid->cur_bd = thread_board[i];
-      cid->step = cur_step;
-      cid->goo = this;
-      cid->max_time_thread = max_time;
-      cid->tamaf = amaf_thread[i];
-      slave_thread[i] = CreateThread(NULL,0,slave_runner,cid,0,NULL);
-    }
-    WaitForMultipleObjects(real_thread_num,slave_thread,true,INFINITE);
-    for (int i=0; i<real_thread_num; ++i){
-      CloseHandle(slave_thread[i]);
-    }
+  for (int i=0; i<real_thread_num; ++i){
+    struct id *cid = (struct id*) malloc(sizeof(struct id));
+    cid->thread_id = i+1;
+    cid->orig_bd = main_board;
+    cid->cur_bd = thread_board[i];
+    cid->step = cur_step;
+    cid->goo = this;
+    cid->max_time_thread = max_time;
+    cid->tamaf = amaf_thread[i];
+    slave_thread[i] = CreateThread(NULL,0,slave_runner,cid,0,NULL);
   }
-
-  else{
-      // 其实没有用到这个else
-      main_board->backup();
-
-      while (clock() - fin_clock < max_time) {
-        Node *node_history[3*MAXSIZE2];
-        int nnode_hist = 0, pass = 0;
-        simul_len = 0;
-
-        amaf.set_up(main_board->get_side(), main_board->get_size());
-
-        Node *node = root;
-
-
-
-        while (node->has_childs() && pass < 2) {
-          node_history[nnode_hist++] = node;
-          node = node->select_child();
-          int move = node->get_move();
-          if(move == Board::PASS) pass++;
-          else pass = 0;
-          main_board->play_move(move);
-          amaf.play(move, ++simul_len);
-        }
-        if (node->get_visits() >= EXPAND || node == root) {
-          Prior priors[MAXSIZE2+1] = {{0,0}};
-
-          int legal_moves[MAXSIZE2+1],nlegal;
-          if (cur_step >= STEPS_BOUNDARY_TWO)
-              nlegal = main_board->legal_moves(legal_moves);
-          else if (cur_step > STEPS_BOUNDARY_ONE && cur_step < STEPS_BOUNDARY_TWO)
-              nlegal = main_board->first_legal_moves(legal_moves,last,2,cur_step);
-          else if (cur_step >= STEPS_START_END && cur_step <= STEPS_BOUNDARY_ONE)
-              nlegal = main_board->first_legal_moves(legal_moves,last,1,cur_step);
-          else
-              nlegal = main_board->legal_moves(legal_moves);
-        #ifdef NEED_PRIORS
-          if ((aver_winrate<STOP_PRIORS_WINRATE_THERESHOLD)&&(rand()&3)&&main_board->get_history_length()>=8 && main_board->get_empty_length()>20)
-           main_board->init_priors(priors);
-        #endif
-          tree.expand(node, legal_moves, nlegal, priors);
-        }
-
-
-
-        node_history[nnode_hist++] = node;
-        int result;
-        float score = 0;
-        result = play_random_game(main_board->get_history_length()>8,score);
-        main_board->resume();
-        if (result == -1) continue;
-        if (side) result = 1-result,score = -score;
-        if (nnode_hist > 1){node_history[1]->update_score(score);}
-       back_up_results(result, node_history, nnode_hist, side);
-
-    #ifdef DEBUG_INFO
-          tree.print();
-    #endif
-      }
+  WaitForMultipleObjects(real_thread_num,slave_thread,true,INFINITE);
+  for (int i=0; i<real_thread_num; ++i){
+    CloseHandle(slave_thread[i]);
   }
+  
+
   Node *best = tree.get_best(aver_winrate);
   last2WinRate[side] = lastWinRate[side];
   lastWinRate[side] = best->get_value(1);
@@ -209,6 +147,7 @@ int Go::generate_move(bool early_pass,int cur_step)
   if (best->get_move() == Board::PASS) return Board::PASS;
   std::cerr << best->get_value(1) <<std::endl;
   std::cerr << "root visit:" << root->get_visits() << std::endl;
+  std::cerr << "best score:" << best->get_score() << std::endl;
   return best->get_move();
 }
 
@@ -280,8 +219,18 @@ void Go::perft(int max)
 DWORD WINAPI slave_runner(void *args){
 
   struct id * cid = (id*)args;
-  srand(time(NULL) * cid->thread_id+1);
+  srand(cid->thread_id*time(NULL)+1);
   cid->cur_bd->copy_from(cid->orig_bd);
   cid->goo->run_thread(cid->max_time_thread,cid->cur_bd,cid->tamaf,cid->thread_id,cid->step);
   return 0;
 }
+#ifdef NEED_PONDER
+DWORD WINAPI slave_runner_ponder(void *args){
+
+  struct id * cid = (id*)args;
+  srand(cid->thread_id*time(NULL)+1);
+  cid->cur_bd->copy_from(cid->orig_bd);
+  cid->goo->run_thread_ponder(cid->max_time_thread,cid->cur_bd,cid->tamaf,cid->thread_id,cid->step);
+  return 0;
+}
+#endif

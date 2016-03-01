@@ -27,9 +27,16 @@
 
 //#define DEBUG_INFO
 #define DEF_PLAYOUTS 3000000
-#define DEF_TREESIZE 6000000
+#define DEF_TREESIZE 10000000
 #define ASTRAY_RED_FRAME() rand()
 #define ALIE_STRIKE(a) srand(a)
+
+#define NEED_PONDER
+#ifdef NEED_PONDER
+  #define PONDER_PLAYOUTS 200000
+  #define START_PONDER_STEP 10
+#endif
+#define START_REUSE_SUBTREE 10
 
 #define MAXSIZE  13
 #define MAXSIZE2  169

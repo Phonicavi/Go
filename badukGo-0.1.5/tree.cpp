@@ -23,11 +23,11 @@
 const double BIAS = 0.00033333333333, UCTK = 0.3, K=2000.0;
 const double discount = 0.0;
 #ifdef CHANGE_BEST_POLICY
-  const double CHANGE_POLICY_WINRATE_THERESHOLD = 0.93;
-  const double CHANGE_POLICY_WINRATE_THERESHOLD2 = 0.30;
-  const double CHANGE_POLICY_WINRATE_DIFF_THERESHOLD = 0.99;
-  const double CHANGE_POLICY_VISIT_DIFF_THERESHOLD = 0.3;
-  const double CHANGE_POLICY_R_VISIT_DIFF_THERESHOLD = 0.35;
+  const double CHANGE_POLICY_WINRATE_THERESHOLD = 0.85;
+  const double CHANGE_POLICY_WINRATE_THERESHOLD2 = 0.4;
+  const double CHANGE_POLICY_WINRATE_DIFF_THERESHOLD = 0.98;
+  const double CHANGE_POLICY_VISIT_DIFF_THERESHOLD = 0.25;
+  const double CHANGE_POLICY_R_VISIT_DIFF_THERESHOLD = 0.3;
 #endif 
 
 FastLog flog(10);
@@ -50,8 +50,8 @@ void Node::copy_values(const Node *orig)
  {
   child = 0;
   sibling = 0;
-  is_expand = 0;
-  is_pruned = orig->is_pruned;
+  is_expand = orig->is_expand;
+  is_pruned = 0;
   visits = orig->visits;
   results = orig->results;
   r_visits = orig->r_visits;
@@ -161,11 +161,13 @@ Node *Node::get_best_child() const
 Node *Node::get_best_child(double winrate) const
 {
   Node *best = NULL;
+  // best = this->select_child();
   double best_v = 0;
   double best_w;
   double cur_v;
   double cur_w;
   for (Node * next = child; next; next = next->sibling){
+    if (next->visits<50) continue;
     cur_v = next->r_visits+next->visits;
     cur_w = next->r_results + results;
     if (cur_v > best_v || (cur_v == best_v && cur_w > best_w)){
@@ -327,6 +329,7 @@ void Tree::clear()
 
 void Tree::clear_cur_root()
 {
+  relative_prun_num = 0;
   size[cur_root] = 1;
   root[cur_root]->reset();
 }
@@ -366,9 +369,20 @@ void Tree::copy_all(Node *parent, const Node *orig)
   }
 }
 
-int Tree::promote(int new_root)
+int Tree::promote(int new_root,int step)
 {
-
+  if (step >= START_REUSE_SUBTREE){
+    for (Node *node = root[cur_root]->get_child(); node; node = node->get_sibling()) {
+      if (node->get_move() == new_root) {
+        root[1-cur_root]->copy_values(node);
+        copy_all(root[1-cur_root], node);
+        clear_cur_root();
+        cur_root = 1-cur_root;
+        // std::cerr << "reuse subtree" <<std::endl;
+        return cur_root;
+      }
+    }
+  }
   clear();
   return cur_root;
 }

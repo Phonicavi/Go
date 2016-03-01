@@ -27,13 +27,13 @@
 #define RELATE_PRUNE
 #ifdef RELATE_PRUNE
   #define BEGIN_PRUN 15
-  #define END_PRUN 140
+  #define END_PRUN 130
   #define AGRESSIVE_R_PRUN_ALPHA 0.8
   #define SOFT_R_PRUN_ALPHA 0.75
   #define LAZY_R_PRUN_ALPHA 0.7
-  #define SOFT_THERESHOLD 0.8
-  #define LAZY_THERESHOLD 0.9
-  #define STOP_THERESHOLD 0.99
+  #define SOFT_THERESHOLD 0.75
+  #define LAZY_THERESHOLD 0.8
+  #define STOP_THERESHOLD 0.9
   #define R_PRUN_RAVE_DISCOUNT 0.99
 #endif
 
@@ -53,7 +53,7 @@ public:
   int is_pruned;
 
   void update_score(const float score){node_score += score;}
-  int get_score() const {return node_score;}
+  float get_score() const {return node_score/visits;}
   void reset();
   void copy_values(const Node *orig);
   void add_child(Node *child);
@@ -98,7 +98,7 @@ public:
   ~Tree();
   void clear();
   void clear_cur_root();
-  int promote(int new_root);
+  int promote(int new_root,int step);
   Node *insert(Node *parent, int move, const Prior &prior);
   Node *insert(Node *parent, const Node *orig);
   void copy_all(Node *parent, const Node *orig);
