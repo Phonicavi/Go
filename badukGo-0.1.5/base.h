@@ -35,6 +35,7 @@
 #ifdef NEED_PONDER
   #define PONDER_PLAYOUTS 200000
   #define START_PONDER_STEP 10
+  #define PONDER_THREAD 4
 #endif
 #define START_REUSE_SUBTREE 10
 
