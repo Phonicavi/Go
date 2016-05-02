@@ -278,7 +278,7 @@ void Go::start_ponder(int step)
 #else
 
 #endif
-    for (int i=0; i<real_thread_num; ++i){
+    for (int i=0; i<min(real_thread_num,PONDER_THREAD); ++i){
       struct id *cid = (struct id*) malloc(sizeof(struct id));
       cid->thread_id = i+1;
       cid->orig_bd = main_board;
